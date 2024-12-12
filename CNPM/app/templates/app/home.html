@@ -1,10 +1,12 @@
+{% load static  %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="homeCss.css">
+    <link rel="stylesheet" href="{% static "app/css/homeCss.css" %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Home</title>
 </head>
@@ -13,13 +15,13 @@
     <header>
         <div class="header_top">
             <div class="img_km">
-                <img src="img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                <img src="/static/app/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
             </div>
         </div>
         <div class="container_header" >
             <div class="container_header_top">
                 <div class="logo">
-                    <img src="img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                    <img src="/static/app/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
                 </div>
                 <div class="search" style="position: relative;">
                     <input type="text" placeholder="Tìm sản phẩm" class="input_search">
@@ -81,12 +83,12 @@
     <main>
         <div class="container_body">
             <a href="#">
-                <img src="img/slide.jpg" alt="Lỗi hiển thị" class="zoomed">
+                <img src="app/img/slide.jpg" alt="Lỗi hiển thị" class="zoomed">
             </a>
         </div>
         <div class="container_flashsale">
             <div class="logo_sale">
-                <img style="max-width: 150px; padding: 4px 50px;" src="img/flash-sale.png" alt="Ảnh sale">
+                <img style="max-width: 150px; padding: 4px 50px;" src="/static/app/img/flash-sale.png" alt="Ảnh sale">
             </div>
             <div class="list_products">
                 <div class="item_products">
@@ -231,7 +233,7 @@
         <div class="container_spBanChay">
             <div class="icon_spBanChay">
                 <a href="#"> 
-                    <img style="width: 1140px;" src="img/spbanchay.jpg" alt="Sản phẩm bán chạy">
+                    <img style="width: 1140px;" src="/static/app/img/spbanchay.jpg" alt="Sản phẩm bán chạy">
                 </a>
             </div>
             <div class="list_products_1">
@@ -242,7 +244,7 @@
                         </div>
                         <a style="text-decoration: none;" href="#">
                             <div class="flashsale-pic">
-                                <img src="img/suabot1.jpg">
+                                <img src="/static/app/img/suabot1.jpg">
                             </div>
                             <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
                             </div>
@@ -403,7 +405,7 @@
             <div class="container_spBan">
                 <div class="icon_spBanChay">
                     <a href="#"> 
-                        <img style="width: 1140px; border-radius: 5px;" src="img/anh_mua.jpg" alt="Sản phẩm bán chạy">
+                        <img style="width: 1140px; border-radius: 5px;" src="/static/app/img/anh_mua.jpg" alt="Sản phẩm bán chạy">
                     </a>
                 </div>
                 <div class="list_products_1">
@@ -414,7 +416,7 @@
                             </div>
                             <a style="text-decoration: none;" href="#">
                                 <div class="flashsale-pic">
-                                    <img src="img/suabot1.jpg">
+                                    <img src="/static/app/img/suabot1.jpg">
                                 </div>
                                 <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
                                 </div>
@@ -578,7 +580,7 @@
                             </div>
                             <a style="text-decoration: none;" href="#">
                                 <div class="flashsale-pic">
-                                    <img src="img/suabot1.jpg">
+                                    <img src="/static/app/img/suabot1.jpg">
                                 </div>
                                 <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
                                 </div>
@@ -742,7 +744,7 @@
                             </div>
                             <a style="text-decoration: none;" href="#">
                                 <div class="flashsale-pic">
-                                    <img src="img/suabot1.jpg">
+                                    <img src="/static/app/img/suabot1.jpg">
                                 </div>
                                 <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
                                 </div>
@@ -913,22 +915,22 @@
                 <div class="listItemKm">
                     <div class="itemkm">
                         <a href="#">
-                            <img src="img/km1.jpg">
+                            <img src="/static/app/img/km1.jpg">
                         </a>
                     </div>
                     <div class="itemkm">
                         <a href="#">
-                            <img src="img/km2.jpg">
+                            <img src="/static/app/img/km2.jpg">
                         </a>
                     </div>
                     <div class="itemkm">
                         <a href="#">
-                            <img src="img/km3.jpg">
+                            <img src="/static/app/img/km3.jpg">
                         </a>
                     </div>
                     <div class="itemkm">
                         <a href="#">
-                            <img src="img/km4.jpg">
+                            <img src="/static/app/img/km4.jpg">
                         </a>
                     </div>
                 </div>
@@ -941,14 +943,14 @@
         </div>
         <div class="container_KienThuc">
             <div class="backgroudKt">
-                <img src="img/kienthuc.jpg">
+                <img src="/static/app/img/kienthuc.jpg">
             </div>
             <div class="list_kien_thuc">
                 <div class="item_kien_thuc">
                     <div class="conten_kienthuc">
                         <a href="#">
                             <div class="anh_kienthuc">
-                                <img src="img/anhkm1.jpeg" alt="Lỗi hiển thị">
+                                <img src="/static/app/img/anhkm1.jpeg" alt="Lỗi hiển thị">
                             </div>
                             <span class="glock-title">Bí quyết nuôi con cao lớn của người Nhật</span>
                         </a>
@@ -958,7 +960,7 @@
                     <div class="conten_kienthuc">
                         <a href="#">
                             <div class="anh_kienthuc">
-                                <img src="img/kt2.jpg" alt="Lỗi hiển thị">
+                                <img src="/static/app/img/kt2.jpg" alt="Lỗi hiển thị">
                             </div>
                             <span class="glock-title">Dù bận rộn đến đâu, cha mẹ cũng không nên cho trẻ ăn những thực phẩm này vào buổi sáng</span>
                         </a>
@@ -968,7 +970,7 @@
                     <div class="conten_kienthuc">
                         <a href="#">
                             <div class="anh_kienthuc">
-                                <img src="img/kt3.jpg" alt="Lỗi hiển thị">
+                                <img src="/static/app/img/kt3.jpg" alt="Lỗi hiển thị">
                             </div>
                             <span class="glock-title">Nếu trẻ có 4 biểu hiện bất thường này chứng tỏ việc tích tụ thức ăn trong cơ thể quá nhiều, trẻ đang bị đầy bụng và khó tiêu</span>
                         </a>
@@ -978,7 +980,7 @@
                     <div class="conten_kienthuc">
                         <a href="#">
                             <div class="anh_kienthuc">
-                                <img src="img/kt4.jpg" alt="Lỗi hiển thị">
+                                <img src="/static/app/img/kt4.jpg" alt="Lỗi hiển thị">
                             </div>
                             <span class="glock-title">10 thực phẩm bổ não, tăng cường trí nhớ - </span>
                         </a>
