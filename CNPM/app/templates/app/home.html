@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static "app/css/homeCss.css" %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Home</title>
+
+    
 </head>
 
 <body style="background: #F5F7FD;">
@@ -43,7 +45,7 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="../login/login.html" style="text-decoration: none; color: black;"> Đăng nhập </a>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> Đăng nhập </a>
                     </div>
                 </div>
             </div>
@@ -83,7 +85,7 @@
     <main>
         <div class="container_body">
             <a href="#">
-                <img src="app/img/slide.jpg" alt="Lỗi hiển thị" class="zoomed">
+                <img src="static/app/img/slide.jpg" alt="Lỗi hiển thị" class="zoomed">
             </a>
         </div>
         <div class="container_flashsale">

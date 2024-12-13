@@ -1,0 +1,192 @@
+{% load static  %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="{% static 'app/js/script.js' %}" > </script>
+</head>
+
+<body>
+    <header>
+        <div class="header_top">
+            <div class="img_km">
+                <img src="/static/app/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+            </div>
+        </div>
+        <div class="container_header" style="background: white; padding: 0px 45px;">
+            <div class="container_header_top">
+                <div class="logo">
+                    <img src="/static/app/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                </div>
+                <div class="search" style="position: relative;">
+                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="list_Function">
+                    <div class="item_list_Function">
+                        <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
+                        width: 25px;
+                        height: 25px;
+                        background-size: contain;"></span>
+                        <p>Giỏ hàng </p>
+                    </div>
+                    <div class="item_list_Function">
+                        <p>Kiểm tra đơn hàng</p>
+                    </div>
+                    <div class="item_list_Function">
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> Đăng nhập </a>
+                    </div>
+                </div>
+            </div>
+            <div class="container_header_bottom">
+                <div class="header__danhmuc">
+                    <div class="header__bars">
+                        <i class="fa fa-bars"></i>
+                        <span>Danh Mục</span>
+                    </div>
+                    <div class="header__menu">
+                        <ul>
+                            <li>
+                                <a href="{% url 'home' %}">Trang chủ</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Mua hàng</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Kiến thức</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Khuyến mãi</a>
+                            </li>
+
+                            <li>
+                                <a target="_blank" href="#">Đổi quà</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="theme-supertitle">
+        <span>Trang thành viên</span>
+    </div>
+    <div class="container_body">
+        <div class="container" id="container">
+            <div class="form-container sign-up">
+                <form>
+                    <h1>Tạo tài khoản</h1>
+                    <div class="social-icons">
+                        <a href="#" class="icon">
+                            <i class="fa-brands fa-google-plus-g"></i>
+                        </a>
+                        <a href="#" class="icon">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </a>
+                    </div>
+                    <span>hoặc sử dụng email của bạn để đăng ký</span>
+                    <input type="text" placeholder="Họ và tên">
+                    <input type="email" placeholder="Email">
+                    <input type="password" placeholder="Mật khẩu">
+                    <button>Đăng Kí</button>
+                </form>
+            </div>
+            <div class="form-container sign-in">
+                <form>
+                    <h1>Đăng nhập</h1>
+                    <div class="social-icons">
+                        <a href="#" class="icon">
+                            <i class="fa-brands fa-google-plus-g"></i>
+                        </a>
+                        <a href="#" class="icon">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </a>
+                    </div>
+                    <span>hoặc sử dụng email và mật khẩu của bạn</span>
+                    <input type="email" placeholder="Email">
+                    <input type="password" placeholder="Mật khẩu">
+                    <a href="">Quên mật khẩu?</a>
+                    <button>Đăng Nhập</button>
+                </form>
+            </div>
+            <div class="toggle-container">
+                <div class="toggle">
+                    <div class="toggle-panel toggle-left">
+                        <h1>Chào mừng trở lại!</h1>
+                        <p>Nhập thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web </p>
+                        <button class="hidden" id="login" onclick="handeSignIn()">Đăng nhập</button>
+                    </div>
+                    <div class="toggle-panel toggle-right">
+                        <h1>Xin chào bố mẹ bé!</h1>
+                        <p>Đăng ký thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web</p>
+                        <button class="hidden" id="register" onclick="handeSignUp()">Đăng kí</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container_footer">
+            <div class="grid">
+                <div class="section">
+                    <h3>Giới thiệu về chúng tôi</h3>
+                    <ul>
+                        <li><a href="#">Cửa hàng của chúng tôi</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Nhãn hàng</a></li>
+                        <li><a href="#">Tặng quà</a></li>
+                    </ul>
+                </div>
+    
+                <div class="section newsletter">
+                    <h3>Đăng ký nhận bản tin của chúng tôi để nhận thông báo và các chương trình khuyến mãi khác</h3>
+                    <!-- <div class="form-container">
+                        <input type="email" placeholder="Email address...">
+                        <button>Subscribe</button>
+                    </div> -->
+                </div>
+    
+                <div class="section"  style="padding-left: 90px;">
+                    <h3>Dịch vụ khách hàng</h3>
+                    <ul>
+                        <li><a href="#">Câu hỏi thường gặp</a></li>
+                        <li><a href="#">Định vị cửa hàng</a></li>
+                        <li><a href="#">Trả lại</a></li>
+                        <li><a href="#">Thông tin vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="footer-bottom">
+                <p>Copyright & copy; 2024. All Right Reserved</p>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'app/js/script.js' %}"></script>
+</body>
+
+</html>
