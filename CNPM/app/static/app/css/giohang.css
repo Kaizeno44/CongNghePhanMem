@@ -1,0 +1,122 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Layout */
+body {
+    background-color: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+.shipping-info, .cart {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.shipping-info {
+    width: 60%;
+}
+
+.cart {
+    width: 35%;
+}
+
+/* Forms and inputs */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.select-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.select-group select {
+    flex: 1;
+}
+
+textarea {
+    height: 80px;
+}
+
+.payment-method label {
+    display: block;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* Cart Section */
+.cart-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #f3f3f3;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.summary {
+    margin-top: 20px;
+}
+
+.summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.pay-btn {
+    background-color: #f50057;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background-color: #d4004c;
+}
