@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <title>Khuyen mai</title>
+    <link rel="stylesheet" href="km.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
-
-<body>
+<body style="background: #F5F7FD;">
     <header>
         <div class="header_top">
             <div class="img_km">
                 <img src="../Home/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
             </div>
         </div>
-        <div class="container_header" style="background: white; padding: 0px 45px;">
+        <div class="container_header" >
             <div class="container_header_top">
                 <div class="logo">
                     <img src="../Home/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
@@ -36,14 +33,14 @@
                         <p>Giỏ hàng </p>
                     </div>
                     <div class="item_list_Function">
-                        <p>Kiểm tra đơn hàng</p>
+                        <span>Kiểm tra đơn hàng</span>
                     </div>
                     <div class="item_list_Function">
                         <span style="height: 25px;
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="../login/index.html" style="text-decoration: none; color: black;"> Đăng nhập </a>
+                        <a href="../login/login.html" style="text-decoration: none; color: black;"> Đăng nhập </a>
                     </div>
                 </div>
             </div>
@@ -64,7 +61,7 @@
                             </li>
 
                             <li>
-                                <a href="../KienThuc/kienThuc.html">Kiến thức</a>
+                                <a href="kienThuc.html">Kiến thức</a>
                             </li>
 
                             <li>
@@ -80,69 +77,53 @@
             </div>
         </div>
     </header>
-    <div class="theme-supertitle">
-        <span>Trang thành viên</span>
-    </div>
-    <div class="container_body">
-        <div class="container" id="container">
-            <div class="form-container sign-up">
-                <form>
-                    <h1>Tạo tài khoản</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
-                    </div>
-                    <span>hoặc sử dụng email của bạn để đăng ký</span>
-                    <input type="text" placeholder="Họ và tên">
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Mật khẩu">
-                    <button>Đăng Kí</button>
-                </form>
+    <main>
+        <div class="theme-supertitle">
+            <span>Khuyến mãi</span>
+        </div>
+        <div class="container_voucher">
+            <div class="titlekm">
+                <span>Chương trình khuyến mãi</span>
             </div>
-            <div class="form-container sign-in">
-                <form>
-                    <h1>Đăng nhập</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
+            <div class="listkm">
+                <div class="listItemKm">
+                    <div class="itemkm">
+                        <a href="#">
+                            <img src="../Home/img/km1.jpg"> 
+                        </a> 
+                        <p>Khuyến mãi từ sữa Danmilko</p>
+
                     </div>
-                    <span>hoặc sử dụng email và mật khẩu của bạn</span>
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Mật khẩu">
-                    <a href="">Quên mật khẩu?</a>
-                    <button>Đăng Nhập</button>
-                </form>
-            </div>
-            <div class="toggle-container">
-                <div class="toggle">
-                    <div class="toggle-panel toggle-left">
-                        <h1>Chào mừng trở lại!</h1>
-                        <p>Nhập thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web </p>
-                        <button class="hidden" id="login" onclick="handeSignIn()">Đăng nhập</button>
+                    <div class="itemkm">
+                        <a href="#">
+                            <img src="../Home/img/km2.jpg"> 
+                            
+                        </a>
+                        <p>
+                            Trung thu rộn ràng quá tặng ngập tràn
+                        </p>
                     </div>
-                    <div class="toggle-panel toggle-right">
-                        <h1>Xin chào bố mẹ bé!</h1>
-                        <p>Đăng ký thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web</p>
-                        <button class="hidden" id="register" onclick="handeSignUp()">Đăng kí</button>
+                    <div class="itemkm">
+                        <a href="#">
+                            <img src="../Home/img/km3.jpg">
+                        </a>
+                        <p>
+                            Uống sữa tốt, đổi quà xịn
+                        </p>
+                    </div>
+                    <div class="itemkm">
+                        <a href="#">
+                            <img src="../Home/img/km4.jpg"> 
+                        </a>
+                        <p>
+                            Uống sữa tốt , Nhận quà hay từ sữa Neocare
+                        </p>
                     </div>
                 </div>
+                
             </div>
         </div>
-    </div>
+    </main>
     <footer class="footer">
         <div class="container_footer">
             <div class="grid">
@@ -158,10 +139,10 @@
     
                 <div class="section newsletter">
                     <h3>Đăng ký nhận bản tin của chúng tôi để nhận thông báo và các chương trình khuyến mãi khác</h3>
-                    <!-- <div class="form-container">
+                    <div class="form-container">
                         <input type="email" placeholder="Email address...">
                         <button>Subscribe</button>
-                    </div> -->
+                    </div>
                 </div>
     
                 <div class="section"  style="padding-left: 90px;">
@@ -180,7 +161,5 @@
             </div>
         </div>
     </footer>
-    <script src="script.js"></script>
 </body>
-
 </html>

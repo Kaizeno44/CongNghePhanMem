@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao Diện Thanh Toán</title>
+    <link rel="stylesheet" href="giohang.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Thông tin vận chuyển -->
+        <div class="shipping-info">
+            <h2>Thông Tin Vận Chuyển</h2>
+            <form>
+                <input type="text" placeholder="Họ tên">
+                <input type="text" placeholder="Số điện thoại">
+                <input type="email" placeholder="Email">
+                <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
+                <div class="select-group">
+                    <select>
+                        <option>Chọn Tỉnh / Thành phố</option>
+                    </select>
+                    <select>
+                        <option>Chọn Quận / Huyện</option>
+                    </select>
+                    <select>
+                        <option>Chọn Phường / Xã</option>
+                    </select>
+                </div>
+                <textarea placeholder="Ghi chú thêm"></textarea>
+            </form>
+            <!-- Hình thức thanh toán -->
+            <h2>Hình thức thanh toán</h2>
+            <div class="payment-method">
+                <label>
+                    <input type="radio" name="payment" checked>
+                    COD <span>Thanh toán khi nhận hàng</span>
+                </label>
+                <label>
+                    <input type="radio" name="payment">
+                    Chuyển khoản ngân hàng
+                </label>
+            </div>
+        </div>
+
+        <!-- Giỏ hàng -->
+        <div class="cart">
+            <h2>Giỏ hàng</h2>
+            <div class="cart-item">
+                <img src="placeholder.jpg" alt="Sản phẩm">
+                <div class="item-details">
+                    <p>Sữa hạt đa dưỡng chất Forganic 400g tặng ly sứ cao cấp [Có Quà]</p>
+                    <div class="quantity">
+                        <button>-</button>
+                        <span>1</span>
+                        <button>+</button>
+                    </div>
+                    <p>410.000đ</p>
+                </div>
+            </div>
+            <input type="text" placeholder="Nhập mã giảm giá">
+            <button>Áp dụng</button>
+
+            <!-- Tổng kết thanh toán -->
+            <div class="summary">
+                <p>Tạm tính: <span>410.000đ</span></p>
+                <p>Giảm giá: <span>0đ</span></p>
+                <p>Phí giao hàng: <span>0đ</span></p>
+                <hr>
+                <p><strong>Tổng: <span>410.000đ</span></strong></p>
+            </div>
+            <button class="pay-btn">Thanh toán 410.000đ (COD)</button>
+        </div>
+    </div>
+</body>
+</html>
