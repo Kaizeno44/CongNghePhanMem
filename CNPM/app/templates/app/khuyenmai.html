@@ -13,13 +13,17 @@
     <header>
         <div class="header_top">
             <div class="img_km">
-                <img src="/static/app/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                <a href="{% url 'home' %}">
+                    <img src="/static/app/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
             </div>
         </div>
         <div class="container_header" >
             <div class="container_header_top">
                 <div class="logo">
+                    <a href="{% url 'home' %}">
                     <img src="/static/app/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                </a>
+
                 </div>
                 <div class="search" style="position: relative;">
                     <input type="text" placeholder="Tìm sản phẩm" class="input_search">
@@ -31,9 +35,12 @@
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <p>Giỏ hàng </p>
+                        <a href="{% url 'giohang' %}">
+                            <p>Giỏ hàng </p>
+                        </a>
                     </div>
                     <div class="item_list_Function">
+                        <a href="{% url 'kiemtradonhang' %}">
                         <span>Kiểm tra đơn hàng</span>
                     </div>
                     <div class="item_list_Function">
@@ -54,15 +61,15 @@
                     <div class="header__menu">
                         <ul>
                             <li>
-                                <a href="home.html">Trang chủ</a>
+                                <a href="{% url 'home' %}">Trang chủ</a>
                             </li>
 
                             <li>
-                                <a href="#">Mua hàng</a>
+                                <a href="{% url 'muahang' %}">Mua hàng</a>
                             </li>
 
                             <li>
-                                <a href="kienThuc.html">Kiến thức</a>
+                                <a href="#">Kiến thức</a>
                             </li>
 
                             <li>

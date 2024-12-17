@@ -9,5 +9,8 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('exchangegifts/', views.exchange_gifts, name='doiqua'),
     path('promote/', views.promote, name='khuyenmai'),
+    path('shoppingcart/', views.shopping_cart, name='giohang'),
+    path('purchase/', views.purchase, name='muahang'),
+    path('checkorder/', views.check_order, name='kiemtradonhang'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

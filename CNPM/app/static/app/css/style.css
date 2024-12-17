@@ -9,7 +9,13 @@ body {
     background: #F5F7FD;
     font-family: Helvetica ;
 }
-
+a{
+    text-decoration: none;
+    color: #000;
+}
+.container_header {
+    background: #fff;
+}
 .header_top {
     background: rgb(234, 0, 97);
 }
@@ -416,6 +422,7 @@ body {
     padding: 65px 0;
     text-transform: uppercase;
     font-size: 32px;
+    padding-left: 25px;
 }
 .container_footer{
     margin:  auto;
@@ -516,4 +523,3 @@ body {
     font-size: 0.875rem;
     color: #666;
 }
-
