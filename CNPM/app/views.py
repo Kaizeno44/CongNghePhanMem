@@ -15,3 +15,5 @@ def purchase(request):
     return render(request, 'app/muahang.html')
 def check_order(request):
     return render(request, 'app/kiemtradonhang.html')
+def knowledge(request):
+    return render(request, 'app/kienthuc.html')

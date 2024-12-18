@@ -357,6 +357,7 @@ a{
     border-right: none;
     border-radius: 20px 0 0 20px;
     outline: none;
+    height: 40px;
 }
 
 .form-container input:focus {

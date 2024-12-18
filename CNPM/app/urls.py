@@ -12,5 +12,7 @@ urlpatterns = [
     path('shoppingcart/', views.shopping_cart, name='giohang'),
     path('purchase/', views.purchase, name='muahang'),
     path('checkorder/', views.check_order, name='kiemtradonhang'),
+    path('knowledge/', views.knowledge, name='kienthuc'),
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
