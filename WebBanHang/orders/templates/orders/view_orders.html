@@ -1,0 +1,30 @@
+<h1>Danh Sách Đơn Hàng</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Tên khách hàng</th>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Giá</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.customer_name }}</td>
+        <td>{{ order.product_name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.price }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+            <a href="{% url 'delete_order' order.id %}">Xóa</a> |
+            <a href="{% url 'update_order' order.id %}">Chỉnh sửa</a> |
+            <a href="{% url 'confirm_order' order.id %}">Xác nhận</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'add_order' %}">Thêm đơn hàng mới</a>
