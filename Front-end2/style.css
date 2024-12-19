@@ -1,0 +1,86 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  justify-content: left;
+  align-items: left;
+  height: 100vh;
+}
+
+/* Sidebar bên trái */
+.sidebar {
+  width: 250px;
+  background-color: #0b1b32;
+  padding: 10px;
+  border-radius: 10px; /* Bo tròn góc cho sidebar */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Cho phép cuộn khi nội dung dài */
+  max-height: 100vh; /* Đảm bảo chiều cao tối đa của sidebar */
+}
+
+.menu-item {
+  margin: 10px 0;
+}
+
+.menu-title {
+  background-color: #24e4e1; /* Màu nền xanh nhạt */
+  color: #000; /* Màu chữ */
+  padding: 10px 15px;
+  border-radius: 20px; /* Bo tròn góc */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between; /* Canh mũi tên bên phải */
+  align-items: center;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.arrow {
+  font-size: 14px; /* Kích thước mũi tên */
+  transition: transform 0.3s ease; /* Hiệu ứng xoay mũi tên */
+}
+
+.submenu {
+  list-style: none;
+  display: none; /* Ẩn menu con */
+  margin-top: 5px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.submenu li a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.submenu li a:hover {
+  background-color: yellow;
+  font-weight: bold;
+  color: #321f1b;
+}
+
+/* Khi hover vào menu title */
+.menu-title:hover {
+  background-color: #F1916D;
+  font-weight: bold;
+  color: #321f1b;
+}
+
+/* Khi mục menu được chọn (active) */
+.menu-title.active {
+  background-color: #F1916D;
+  font-weight: bold;
+  color: #321f1b;
+}
