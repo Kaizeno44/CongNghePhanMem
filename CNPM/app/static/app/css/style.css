@@ -485,25 +485,26 @@ a{
     margin-bottom: 1rem;
 }
 
-.form-container {
+.bantin {
     display: flex;
     margin-top: 1rem;
 }
 
-/* .form-container input {
+.bantin input {
     flex-grow: 1;
     padding: 0.5rem 1rem;
     border: 1px solid #ccc;
     border-right: none;
     border-radius: 20px 0 0 20px;
     outline: none;
+    height: 57px;
 }
 
-.form-container input:focus {
+.bantin input:focus {
     border-color: rgb(234, 0, 97);
 }
 
-.form-container button {
+.bantin button {
     background-color: rgb(234, 0, 97);
     color: #fff;
     padding: 0.5rem 1rem;
@@ -511,9 +512,9 @@ a{
     border-radius: 0 20px 20px 0;
     cursor: pointer;
     transition: background-color 0.3s;
-} */
+}
 
-.form-container button:hover {
+.bantin button:hover {
     background-color: #333;
 }
 

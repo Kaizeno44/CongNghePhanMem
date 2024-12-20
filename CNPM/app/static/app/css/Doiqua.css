@@ -2,6 +2,10 @@
     margin: 0;
 
 }
+a{
+    text-decoration: none;
+    color: #000;
+}
 body {
     background: #F5F7FD;
     font-family: Helvetica ;
@@ -216,6 +220,7 @@ body {
     border-right: none;
     border-radius: 20px 0 0 20px;
     outline: none;
+    height: 40px;
 }
 
 .form-container input:focus {
