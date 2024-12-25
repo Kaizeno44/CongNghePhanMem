@@ -252,12 +252,7 @@ a.phone_backtotop img {
     text-decoration: underline;
     color: rgb(234, 0, 97);
 }
-.tb_gio_hang {
-    background: #00f4ff;
-    width: 30px;
-    text-align: center;
-    border-radius: 40%;
-}
+
 .newsletter h3 {
     font-size: 1.25rem;
     font-weight: 600;
@@ -341,11 +336,11 @@ a.phone_backtotop img {
     align-items: center;
     margin-bottom: 5px;
 }
-.header_doiqua .khung_chucnang:nth-child(1){
+.header_doiqua .khung_chucnang:nth-child(2){
     background: blue;
     border-radius: 10px;
 }
-.header_doiqua .khung_chucnang:nth-child(1):hover{
+.header_doiqua .khung_chucnang:nth-child(2):hover{
     background: blue;
     border-radius: 10px;
 } 
@@ -354,55 +349,38 @@ a.phone_backtotop img {
     cursor: pointer;
     color: white;
 }
-.anh_qua {
-    height: 210px;
-    width: 210px;
-    padding: 10px 10px 10px 15px;
+h2 {
+    color: #333;
+    margin-bottom: 20px;
 }
-.anh_qua img {
-    width: 100%;
-    max-width: 215px;
-    max-height: 210px;
-    border-radius: 8px;
+.container {
+    width: 50%;
+    margin: 30px auto;
+    text-align: center;
 }
-.item_doiqua {
-    border: 1px solid black;
-    border-radius: 8px;
-    margin: 25px 25px 10px 25px;
-    background: #f4f3f3;
-}
-.list_doiqua {
-    display: flex;
-}
-.item_doiqua p {
-    padding: 5px 5px 5px 15px;
+.container input{
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 16px;
-    color: rgb(48, 151, 171);
 }
-.thong_tindoi {
-    display: flex;
-    padding: 5px 20px 5px 15px;
-    justify-content: space-between;
-}
-.thongtin1 {
-    color: #e2e208;
-    display: flex;
-    align-items: center;
-}
-.thongtin2 {
-    background: rgb(48, 151, 171);
-    width: 120px;
-    height: 32px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    border-radius: 20px;
-}
-.item_doiqua p:hover{
-    color: rgb(234, 0, 97);
-    cursor: pointer;
-}
-.thongtin2:hover{
+.container button{
+    padding: 10px 20px;
+    background-color: #337ab7;
     color: #fff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+}
+.container button:hover{
+    background-color: #286090;
+}
+.tb_gio_hang {
+    background: #00f4ff;
+    width: 30px;
+    text-align: center;
+    border-radius: 40%;
 }

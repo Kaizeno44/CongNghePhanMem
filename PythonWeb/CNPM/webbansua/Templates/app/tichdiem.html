@@ -1,14 +1,14 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiem tra don hang</title>
-    <link rel="stylesheet" href="style.css">
+    <title>TICh Diem</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="{% static "app/tichdiem.css" %}">
 </head>
-<body>
+<body style="background: #F5F7FD;">
     <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
         <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
     </a>
@@ -18,16 +18,16 @@
     <header>
         <div class="header_top">
             <div class="img_km">
-                <a href="../Home/Home.html">
-                    <img src="../Home/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                <a href="{% url "home" %}">
+                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
         <div class="container_header" >
             <div class="container_header_top">
                 <div class="logo">
-                    <a href="../Home/Home.html">
-                        <img src="../Home/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                    <a href="{% url "home" %}">
+                        <img src="/static/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
@@ -40,14 +40,14 @@
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <a href="../giohang/giohang.html">
+                        <a href="{% url "giohang" %}">
                             <div class="tb_gio_hang">
                                 <span style="font-weight: 600; color: red;">0</span>
                             </div>
                         </a>
                     </div>
                     <div class="item_list_Function">
-                        <a href="../Kiemtradonhang/index.html">
+                        <a href="{% url "kiemtradonhang" %}">
                             <span>Kiểm tra đơn hàng</span>
                         </a>
                     </div>
@@ -56,7 +56,7 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="../login/login.html" style="text-decoration: none; color: black;"> <span>Đăng nhập</span>  </a>
+                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> <span>Đăng nhập</span>  </a>
                     </div>
                 </div>
             </div>
@@ -69,23 +69,23 @@
                     <div class="header__menu">
                         <ul>
                             <li>
-                                <a href="../Home/Home.html">Trang chủ</a>
+                                <a href="{% url "home" %}">Trang chủ</a>
                             </li>
 
                             <li>
-                                <a href="../Muahang/muahang.html">Mua hàng</a>
+                                <a href="{% url "muahang" %}">Mua hàng</a>
                             </li>
 
                             <li>
-                                <a href="../KienThuc/kienThuc.html">Kiến thức</a>
+                                <a href="{% url "kienthuc" %}">Kiến thức</a>
                             </li>
 
                             <li>
-                                <a href="../KhuyenMai/Khuyenmai.html">Khuyến mãi</a>
+                                <a href="{% url "khuyenmai" %}">Khuyến mãi</a>
                             </li>
 
                             <li>
-                                <a  href="../Doiqua/Doiqua.html">Đổi quà</a>
+                                <a  href="{% url "doiqua" %}">Đổi quà</a>
                             </li>
                         </ul>
                     </div>
@@ -94,11 +94,27 @@
         </div>
     </header>
     <main>
+        <div class="theme-supertitle">
+            <span>Tích điểm - Đổi quà</span>
+        </div>
+        <div class="container_doiqua">
+            <div class="header_doiqua">
+                <div class="khung_chucnang">
+                    <a href="{% url "doiqua" %}"><p>Đổi quà</p></a>
+                </div>
+                <div class="khung_chucnang">
+                    <a href="{% url "tichdiem" %}"><p>Tích điểm</p></a>
+                </div>
+            </div>
+                
+        </div>
         <div class="container">
-            <h2>KIỂM TRA ĐƠN HÀNG</h2>
-            <input type="text" placeholder="Nhập số điện thoại/Email để kiểm tra đơn hàng" />
+            <h2>Tích điểm </h2>
+            <input type="tel" placeholder="Nhập số điện thoại để tích điểm" />
             <br>
-            <button>Kiểm tra đơn hàng</button>
+            <button>Xác nhận</button>
+        </div>
+        
     </main>
     <footer class="footer">
         <div class="container_footer">

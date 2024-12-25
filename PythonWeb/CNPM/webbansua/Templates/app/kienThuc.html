@@ -13,15 +13,15 @@
     <header>
         <div class="header_top">
             <div class="img_km">
-                <a href="{% url 'home'%}">
-                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                <a href="{% url "home" %}">
+                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
         <div class="container_header" >
             <div class="container_header_top">
                 <div class="logo">
-                    <a href="{% url 'home' %}">
+                    <a href="{% url "home" %}">
                         <img src="/static/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
                     </a>
                 </div>
@@ -36,7 +36,9 @@
                         height: 25px;
                         background-size: contain;"></span>
                         <a href="{% url "giohang" %}">
-                            <p>Giỏ hàng </p>
+                            <div class="tb_gio_hang">
+                                <span style="font-weight: 600; color: red;">0</span>
+                            </div>
                         </a>
                     </div>
                     <div class="item_list_Function">
@@ -49,7 +51,7 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> <span>Đăng nhập</span></a>
+                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> <span>Đăng nhập</span>  </a>
                     </div>
                 </div>
             </div>

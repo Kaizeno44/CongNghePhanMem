@@ -25,3 +25,9 @@ def check_order(request):
 def knowledge(request):
     context = {}
     return render(request, 'app/kienthuc.html', context)
+def Orderdetails(request):
+    context = {}
+    return render(request, 'app/chitietsp.html', context)
+def Earnpoints(request):
+    context = {}
+    return render(request, 'app/tichdiem.html', context)
