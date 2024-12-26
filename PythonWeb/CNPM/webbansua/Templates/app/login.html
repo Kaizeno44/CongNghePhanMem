@@ -60,7 +60,27 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> <span>Đăng nhập</span>  </a>
+                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                                <div class="menu_content_1">
+                                    <ul >
+                                        <li >
+                                            <a href="#">
+                                                <i class="fa fa-user-o"></i>
+                                                <span>Hồ sơ</span>
+                                            </a>
+                                        </li>
+                                        <li >
+                                            <a href="#">
+                                                <i class="fa fa-sign-out"></i>
+                                                <span>Đăng xuất</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>  
+                        </a>
                     </div>
                 </div>
             </div>
@@ -69,6 +89,24 @@
                     <div class="header__bars">
                         <i class="fa fa-bars"></i>
                         <span>Danh Mục</span>
+                        <div class="menu_content">
+                            <ul >
+                                <li >
+                                    <div class="noidungmenu">
+                                        <a href="{% url "muahang" %}">SỮA BỘT DINH DƯỠNG</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                    
+
+                                </li>
+                                <li >
+                                    <div class="noidungmenu">
+                                        <a href="{% url "muahang" %}">TÃ BỈM CHO BÉ</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="header__menu">
                         <ul>
