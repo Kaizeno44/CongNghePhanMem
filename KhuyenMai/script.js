@@ -1,44 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Nút Subscribe
-document.addEventListener('DOMContentLoaded', () => {
-    const subscribeButton = document.querySelector('.form-container button');
-    const emailInput = document.querySelector('.form-container input');
-
-    subscribeButton.addEventListener('click', () => {
-        const email = emailInput.value;
-        if (email) {
-            showNotification('Bạn đã đăng ký thành công!');
-            emailInput.value = ''; // Reset trường nhập
-        } else {
-            showNotification('Vui lòng nhập email!', 'error');
-        }
-    });
-
-    function showNotification(message, type = 'success') {
-        // Tạo thông báo
-        const notification = document.createElement('div');
-        notification.className = `notification ${type === 'error' ? 'error' : ''}`;
-        notification.textContent = message;
-
-        // Thêm thông báo vào body
-        document.body.appendChild(notification);
-
-        // Hiển thị thông báo
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
-
-        // Ẩn và xóa thông báo sau 3 giây
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                notification.remove();
-            }, 500);
-        }, 3000);
-    }
-});
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Khuyến mãi từ sữa Danmilko
 document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện cho mục "Khuyến mãi từ sữa Danmilko"
     const danmilkoItem = document.querySelector('.listItemKm .itemkm:first-child');
@@ -76,40 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `);
     });
 
-    function showModal(content) {
-        // Tạo backdrop
-        const backdrop = document.createElement('div');
-        backdrop.className = 'modal-backdrop';
-        document.body.appendChild(backdrop);
-
-        // Tạo modal
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <button class="close">&times;</button>
-            <div>${content}</div>
-        `;
-        document.body.appendChild(modal);
-
-        // Hiển thị modal và backdrop
-        backdrop.style.display = 'block';
-        modal.style.display = 'block';
-
-        // Thêm sự kiện đóng modal
-        modal.querySelector('.close').addEventListener('click', closeModal);
-        backdrop.addEventListener('click', closeModal);
-
-        function closeModal() {
-            modal.remove();
-            backdrop.remove();
-        }
-    }
-});
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Trung thu rộn ràng quá tặng ngập tràn
-document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện cho mục "Trung thu rộn ràng quá tặng ngập tràn"
-    const trungThuItem = document.querySelector('.listItemKm .itemkm:nth-child(2)'); // Đảm bảo chọn đúng phần tử
+    const trungThuItem = document.querySelector('.listItemKm .itemkm:nth-child(2)');
     trungThuItem.addEventListener('click', () => {
         showModal(`
             <h2>Trung Thu Rộn Ràng Quà Tặng Ngập Tràn</h2>
@@ -121,38 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `);
     });
 
-    function showModal(content) {
-        // Tạo backdrop
-        const backdrop = document.createElement('div');
-        backdrop.className = 'modal-backdrop';
-        document.body.appendChild(backdrop);
-
-        // Tạo modal
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <button class="close">&times;</button>
-            <div>${content}</div>
-        `;
-        document.body.appendChild(modal);
-
-        // Hiển thị modal và backdrop
-        backdrop.style.display = 'block';
-        modal.style.display = 'block';
-
-        // Thêm sự kiện đóng modal
-        modal.querySelector('.close').addEventListener('click', closeModal);
-        backdrop.addEventListener('click', closeModal);
-
-        function closeModal() {
-            modal.remove();
-            backdrop.remove();
-        }
-    }
-});
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Uống sữa tốt, đổi quà xịn
-document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện cho mục "Uống sữa tốt, đổi quà xịn"
     const uongSuaItem = document.querySelector('.listItemKm .itemkm:nth-child(3)'); // Đảm bảo chọn đúng phần tử
     uongSuaItem.addEventListener('click', () => {
@@ -186,38 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `);
     });
 
-    function showModal(content) {
-        // Tạo backdrop
-        const backdrop = document.createElement('div');
-        backdrop.className = 'modal-backdrop';
-        document.body.appendChild(backdrop);
-
-        // Tạo modal
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <button class="close">&times;</button>
-            <div>${content}</div>
-        `;
-        document.body.appendChild(modal);
-
-        // Hiển thị modal và backdrop
-        backdrop.style.display = 'block';
-        modal.style.display = 'block';
-
-        // Thêm sự kiện đóng modal
-        modal.querySelector('.close').addEventListener('click', closeModal);
-        backdrop.addEventListener('click', closeModal);
-
-        function closeModal() {
-            modal.remove();
-            backdrop.remove();
-        }
-    }
-});
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Uống sữa tốt , Nhận quà hay từ sữa Neocare
-document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện cho mục "Uống Sữa Tốt, Nhận Quà Hay Từ Sữa Neocare"
     const uongSuaNeocareItem = document.querySelector('.listItemKm .itemkm:nth-child(4)'); // Đảm bảo chọn đúng phần tử
     uongSuaNeocareItem.addEventListener('click', () => {
