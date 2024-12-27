@@ -31,3 +31,6 @@ def Orderdetails(request):
 def Earnpoints(request):
     context = {}
     return render(request, 'app/tichdiem.html', context)
+def Profile(request):
+    context = {}
+    return render(request, 'app/hoso.html', context)

@@ -187,6 +187,7 @@ a.phone_backtotop img {
   display: flex;
   justify-content: space-between;
   gap: 25px;
+  font-size: 18px;
   height: 25px;
 }
 .search input {

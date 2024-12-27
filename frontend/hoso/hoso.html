@@ -1,17 +1,12 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="{% static "app/login.css" %}">
+    <title>Ho_so</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="hoso.css">
 </head>
-
 <body>
     <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
         <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
@@ -22,16 +17,16 @@
     <header>
         <div class="header_top">
             <div class="img_km">
-                <a href="{% url "home" %}">
-                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
+                <a href="../Home/Home.html">
+                    <img src="../Home/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
-        <div class="container_header" >
+        <div class="container_header">
             <div class="container_header_top">
                 <div class="logo">
-                    <a href="{% url "home" %}">
-                        <img src="/static/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                    <a href="../Home/Home.html">
+                        <img src="../Home/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
@@ -44,14 +39,14 @@
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <a href="{% url "giohang" %}">
+                        <a href="../giohang/giohang.html">
                             <div class="tb_gio_hang">
                                 <span style="font-weight: 600; color: red;">0</span>
                             </div>
                         </a>
                     </div>
                     <div class="item_list_Function">
-                        <a href="{% url "kiemtradonhang" %}">
+                        <a href="../Kiemtradonhang/index.html">
                             <span>Kiểm tra đơn hàng</span>
                         </a>
                     </div>
@@ -60,13 +55,13 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                        <a href="../login/login.html"> 
                             <div class="header__bars_1">
                                 <span>Đăng nhập</span>
                                 <div class="menu_content_1">
                                     <ul >
                                         <li >
-                                            <a href="{% url "hoso" %}">
+                                            <a href="hoso.html">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
@@ -79,7 +74,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div>  
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -93,7 +88,7 @@
                             <ul >
                                 <li >
                                     <div class="noidungmenu">
-                                        <a href="{% url "muahang" %}">SỮA BỘT DINH DƯỠNG</a>
+                                        <a href="../Muahang/muahang.html">SỮA BỘT DINH DƯỠNG</a>
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                                     </div>
                                     
@@ -101,33 +96,34 @@
                                 </li>
                                 <li >
                                     <div class="noidungmenu">
-                                        <a href="{% url "muahang" %}">TÃ BỈM CHO BÉ</a>
+                                        <a href="../Muahang/muahang.html">TÃ BỈM CHO BÉ</a>
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
+
                     <div class="header__menu">
                         <ul>
                             <li>
-                                <a href="{% url "home" %}">Trang chủ</a>
+                                <a href="../Home/Home.html">Trang chủ</a>
                             </li>
 
                             <li>
-                                <a href="{% url "muahang" %}">Mua hàng</a>
+                                <a href="../Muahang/muahang.html">Mua hàng</a>
                             </li>
 
                             <li>
-                                <a href="{% url "kienthuc" %}">Kiến thức</a>
+                                <a href="../KienThuc/kienThuc.html">Kiến thức</a>
                             </li>
 
                             <li>
-                                <a href="{% url "khuyenmai" %}">Khuyến mãi</a>
+                                <a href="../KhuyenMai/Khuyenmai.html">Khuyến mãi</a>
                             </li>
 
                             <li>
-                                <a  href="{% url "doiqua" %}">Đổi quà</a>
+                                <a href="../Doiqua/Doiqua.html">Đổi quà</a>
                             </li>
                         </ul>
                     </div>
@@ -135,69 +131,23 @@
             </div>
         </div>
     </header>
-    <div class="theme-supertitle">
-        <span>Trang thành viên</span>
-    </div>
-    <div class="container_body">
-        <div class="container" id="container">
-            <div class="form-container sign-up">
-                <form>
-                    <h1>Tạo tài khoản</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
-                    </div>
-                    <span>hoặc sử dụng email của bạn để đăng ký</span>
-                    <input type="text" placeholder="Họ và tên">
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Mật khẩu">
-                    <button>Đăng Kí</button>
-                </form>
-            </div>
-            <div class="form-container sign-in">
-                <form>
-                    <h1>Đăng nhập</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
-                    </div>
-                    <span>hoặc sử dụng email và mật khẩu của bạn</span>
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Mật khẩu">
-                    <a href="">Quên mật khẩu?</a>
-                    <button>Đăng Nhập</button>
-                </form>
-            </div>
-            <div class="toggle-container">
-                <div class="toggle">
-                    <div class="toggle-panel toggle-left">
-                        <h1>Chào mừng trở lại!</h1>
-                        <p>Nhập thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web </p>
-                        <button class="hidden" id="login" onclick="handeSignIn()">Đăng nhập</button>
-                    </div>
-                    <div class="toggle-panel toggle-right">
-                        <h1>Xin chào bố mẹ bé!</h1>
-                        <p>Đăng ký thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web</p>
-                        <button class="hidden" id="register" onclick="handeSignUp()">Đăng kí</button>
+    <main>
+        <div class="container">
+            <div class="header">Thông tin khách hàng</div>
+            <div class="content">
+                <img src="../admin/img/avatar-6.jpg" alt="Student Photo">
+                <div class="info">
+                    <div><span>Tẻn đăng nhập:</span> Huybv123 </div>
+                    <div><span>Họ tên:</span> Bùi Văn Huy</div>
+                    <div><span>Số điện thoại:</span> 0868698389</div>
+                    <div><span>Email:</span> buivanhuy2706@gmail.com</div>
+                    <div><span>Tích điểm :</span> 970 
+                        <i class="fa fa-star" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <footer class="footer">
         <div class="container_footer">
             <div class="grid">
@@ -213,7 +163,7 @@
     
                 <div class="section newsletter">
                     <h3>Đăng ký nhận bản tin của chúng tôi để nhận thông báo và các chương trình khuyến mãi khác</h3>
-                    <div class="bantin">
+                    <div class="form-container">
                         <input type="email" placeholder="Email address...">
                         <button>Subscribe</button>
                     </div>
@@ -231,11 +181,9 @@
             </div>
     
             <div class="footer-bottom">
-                <p>Copyright & copy; 2024. All Right Reserved</p>
+                <p>Copyright &copy; 2024. All Right Reserved</p>
             </div>
         </div>
     </footer>
-    <script src="/static/js/login.js"></script>
 </body>
-
 </html>
