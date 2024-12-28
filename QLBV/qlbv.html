@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý đơn hàng</title>
+    <title>Quản lý bài viết</title>
     <link href="css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/css.css">
-    <link rel="stylesheet" href="css/qldh.css">
+    <link rel="stylesheet" href="css/qlbv.css">
     <link rel="stylesheet" type="text/css" href="css/c3.min.css">
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet">
     <link href="css/icons.min.css" rel="stylesheet" type="text/css">
@@ -201,8 +201,8 @@
                                 </div>
                             </div>
                             <div class="input_search">
-                                <input type="text" placeholder="Theo mã đơn hàng">
-                                <input type="text" placeholder="Theo tên khách hàng">
+                                <input type="text" placeholder="Theo mã bài viết">
+                                <input type="text" placeholder="Theo tên bài viết">
                             </div>
                         </div>
                         <div class="header_left_container_main">
@@ -222,29 +222,20 @@
                                 <div class="item1">
                                     <p>
                                         <input type="radio" name="tonkho">
-                                    </p> Đang giao
-                                </div>
-                                <div class="item1">
-                                    <p>
-                                        <input type="radio" name="tonkho">
                                     </p> Chờ xử lý
                                 </div>
+                                
                                 <div class="item1">
                                     <p>
                                         <input type="radio" name="tonkho">
-                                    </p> Hoàn thành
-                                </div>
-                                <div class="item1">
-                                    <p>
-                                        <input type="radio" name="tonkho">
-                                    </p> Đã hủy
+                                    </p> Đã duyệt
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="right_container_main">
                         <div class="header_right_container_main">
-                            <span style="font-size: 20px;">Đơn hàng</span>
+                            <span style="font-size: 20px;">Bài viết</span>
                             <div class="icon_them">
                                 <div class="title_icon_them">
                                     <i class="fa fa-plus-square-o" aria-hidden="true"></i>
@@ -258,10 +249,9 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Tên khách hàng</th>
-                                            <th>Ngày đặt hàng</th>
-                                            <th>Số lượng</th>
-                                            <th>Tổng tiền</th>
+                                            <th>Tên bài viết</th>
+                                            <th>Người đăng</th>
+                                            <th>Ngày đăng</th>
                                             <th>Trạng thái</th>
                                             <th>Hành động</th>
                                         </tr>
@@ -269,11 +259,10 @@
                                     <tbody>
                                         <tr>
                                             <td>#9</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>20-12-2024</td>
-                                            <td>2</td>
-                                            <td>500,000</td>
-                                            <td><span class="featured featured-yes">Đang giao</span></td>
+                                            <td>Lợi ích uống sữa bột</td>
+                                            <td>Tô Vĩnh Lâm</td>
+                                            <td>11-11-2024</td>
+                                            <td><span class="featured featured-yes">Đã duyệt</span></td>
                                             <td class="actions">
                                                 <a href="#" class="details">Details</a>
                                                 <a href="#" class="edit">✎</a>
@@ -281,12 +270,12 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>#9</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>20-12-2024</td>
-                                            <td>2</td>
-                                            <td>500,000</td>
-                                            <td><span class="featured featured-yes">Đang giao</span></td>
+                                            <tr>
+                                            <td>#13</td>
+                                            <td>Tác hại uống sữa bột</td>
+                                            <td>Lê Thị Tuyết Băng</td>
+                                            <td>15-11-2024</td>
+                                            <td><span class="featured featured-yes">Chờ xử lý</span></td>
                                             <td class="actions">
                                                 <a href="#" class="details">Details</a>
                                                 <a href="#" class="edit">✎</a>
@@ -294,12 +283,11 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>#9</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>20-12-2024</td>
-                                            <td>2</td>
-                                            <td>500,000</td>
-                                            <td><span class="featured featured-yes">Đang giao</span></td>
+                                            <td>#15</td>
+                                            <td>Sữa bột TH True Milk vươn tầm thế giới</td>
+                                            <td>Kiều Trần Thu Uyên</td>
+                                            <td>05-12-2024</td>
+                                            <td><span class="featured featured-yes">Đã duyệt</span></td>
                                             <td class="actions">
                                                 <a href="#" class="details">Details</a>
                                                 <a href="#" class="edit">✎</a>
@@ -307,12 +295,11 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>#9</td>
-                                            <td>Nguyễn Văn A</td>
+                                            <td>#25</td>
+                                            <td>Mẹ bầu nên ăn uống như thế nào?</td>
+                                            <td>Hoàng Văn Vũ</td>
                                             <td>20-12-2024</td>
-                                            <td>2</td>
-                                            <td>500,000</td>
-                                            <td><span class="featured featured-yes">Đang giao</span></td>
+                                            <td><span class="featured featured-yes">Đã duyệt</span></td>
                                             <td class="actions">
                                                 <a href="#" class="details">Details</a>
                                                 <a href="#" class="edit">✎</a>
@@ -320,12 +307,11 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>#9</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>20-12-2024</td>
-                                            <td>2</td>
-                                            <td>500,000</td>
-                                            <td><span class="featured featured-yes">Đang giao</span></td>
+                                            <td>#30</td>
+                                            <td>CEO Vinamilk Bùi Văn Huy giàu cỡ nào?</td>
+                                            <td>Lê Minh Tân</td>
+                                            <td>01-01-2025</td>
+                                            <td><span class="featured featured-yes">Đã duyệt</span></td>
                                             <td class="actions">
                                                 <a href="#" class="details">Details</a>
                                                 <a href="#" class="edit">✎</a>
@@ -344,7 +330,6 @@
                         </div>
                     </div>
                 </div>
-                
             </main>
             <footer class="footer">
                 <div class="container-fluid">
@@ -378,7 +363,7 @@
     
             // Hàm tải giao diện thêm đơn hàng
             function loadAddOrderForm() {
-                fetch("them_don_hang.html")
+                fetch("them_bai_viet.html")
                     .then(response => {
                         if (!response.ok) {
                             throw new Error("Không thể tải nội dung");
@@ -413,8 +398,7 @@
             // Gắn sự kiện ban đầu
             attachAddButtonEvent();
         });
-    </script>    
-    
+    </script>
 </body>
 
 </html>
