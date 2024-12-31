@@ -1,33 +1,166 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
+        # Kiểm tra email
         if not email:
             raise ValueError('The Email field must be set')
+        
+        # Chuẩn hóa email
         email = self.normalize_email(email)
+        
+        # Tạo người dùng mới
         user = self.model(username=username, email=email, **extra_fields)
-        user.set_password(password)
+        user.set_password(password)  # Đặt mật khẩu
         user.save(using=self._db)
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
+        # Đảm bảo rằng superuser có quyền admin
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        
         return self.create_user(username, email, password, **extra_fields)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
-    is_active = models.BooleanField(default=True)  # Trường is_active
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
 
+# CustomUser kế thừa từ AbstractUser, cho phép thêm các trường tùy chỉnh
+class CustomUser(AbstractUser):
+    # Thêm trường tùy chỉnh như phone nếu cần
+
+    # Chỉ định manager cho CustomUser
     objects = CustomUserManager()
+    class Meta:
+        db_table = 'webbansua_customuser'
+    def __str__(self):
+        return self.username  # Trả về tên người dùng khi in đối tượng
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+
+@receiver(post_save, sender=CustomUser)
+def create_employee_for_new_user(sender, instance, created, **kwargs):
+    if created:
+        # Tạo một đối tượng Employee khi một CustomUser được tạo mới
+        Employee.objects.create(
+            user=instance,  # Liên kết đối tượng Employee với đối tượng CustomUser mới
+            name=instance.username,  # Hoặc lấy tên từ instance nếu có
+            email=instance.email,  # Email từ CustomUser
+            position='Employee'  # Vị trí có thể được đặt mặc định hoặc tùy chỉnh
+        )
+
+@receiver(post_save, sender=CustomUser)
+def save_employee(sender, instance, **kwargs):
+    try:
+        # Cập nhật thông tin nhân viên khi CustomUser thay đổi
+        instance.employee.save()
+    except Employee.DoesNotExist:
+        pass
+class Employee(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15)
+    position = models.CharField(max_length=100)
+    date_joined = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.username
+        return self.name
+
+
+class Order(models.Model):
+    customer = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Liên kết với người dùng
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Liên kết với sản phẩm
+    quantity = models.PositiveIntegerField()
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(
+        max_length=50,
+        choices=[
+            ('Pending', 'Pending'),
+            ('Shipped', 'Shipped'),
+            ('Delivered', 'Delivered'),
+            ('Cancelled', 'Cancelled'),
+        ],
+        default='Pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order {self.id} - {self.customer.username}"
+
+
+class Voucher(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    discount = models.DecimalField(max_digits=5, decimal_places=2)  # % giảm giá
+    expiration_date = models.DateField()
+
+    def __str__(self):
+        return self.code
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField()
+    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)  # Trường để upload ảnh
+    image_url = models.URLField(blank=True, null=True)  # Trường để lưu link ảnh trực tuyến
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+    
+class Cart(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Người dùng sở hữu giỏ hàng
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart of {self.user.username}"
+    
+class CartItem(models.Model):
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE)  # Liên kết với giỏ hàng
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Liên kết với sản phẩm
+    quantity = models.PositiveIntegerField(default=1)  # Số lượng sản phẩm
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.product.name} in {self.cart}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)  # Liên kết với đơn hàng
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Liên kết với sản phẩm
+    quantity = models.PositiveIntegerField()  # Số lượng sản phẩm
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Giá tại thời điểm đặt hàng
+
+class Promotion(models.Model):
+    title = models.CharField(max_length=255)  # Tiêu đề khuyến mãi
+    description = models.TextField(blank=True, null=True)  # Mô tả
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2)  # % giảm giá
+    start_date = models.DateField()  # Ngày bắt đầu
+    end_date = models.DateField()  # Ngày kết thúc
+    image = models.ImageField(upload_to='promotions/', blank=True, null=True)  # Ảnh khuyến mãi
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def is_active(self):
+        from django.utils.timezone import now
+        return self.start_date <= now().date() <= self.end_date

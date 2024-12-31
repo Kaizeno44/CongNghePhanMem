@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .admin import custom_admin_site
+from .admin import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 
@@ -14,6 +14,8 @@ urlpatterns = [
     path('purchase/', views.purchase, name='muahang'),
     path('checkorder/', views.check_order, name='kiemtradonhang'),
     path('knowledge/', views.knowledge, name='kienthuc'),
-    path('admin/', custom_admin_site.urls),  # Trang admin tùy chỉnh
-    path('custom-admin/', login_required(views.custom_admin_view), name='custom-admin'),
+    path('admin/', admin.site.urls), 
+    path('Orderdetails/', views.Orderdetails, name='chitietsp'),
+    path('Earnpoints/', views.Earnpoints, name='tichdiem'),
+    path('Profile/', views.Profile, name='hoso')
 ]

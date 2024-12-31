@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kien_Thuc</title>
-    <link rel="stylesheet" href="{% static "app/kienThuc.css" %}">
+    <title>TICh Diem</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="{% static "app/tichdiem.css" %}">
 </head>
 <body style="background: #F5F7FD;">
     <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
@@ -134,119 +133,26 @@
     </header>
     <main>
         <div class="theme-supertitle">
-            <span>Kiến thức</span>
+            <span>Tích điểm - Đổi quà</span>
         </div>
-        <div class="container_kienThuc">
-            <div class="container_kienThuc_top">
-                <p> Bí quyết nuôi con cao lớn của người Nhật</p>
-                <div class="bg_kienthuc">
-                    <div class="anh_bg">
-                        <a href="#">
-                            <img src="/static/img/anhkm1.jpeg" alt="Lỗi hiển thị">
-                        </a>
-                    </div>
-                    <div class="tilte_bg">
-                        <p>(Dân trí) - Người Nhật nổi tiếng có cách nuôi dạy trẻ thông minh và cao lớn rất đặc biệt mà cả thế giới đều ngưỡng mộ, muốn học hỏi.</p>
-                        <a href="#">Link Đặt Hàng</a>
-                    </div>
+        <div class="container_doiqua">
+            <div class="header_doiqua">
+                <div class="khung_chucnang">
+                    <a href="{% url "doiqua" %}"><p>Đổi quà</p></a>
+                </div>
+                <div class="khung_chucnang">
+                    <a href="{% url "tichdiem" %}"><p>Tích điểm</p></a>
                 </div>
             </div>
-            <div class="container_kienThuc_bottom">
-                <div class="item_kien_thuc">
-                    <div class="conten_kienthuc">
-                        <a href="#">
-                            <div class="anh_kienthuc">
-                                <img src="/static/img/kt2.jpg" alt="Lỗi hiển thị">
-                            </div>
-                            <span class="glock-title">Dù bận rộn đến đâu, cha mẹ cũng không nên cho trẻ ăn những thực phẩm này vào buổi sáng</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="item_kien_thuc">
-                    <div class="conten_kienthuc">
-                        <a href="#">
-                            <div class="anh_kienthuc">
-                                <img src="/static/img/kt3.jpg" alt="Lỗi hiển thị">
-                            </div>
-                            <span class="glock-title">Nếu trẻ có 4 biểu hiện bất thường này chứng tỏ việc tích tụ thức ăn trong cơ thể quá nhiều, trẻ đang bị đầy bụng và khó tiêu</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="item_kien_thuc">
-                    <div class="conten_kienthuc">
-                        <a href="#">
-                            <div class="anh_kienthuc">
-                                <img src="/static/img/kt4.jpg" alt="Lỗi hiển thị">
-                            </div>
-                            <span class="glock-title">10 thực phẩm bổ não, tăng cường trí nhớ - </span>
-                        </a>
-                    </div>
-                </div>
-                <div class="item_kien_thuc">
-                    <div class="conten_kienthuc">
-                        <a href="#">
-                            <div class="anh_kienthuc">
-                                <img src="/static/img/kt5.jpg" alt="Lỗi hiển thị">
-                            </div>
-                            <span class="glock-title">10 việc bố nên làm trong giai đoạn con bú sữa mẹ</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="mainkt">
-            <div class="list_mainkt">
-                <div class="container_kienThuc">
-                    <div class="catecat">
-                        <span>Thông tin kiến thức</span>
-                    </div>
-                    <div class="container_kienThuc_top" style="margin: 20px;">
-                        <div class="bg_kienthuc_1">
-                            <div class="anh_bg">
-                                <a href="#">
-                                    <img src="https://sua.vn/uploads/News/pic/1445419952.nv.jpg" alt="Lỗi hiển thị">
-                                </a>
-                            </div>
-                            <div class="tilte_bg">
-                                <a href="#">7 sản phẩm cho trẻ em dễ chứa chất độc hại các mẹ nên biết</a>
-                                <p class="title_p">Các bố mẹ luôn có xu hướng chọn những sản phẩm tốt nhất cho con với tâm lý “đắt xắt ra miếng”, tuy nhiên, có rất nhiều sản phẩm trẻ em phổ biến thường có chứa các thành phần có hại.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container_kienThuc">
-                        <div class="container_kienThuc_top" style="margin: 20px;">
-                            <div class="bg_kienthuc_1">
-                                <div class="anh_bg">
-                                    <a href="#">
-                                        <img src="https://sua.vn/uploads/News/pic/1445419707.nv.jpg" alt="Lỗi hiển thị">
-                                    </a>
-                                </div>
-                                <div class="tilte_bg">
-                                    <a href="#">Những cột mốc phát triển của trẻ và bí quyết tăng chiều cao hữu hiệu</a>
-                                    <p class="title_p">Để cho con mình cao lớn, khỏe mạnh, cha mẹ cần nắm rõ các giai đoạn phát triển của trẻ, từ đó xây dựng chế độ dinh dưỡng tốt cho con.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container_kienThuc">
-                        <div class="container_kienThuc_top" style="margin: 20px;">
-                            <div class="bg_kienthuc_1">
-                                <div class="anh_bg">
-                                    <a href="#">
-                                        <img src="/static/img/kt2.jpg" alt="Lỗi hiển thị">
-                                    </a>
-                                </div>
-                                <div class="tilte_bg">
-                                    <a href="#">Dù bận rộn đến đâu, cha mẹ cũng không nên cho trẻ ăn những thực phẩm này vào buổi sáng</a>
-                                    <p class="title_p"> Buổi sáng là thời điểm trẻ cần năng lượng nhiều nhất trong ngày, vì vậy cha mẹ cần quan tâm hơn đến bữa sáng của con mình.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
-            </div>
         </div>
+        <div class="container">
+            <h2>Tích điểm </h2>
+            <input type="tel" placeholder="Nhập số điện thoại để tích điểm" />
+            <br>
+            <button>Xác nhận</button>
+        </div>
+        
     </main>
     <footer class="footer">
         <div class="container_footer">
@@ -281,7 +187,7 @@
             </div>
     
             <div class="footer-bottom">
-                <p>Copyright & copy; 2024. All Right Reserved</p>
+                <p>Copyright &copy; 2024. All Right Reserved</p>
             </div>
         </div>
     </footer>

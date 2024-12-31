@@ -9,18 +9,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
+        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
+    </a>
+    <a href="#" target="_blank" class="foot_zalo">
+        <img src="https://sua.vn/themes/sua/images/zalo.png">
+    </a>
     <header>
         <div class="header_top">
             <div class="img_km">
-                <a href="{% url 'home'%}">
-                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                <a href="{% url "home" %}">
+                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
         <div class="container_header" >
             <div class="container_header_top">
                 <div class="logo">
-                    <a href="{% url 'home' %}">
+                    <a href="{% url "home" %}">
                         <img src="/static/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
                     </a>
                 </div>
@@ -35,7 +41,9 @@
                         height: 25px;
                         background-size: contain;"></span>
                         <a href="{% url "giohang" %}">
-                            <p>Giỏ hàng </p>
+                            <div class="tb_gio_hang">
+                                <span style="font-weight: 600; color: red;">0</span>
+                            </div>
                         </a>
                     </div>
                     <div class="item_list_Function">
@@ -48,7 +56,27 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> <span>Đăng nhập</span></a>
+                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                                <div class="menu_content_1">
+                                    <ul >
+                                        <li >
+                                            <a href="{% url "hoso" %}">
+                                                <i class="fa fa-user-o"></i>
+                                                <span>Hồ sơ</span>
+                                            </a>
+                                        </li>
+                                        <li >
+                                            <a href="#">
+                                                <i class="fa fa-sign-out"></i>
+                                                <span>Đăng xuất</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>  
+                        </a>
                     </div>
                 </div>
             </div>
@@ -57,6 +85,24 @@
                     <div class="header__bars">
                         <i class="fa fa-bars"></i>
                         <span>Danh Mục</span>
+                        <div class="menu_content">
+                            <ul >
+                                <li >
+                                    <div class="noidungmenu">
+                                        <a href="{% url "muahang" %}">SỮA BỘT DINH DƯỠNG</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                    
+
+                                </li>
+                                <li >
+                                    <div class="noidungmenu">
+                                        <a href="{% url "muahang" %}">TÃ BỈM CHO BÉ</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="header__menu">
                         <ul>

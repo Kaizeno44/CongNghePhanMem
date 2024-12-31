@@ -31,8 +31,27 @@ def check_order(request):
 def knowledge(request):
     context = {}
     return render(request, 'app/kienthuc.html', context)
-def custom_admin_view(request):
-    return render(request, 'app/custom_admin.html')
+def Orderdetails(request):
+    context = {}
+    return render(request, 'app/chitietsp.html', context)
+def Earnpoints(request):
+    context = {}
+    return render(request, 'app/tichdiem.html', context)
+def Profile(request):
+    context = {}
+    return render(request, 'app/hoso.html', context)
+
+# from django.shortcuts import render
+# from .models import Promotion
+# from django.utils.timezone import now
+
+# def promotions_page(request):
+#     # Lấy các chương trình khuyến mãi đang hoạt động
+#     active_promotions = Promotion.objects.filter(
+#         start_date__lte=now().date(),
+#         end_date__gte=now().date()
+#     )
+#     return render(request, 'promotions.html', {'promotions': active_promotions})
 def login_register(request):
     login_form = LoginForm()
     register_form = RegistrationForm()
@@ -47,15 +66,16 @@ def login_register(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    return redirect('home')
+                    return redirect('home')  # Đảm bảo 'home' đã định nghĩa trong urls.py
                 else:
                     messages.error(request, 'Tên đăng nhập hoặc mật khẩu không đúng.')
+            else:
+                messages.error(request, "Thông tin đăng nhập không hợp lệ.")
 
         # Xử lý đăng ký
         elif 'register' in request.POST:
             register_form = RegistrationForm(request.POST)
             if register_form.is_valid():
-                # Kiểm tra nếu tên người dùng hoặc email đã tồn tại
                 username = register_form.cleaned_data['username']
                 email = register_form.cleaned_data['email']
                 if CustomUser.objects.filter(username=username).exists():
@@ -63,12 +83,15 @@ def login_register(request):
                 elif CustomUser.objects.filter(email=email).exists():
                     messages.error(request, 'Email đã được đăng ký.')
                 else:
-                    # Tạo người dùng mới
-                    user = register_form.save()
-                    messages.success(request, "Đăng ký thành công! Bạn có thể đăng nhập ngay.")
-                    return redirect('login')
+                    try:
+                        user = register_form.save()
+                        messages.success(request, "Đăng ký thành công! Bạn có thể đăng nhập ngay.")
+                        return redirect('login')  # Đảm bảo 'login' đã định nghĩa trong urls.py
+                    except Exception as e:
+                        print(f"Lỗi khi lưu người dùng: {e}")
+                        messages.error(request, "Đăng ký thất bại. Vui lòng thử lại.")
             else:
-                print(register_form.errors)  # In ra lỗi nếu form không hợp lệ
+                print(register_form.errors)
                 messages.error(request, "Đăng ký không thành công, vui lòng kiểm tra lại thông tin.")
 
     return render(request, 'app/login.html', {
