@@ -1,11 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .models import CustomUser 
 from .forms import LoginForm, RegistrationForm
 from webbansua.models import CustomUser
+
 # Create your views here.
 def home(request):
     context = {}
@@ -98,3 +99,9 @@ def login_register(request):
         'login_form': login_form,
         'register_form': register_form
     })
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Bạn đã đăng xuất thành công.")
+    return redirect('login')

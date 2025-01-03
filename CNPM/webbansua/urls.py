@@ -3,6 +3,7 @@ from . import views
 from .admin import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
+from .views import logout_view
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -17,5 +18,6 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
     path('Orderdetails/', views.Orderdetails, name='chitietsp'),
     path('Earnpoints/', views.Earnpoints, name='tichdiem'),
-    path('Profile/', views.Profile, name='hoso')
+    path('Profile/', views.Profile, name='hoso'),
+    path('logout/', logout_view, name='logout'),
 ]
