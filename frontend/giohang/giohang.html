@@ -180,52 +180,27 @@
             <!-- Giỏ hàng -->
             <div class="cart">
                 <h2>Giỏ hàng</h2>
-                <div class="cart-item">
-                    <div class="col-md-3">
-                        <div class="cartpic">
-                            <img  style="width: 100px; padding: 13px;" src="https://sua.vn/uploads/shop/pic/1732777227.nv.jpg">
-                            <div class="cartcount">1</div>
+                <div id="emptyCartMessage">Chưa có sản phẩm trong giỏ</div>
+                <div id="cartItems" style="display: none;"></div>
+                <div class="summary-container" style="display: none;">
+                    <div class="summary" style="border-bottom:2px solid gainsboro;">
+                        <div class="sum1">
+                            <p>Tạm tính: </p> <span id="subtotal">0đ</span>
+                        </div>
+                        <div class="sum1">
+                            <p>Giảm giá: </p> <span id="discount">0đ</span>
+                        </div>
+                        <div class="sum1">
+                            <p>Phí giao hàng: </p> <span id="shipping">0đ</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="carttitle">
-                            Sữa hạt đa dưỡng chất Forganic 800g tặng Sữa bữa ăn thay thế 400g [Mua 1 Tặng 1]
-                        </div>
-                        <div class="cartcount1">
-                            <i class="fa fa-minus addminus add-minus" data-gid="3166"></i>
-                            <span>
-                                <input class="soluong3166" type="number" name="txt_soluong" value="1">
-                            </span>
-                            <i class="fa fa-plus add-plus" data-gid="3166"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="apvoucheandgia">
-                    <div class="apvoucher">
-                        <input type="text" placeholder="Nhập mã giảm giá">
-                        <button class="ctn_button">Áp dụng</button>
-                    </div>
-                    <div class="gia">
-                        <span>410.000đ</span>
-                    </div>
-                </div>
-                <div class="summary" style="border-bottom:2px solid gainsboro ;">
                     <div class="sum1">
-                        <p>Tạm tính: </p> <span>410.000đ</span>
+                        <p><strong>Tổng: </strong></p> <span id="total">0đ</span>
                     </div>
-                    <div class="sum1">
-                        <p>Giảm giá: </p> <span>0đ</span>
-                    </div>
-                    <div class="sum1">
-                        <p>Phí giao hàng: </p> <span>0đ</span>
-                    </div>
+                    <button class="pay-btn">Thanh toán</button>
                 </div>
-                <div class="sum1">
-                    <p><strong>Tổng: </strong></p> <span>410.000đ</span>
-                </div>
-
-                <button class="pay-btn">Thanh toán 410.000đ (COD)</button>
             </div>
+            
         </div>
     </main>
     <footer class="footer">
@@ -265,5 +240,6 @@
             </div>
         </div>
     </footer>
+    <script src="giohang.js"></script>
 </body>
 </html>

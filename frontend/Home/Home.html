@@ -43,7 +43,7 @@
                         background-size: contain;"></span>
                         <a href="../giohang/giohang.html">
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -57,18 +57,18 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="../login/login.html"> 
+                        <a href="../login/login.html">
                             <div class="header__bars_1">
                                 <span>Đăng nhập</span>
                                 <div class="menu_content_1">
-                                    <ul >
-                                        <li >
+                                    <ul>
+                                        <li>
                                             <a href="#">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
                                         </li>
-                                        <li >
+                                        <li>
                                             <a href="#">
                                                 <i class="fa fa-sign-out"></i>
                                                 <span>Đăng xuất</span>
@@ -86,16 +86,16 @@
                         <i class="fa fa-bars"></i>
                         <span>Danh Mục</span>
                         <div class="menu_content">
-                            <ul >
-                                <li >
+                            <ul>
+                                <li>
                                     <div class="noidungmenu">
                                         <a href="../Muahang/muahang.html">SỮA BỘT DINH DƯỠNG</a>
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                                     </div>
-                                    
+
 
                                 </li>
-                                <li >
+                                <li>
                                     <div class="noidungmenu">
                                         <a href="../Muahang/muahang.html">TÃ BỈM CHO BÉ</a>
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -167,7 +167,13 @@
                                 </div>
                             </div>
                             <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
+                                <a href="#" 
+                                onclick="handdeMua(this)" 
+                                data-id="1"
+                                data-name="Sữa hạt Đa dưỡng chất & Sữa hạt Bữa ăn thay thế 30g Forganic
+                                [Combo 4 gói trải nghiệm]"
+                                data-image="https://sua.vn/uploads/shop/pic/small_1733133583.nv.jpg"
+                                data-price="129.000">Chọn mua</a>
                             </div>
                         </div>
                     </div>
@@ -503,186 +509,7 @@
                                         </div>
                                     </div>
                                     <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 13%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="#">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730519403.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa bầu Morinaga E-Okasan vị trà sữa 800g
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">550.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">630.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 8%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="#">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1728373943.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Similac Total Protection 1+ 850g (1 - 2 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">595.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">645.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 40%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="#">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730521533.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa tăng chiều cao Hiup 650gr (cho bé 3 - 18 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">535.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">890.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 6%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="#">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1663754217.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">580.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">615.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="#">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1686023151.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Pediasure B/A 1kg6 (1-10t) Mẫu mới
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">1.140.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">1.090.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="list_products_1">
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="#">
-                                    <div class="flashsale-pic">
-                                        <img src="../Home/img/suabot1.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">890.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">940.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
+                                        <a href="#" onclick="handdeMua()">Chọn mua</a>
                                     </div>
                                 </div>
                             </div>
@@ -1149,7 +976,7 @@
             </div>
         </div>
     </footer>
-
+    <script src="home.js"></script>
 </body>
 
 </html>
