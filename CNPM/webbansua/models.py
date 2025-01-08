@@ -29,7 +29,7 @@ class CustomUserManager(BaseUserManager):
 # CustomUser kế thừa từ AbstractUser, cho phép thêm các trường tùy chỉnh
 class CustomUser(AbstractUser):
     # Thêm trường tùy chỉnh như phone nếu cần
-
+    phone_number = models.CharField(max_length=15, null=True, blank=True)  # Thêm trường số điện thoại
     # Chỉ định manager cho CustomUser
     objects = CustomUserManager()
     class Meta:
@@ -41,13 +41,15 @@ class CustomUser(AbstractUser):
 @receiver(post_save, sender=CustomUser)
 def create_employee_for_new_user(sender, instance, created, **kwargs):
     if created:
-        # Tạo một đối tượng Employee khi một CustomUser được tạo mới
-        Employee.objects.create(
-            user=instance,  # Liên kết đối tượng Employee với đối tượng CustomUser mới
-            name=instance.username,  # Hoặc lấy tên từ instance nếu có
-            email=instance.email,  # Email từ CustomUser
-            position='Employee'  # Vị trí có thể được đặt mặc định hoặc tùy chỉnh
-        )
+        # Kiểm tra xem Employee đã tồn tại chưa trước khi tạo mới
+        if not hasattr(instance, 'employee'):
+            Employee.objects.create(
+                user=instance,
+                name=instance.username,
+                email=instance.email,
+                position='Employee'
+            )
+
 
 @receiver(post_save, sender=CustomUser)
 def save_employee(sender, instance, **kwargs):
@@ -69,8 +71,9 @@ class Employee(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Liên kết với người dùng
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Liên kết với sản phẩm
+    customer = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
+    phone_number = models.CharField(max_length=15)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(
@@ -84,10 +87,10 @@ class Order(models.Model):
         default='Pending'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    voucher = models.ForeignKey('Voucher', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"Order {self.id} - {self.customer.username}"
-
+        return f"Order {self.id} - {self.phone_number or self.customer.username}"
 
 class Voucher(models.Model):
     code = models.CharField(max_length=50, unique=True)

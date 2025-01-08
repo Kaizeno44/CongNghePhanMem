@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
-from .admin import admin
+from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from .views import logout_view
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -17,7 +19,12 @@ urlpatterns = [
     path('knowledge/', views.knowledge, name='kienthuc'),
     path('admin/', admin.site.urls), 
     path('Orderdetails/', views.Orderdetails, name='chitietsp'),
+    path('Orderdetails/<int:id>/', views.Orderdetails, name='chitietsp'),
     path('Earnpoints/', views.Earnpoints, name='tichdiem'),
     path('Profile/', views.Profile, name='hoso'),
     path('logout/', logout_view, name='logout'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

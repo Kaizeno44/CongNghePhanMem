@@ -31,7 +31,9 @@ class CustomUserAdmin(admin.ModelAdmin):
 # Sử dụng admin tùy chỉnh để đăng ký CustomUser
 admin.site.register(CustomUser, CustomUserAdmin)
 
+
 @admin.register(Promotion)
 class PromotionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'discount_percent', 'start_date', 'end_date', 'is_active')
+    list_display = ('title', 'start_date', 'end_date', 'discount_percent', 'is_active')
+    search_fields = ('title', 'description')
     list_filter = ('start_date', 'end_date')

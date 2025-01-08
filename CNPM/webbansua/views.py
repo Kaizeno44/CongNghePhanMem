@@ -1,16 +1,21 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .models import CustomUser 
+from .models import CustomUser,Product,Promotion
 from .forms import LoginForm, RegistrationForm
 from webbansua.models import CustomUser
 
 # Create your views here.
 def home(request):
-    context = {}
+    products = Product.objects.exclude(id=None)
+    promotions = Promotion.objects.all()   
+    active_promotions = [promotion for promotion in promotions if promotion.is_active]
+
+    context = {'products': products, 'promotions': active_promotions}
     return render(request, 'app/Home.html', context)
+
 def user_login(request):
     login_form = LoginForm()
     return render(request, 'app/login.html', {'login_form': login_form})
@@ -18,8 +23,11 @@ def Redeem_gifts(request):
     context = {}
     return render(request, 'app/Doiqua.html', context)
 def promote(request):
-    context = {}
-    return render(request, 'app/Khuyenmai.html', context)
+    promotions = Promotion.objects.all()
+    
+    # Lọc các khuyến mãi đang hoạt động (is_active) trong Python
+    active_promotions = [promotion for promotion in promotions if promotion.is_active]
+    return render(request, 'app/Khuyenmai.html', {'promotions': active_promotions})
 def shopping_cart(request):
     context = {}
     return render(request, 'app/giohang.html', context)
@@ -32,8 +40,9 @@ def check_order(request):
 def knowledge(request):
     context = {}
     return render(request, 'app/kienthuc.html', context)
-def Orderdetails(request):
-    context = {}
+def Orderdetails(request, id):
+    product = get_object_or_404(Product, id=id)  # Sử dụng get_object_or_404
+    context = {'product': product}
     return render(request, 'app/chitietsp.html', context)
 def Earnpoints(request):
     context = {}
@@ -102,6 +111,6 @@ def login_register(request):
 
 
 def logout_view(request):
-    logout(request)
-    messages.success(request, "Bạn đã đăng xuất thành công.")
+    if request.user.is_authenticated:
+        logout(request)
     return redirect('login')

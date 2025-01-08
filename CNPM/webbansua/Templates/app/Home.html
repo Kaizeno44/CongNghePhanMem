@@ -11,17 +11,14 @@
 </head>
 
 <body style="background: #F5F7FD; ">
-    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
-        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
-    </a>
-    <a href="#" target="_blank" class="foot_zalo">
+    <a href="https://zalo.me/0925931331" target="_blank" class="foot_zalo">
         <img src="https://sua.vn/themes/sua/images/zalo.png">
     </a>
     <header>
         <div class="header_top">
             <div class="img_km">
                 <a href="{% url "home" %}">
-                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
+                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
@@ -145,26 +142,39 @@
                 <img style="max-width: 150px; padding: 4px 50px;" src="/static/img/flash-sale.png" alt="Ảnh sale">
             </div>
             <div class="list_products">
+                {% for product in products %}
                 <div class="item_products">
                     <div class="inside-flas isspbc" style="position: relative;">
                         <div class="home-sua-percent">
-                            <span>- 14%</span>
+                            {% if product.discount %}
+                            <span>- {{ product.discount|default_if_none:0 }}%</span>
+                            {% endif %}                            
                         </div>
-                        <a style="text-decoration: none;" href="{% url "chitietsp" %}">
+                        <a style="text-decoration: none;" href="{% url 'chitietsp' product.id %}">
                             <div class="flashsale-pic">
-                                <img src="https://sua.vn/uploads/shop/pic/small_1733133583.nv.jpg">
+                                {% if product.image_url %}
+                                <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                                {% elif product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                {% else %}
+                                <img src="/static/img/default-product.jpg" alt="Sản phẩm mặc định">
+                                {% endif %}                                
                             </div>
-                            <div class="flashsale-title">Sữa hạt Đa dưỡng chất & Sữa hạt Bữa ăn thay thế 30g Forganic
-                                [Combo 4 gói trải nghiệm] 
-                            </div>
+                            <div class="flashsale-title">{{ product.description}}</div>
                         </a>
+                        
+
                         <div>
                             <div class="title_gia" style="display: flex; margin-bottom: 5px;">
                                 <div class="col-md-6 paddL0">
-                                    <div class="sales-price">129.000<sup>đ</sup></div>
+                                    <div class="sales-price">{{ product.price|floatformat:0 }}<sup>đ</sup></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="sales-root">150.000<sup>đ</sup></div>
+                                    {% if product.original_price %}
+                                    <div class="sales-root">{{ product.original_price|floatformat:0 }}<sup>đ</sup></div>
+                                    {% elif product.discount %}
+                                    <div class="sales-root">{{ product.price|floatformat:0|add:"product.price*product.discount/100"|floatformat:0 }}<sup>đ</sup></div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="chonmua_buy_fast">
@@ -173,6 +183,9 @@
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <p>Hiện không có sản phẩm nào trong danh sách.</p>
+                {% endfor %}
                 <div class="item_products">
                     <div class="inside-flas isspbc" style="position: relative;">
                         <div class="home-sua-percent">
@@ -1027,26 +1040,21 @@
             </div>
             <div class="listkm">
                 <div class="listItemKm">
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km1.jpg">
-                        </a>
-                    </div>
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km2.jpg">
-                        </a>
-                    </div>
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km3.jpg">
-                        </a>
-                    </div>
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km4.jpg">
-                        </a>
-                    </div>
+                    {% for promotion in promotions %}
+                        <div class="itemkm">
+                            <a href="#">
+                                <!-- Hiển thị hình ảnh khuyến mãi -->
+                                {% if promotion.image %}
+                                    <img src="{{ promotion.image.url }}" alt="{{ promotion.title }}">
+                                {% else %}
+                                    <img src="/static/img/default-product.jpg" alt="Khuyến mãi mặc định">
+                                {% endif %}
+                            </a>
+                            <p>{{ promotion.title }}</p>
+                        </div>
+                    {% empty %}
+                        <p>Không có khuyến mãi nào hiện tại.</p>
+                    {% endfor %}
                 </div>
                 <div class="button_mua">
                     <a class="c-btn" href="{% url "khuyenmai" %}">

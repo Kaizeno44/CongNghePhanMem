@@ -134,48 +134,30 @@
     </header>
     <main>
         <div class="theme-supertitle">
-            <span>Khuyến mãi</span>
+            <span>Khuyến Mãi</span>
         </div>
         <div class="container_voucher">
             <div class="titlekm">
-                <span>Chương trình khuyến mãi</span>
+                <span>Chương Trình Khuyến Mãi</span>
             </div>
             <div class="listkm">
                 <div class="listItemKm">
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km1.jpg"> 
-                        </a> 
-                        <p>Khuyến mãi từ sữa Danmilko</p>
-
-                    </div>
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km2.jpg"> 
-                            
-                        </a>
-                        <p>
-                            Trung thu rộn ràng quá tặng ngập tràn
-                        </p>
-                    </div>
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km3.jpg">
-                        </a>
-                        <p>
-                            Uống sữa tốt, đổi quà xịn
-                        </p>
-                    </div>
-                    <div class="itemkm">
-                        <a href="#">
-                            <img src="/static/img/km4.jpg"> 
-                        </a>
-                        <p>
-                            Uống sữa tốt , Nhận quà hay từ sữa Neocare
-                        </p>
-                    </div>
+                    {% for promotion in promotions %}
+                        <div class="itemkm">
+                            <a href="#">
+                                <!-- Hiển thị hình ảnh khuyến mãi -->
+                                {% if promotion.image %}
+                                    <img src="{{ promotion.image.url }}" alt="{{ promotion.title }}">
+                                {% else %}
+                                    <img src="/static/img/default.jpg" alt="Khuyến mãi mặc định">
+                                {% endif %}
+                            </a>
+                            <p>{{ promotion.title }}</p>
+                        </div>
+                    {% empty %}
+                        <p>Không có khuyến mãi nào hiện tại.</p>
+                    {% endfor %}
                 </div>
-                
             </div>
         </div>
     </main>
