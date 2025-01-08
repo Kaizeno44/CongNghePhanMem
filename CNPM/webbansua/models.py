@@ -93,12 +93,22 @@ class Order(models.Model):
         return f"Order {self.id} - {self.phone_number or self.customer.username}"
 
 class Voucher(models.Model):
-    code = models.CharField(max_length=50, unique=True)
-    discount = models.DecimalField(max_digits=5, decimal_places=2)  # % giảm giá
-    expiration_date = models.DateField()
+    code = models.CharField(max_length=50, unique=True)  # Mã giảm giá
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Giá trị giảm giá (tiền mặt)
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # % giảm giá
+    minimum_order_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Điều kiện áp dụng
+    brand = models.CharField(max_length=100, null=True, blank=True)  # Nhãn hiệu áp dụng
+    expiration_date = models.DateField()  # Ngày hết hạn
+    description = models.TextField(null=True, blank=True)  # Mô tả thêm
 
     def __str__(self):
-        return self.code
+        return f"{self.code} - {self.brand or 'Generic'}"
+
+    @property
+    def is_active(self):
+        from django.utils.timezone import now
+        return now().date() <= self.expiration_date
+
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
@@ -110,18 +120,27 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-class ProductCategory(models.Model):
-    name = models.CharField(max_length=100, unique=True)
 
-    def __str__(self):
-        return self.name
 
 class Product(models.Model):
+    STATUS_CHOICES = [
+        ('available', 'Available'),
+        ('out_of_stock', 'Out of Stock'),
+        ('discontinued', 'Discontinued'),
+    ]
+
+    CATEGORY_CHOICES = [
+        ('sua_bot_dinh_duong', 'Sữa bột dinh dưỡng'),
+        ('ta_bim_cho_be', 'Tả bỉm cho bé'),
+    ]
+
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Giá sau khi giảm giá
     stock = models.PositiveIntegerField()
-    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')  # Trạng thái sản phẩm
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, null=True, blank=True)  # Phân loại sản phẩm
     image = models.ImageField(upload_to='products/', blank=True, null=True)  # Trường để upload ảnh
     image_url = models.URLField(blank=True, null=True)  # Trường để lưu link ảnh trực tuyến
     created_at = models.DateTimeField(auto_now_add=True)
