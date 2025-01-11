@@ -29,6 +29,7 @@ class CustomUserManager(BaseUserManager):
 # CustomUser kế thừa từ AbstractUser, cho phép thêm các trường tùy chỉnh
 class CustomUser(AbstractUser):
     # Thêm trường tùy chỉnh như phone nếu cần
+    points = models.PositiveIntegerField(default=0)  # Điểm của người dùng
     phone_number = models.CharField(max_length=15, null=True, blank=True)  # Thêm trường số điện thoại
     # Chỉ định manager cho CustomUser
     objects = CustomUserManager()
@@ -79,18 +80,24 @@ class Order(models.Model):
     status = models.CharField(
         max_length=50,
         choices=[
-            ('Pending', 'Pending'),
-            ('Shipped', 'Shipped'),
-            ('Delivered', 'Delivered'),
-            ('Cancelled', 'Cancelled'),
+            ('dang_cho_xu_ly', 'Đang chờ xử lý'),
+            ('da_van_chuyen', 'Đã vận chuyển'),
+            ('da_giao', 'Đã giao'),
+            ('da_huy', 'Đã hủy'),
         ],
-        default='Pending'
+        default='dang_cho_xu_ly'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     voucher = models.ForeignKey('Voucher', on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Các trường mới thêm vào
+    full_name = models.CharField(max_length=255, null=False, default='')  # Họ và tên
+    notes = models.TextField(null=True, blank=True)  # Ghi chú thêm
+    address = models.TextField(null=True, blank=True)  # Địa chỉ
 
     def __str__(self):
         return f"Order {self.id} - {self.phone_number or self.customer.username}"
+
 
 class Voucher(models.Model):
     code = models.CharField(max_length=50, unique=True)  # Mã giảm giá
@@ -124,13 +131,15 @@ class Article(models.Model):
 
 class Product(models.Model):
     STATUS_CHOICES = [
-        ('available', 'Available'),
-        ('out_of_stock', 'Out of Stock'),
+        ('con_hang', 'Còn hàng'),
+        ('het_hang', 'Hết hàng'),
     ]
 
     CATEGORY_CHOICES = [
         ('sua_bot_dinh_duong', 'Sữa bột dinh dưỡng'),
         ('ta_bim_cho_be', 'Tả bỉm cho bé'),
+        ('hang_ban_chay', 'Hàng bán chạy'),
+        ('hang_khuyen_mai', 'Hàng khuyến mãi'),
     ]
 
     name = models.CharField(max_length=255)
@@ -140,7 +149,6 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField()  # Thay đổi từ stock sang quantity
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')  # Trạng thái sản phẩm
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, null=True, blank=True)  # Phân loại sản phẩm
-    image = models.ImageField(upload_to='products/', blank=True, null=True)  # Trường để upload ảnh
     image_url = models.URLField(blank=True, null=True)  # Trường để lưu link ảnh trực tuyến
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -153,21 +161,19 @@ class Product(models.Model):
             return round(100 * (self.price - self.sale_price) / self.price, 0)
         return 0
     
-class Cart(models.Model):
-    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Người dùng sở hữu giỏ hàng
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Cart of {self.user.username}"
-    
 class CartItem(models.Model):
-    cart = models.ForeignKey('Cart', on_delete=models.CASCADE)  # Liên kết với giỏ hàng
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Liên kết với sản phẩm
-    quantity = models.PositiveIntegerField(default=1)  # Số lượng sản phẩm
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+    product_name = models.CharField(max_length=255, blank=True)
+    image_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.name} in {self.cart}"
+        return f"{self.quantity} of {self.product.name} for {self.user.username}"
+
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey('Order', on_delete=models.CASCADE)  # Liên kết với đơn hàng
@@ -190,3 +196,21 @@ class Promotion(models.Model):
     def is_active(self):
         from django.utils.timezone import now
         return self.start_date <= now().date() <= self.end_date
+    
+class Reward(models.Model):
+    img_url = models.URLField(blank=True, null=True)  # Link ảnh của quà
+    product_name = models.CharField(max_length=255)  # Tên sản phẩm quà tặng
+    points = models.PositiveIntegerField()  # Số điểm cần để đổi quà
+
+    def __str__(self):
+        return f"{self.product_name} - {self.points} points"
+    
+
+class Point(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Liên kết người dùng
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)  # Liên kết với đơn hàng
+    points_earned = models.PositiveIntegerField()  # Số điểm tích được từ đơn hàng
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"User {self.user.username} earned {self.points_earned} points from Order {self.order.id}"
