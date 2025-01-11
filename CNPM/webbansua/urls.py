@@ -6,7 +6,6 @@ from django.contrib.auth import views as auth_views
 from .views import logout_view
 from django.conf import settings
 from django.conf.urls.static import static
-
 urlpatterns = [
     path('', views.home, name='home'),
     path('login/', views.login_register, name='login'),
@@ -17,7 +16,7 @@ urlpatterns = [
     path('purchase/', views.purchase, name='muahang'),
     path('checkorder/', views.check_order, name='kiemtradonhang'),
     path('knowledge/', views.knowledge, name='kienthuc'),
-    path('admin/', admin.site.urls), 
+    path('admin/', admin.site.urls ,name='admin'), 
     path('Orderdetails/', views.Orderdetails, name='chitietsp'),
     path('Orderdetails/<int:id>/', views.Orderdetails, name='chitietsp'),
     path('Earnpoints/', views.Earnpoints, name='tichdiem'),

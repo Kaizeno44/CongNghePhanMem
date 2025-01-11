@@ -143,66 +143,10 @@
             <div class="modau">
                 <p>Nhận Voucher</p>
             </div>
-            <div class="listvoucher">
-                <div class="itemvoucher">
-                    <div class="voucher_header">
-                        <span>50.000đ</span>
-                        <div class="thongtin">
-                            <p>Cho đơn hàng online từ</p>
-                            <p>600k</p>
-                        </div>
-                    </div>
-                    <div class="voucher_footer">
-                        <p>NOBIKO</p>
-                        <span style="color: #ae0258; font-size: 11px;">Mã dành cho NEOCARE</span>
-                        <div class="tile1">
-                            <span style="color: #ae0258; font-size: 11px;">Đến ngày 07/04</span>
-                            <div class="tile2">
-                                <button style="border: none; background: none; color: white;">MILKSUA30</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="itemvoucher">
-                    <div class="voucher_header">
-                        <span>40.000đ</span>
-                        <div class="thongtin">
-                            <p>Cho đơn hàng online từ</p>
-                            <p>350k</p>
-                        </div>
-                    </div>
-                    <div class="voucher_footer">
-                        <p>NOBIKO</p>
-                        <span style="color: #ae0258; font-size: 11px;">Mã dành cho NEOCARE</span>
-                        <div class="tile1">
-                            <span style="color: #ae0258; font-size: 11px;">Đến ngày 11/04</span>
-                            <div class="tile2">
-                                <button style="border: none; background: none; color: white;">MILKSUA90</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="itemvoucher">
-                    <div class="voucher_header">
-                        <span>150.000đ</span>
-                        <div class="thongtin">
-                            <p>Cho đơn hàng online từ</p>
-                            <p>1600k</p>
-                        </div>
-                    </div>
-                    <div class="voucher_footer">
-                        <p>NOBIKO</p>
-                        <span style="color: #ae0258; font-size: 11px;">Mã dành cho NEOCARE</span>
-                        <div class="tile1">
-                            <span style="color: #ae0258; font-size: 11px;">Đến ngày 07/04</span>
-                            <div class="tile2">
-                                <button style="border: none; background: none; color: white;">MILKSUA150</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="listvoucher" id="voucher-container" data-vouchers='{{ vouchers_json|safe}}'></div>
+            <script src="{% static 'js/vouchers.js' %}"></script>
         </div>
+        
         <div class="container_thuonghieu">
             <div class="modau">
                 <p>Thương Hiệu</p>

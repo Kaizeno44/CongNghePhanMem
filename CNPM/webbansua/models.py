@@ -109,7 +109,7 @@ class Voucher(models.Model):
         from django.utils.timezone import now
         return now().date() <= self.expiration_date
 
-
+        
 class Article(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -126,7 +126,6 @@ class Product(models.Model):
     STATUS_CHOICES = [
         ('available', 'Available'),
         ('out_of_stock', 'Out of Stock'),
-        ('discontinued', 'Discontinued'),
     ]
 
     CATEGORY_CHOICES = [
@@ -138,7 +137,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     sale_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Giá sau khi giảm giá
-    stock = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()  # Thay đổi từ stock sang quantity
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')  # Trạng thái sản phẩm
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, null=True, blank=True)  # Phân loại sản phẩm
     image = models.ImageField(upload_to='products/', blank=True, null=True)  # Trường để upload ảnh
@@ -148,6 +147,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    @property
+    def discount(self):
+        if self.price and self.sale_price:
+            return round(100 * (self.price - self.sale_price) / self.price, 0)
+        return 0
     
 class Cart(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Người dùng sở hữu giỏ hàng

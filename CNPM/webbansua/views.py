@@ -3,9 +3,13 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .models import CustomUser,Product,Promotion
+from .models import CustomUser,Product,Promotion,Voucher
 from .forms import LoginForm, RegistrationForm
 from webbansua.models import CustomUser
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from django.utils.timezone import now
+
 
 # Create your views here.
 def home(request):
@@ -32,7 +36,21 @@ def shopping_cart(request):
     context = {}
     return render(request, 'app/giohang.html', context)
 def purchase(request):
-    context = {}
+    # Truy vấn các voucher còn hiệu lực
+    vouchers = Voucher.objects.filter(expiration_date__gte=now().date()).values(
+        'code',
+        'discount_value',
+        'discount_percent',
+        'minimum_order_value',
+        'brand',
+        'expiration_date',
+        'description'
+    )
+
+    # Serialize dữ liệu sang JSON
+    context = {
+        'vouchers_json': json.dumps(list(vouchers), cls=DjangoJSONEncoder),
+    }
     return render(request, 'app/muahang.html', context)
 def check_order(request):
     context = {}
