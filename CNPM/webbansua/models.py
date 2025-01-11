@@ -169,6 +169,7 @@ class CartItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     product_name = models.CharField(max_length=255, blank=True)
     image_url = models.URLField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Thêm trường giá
 
     def __str__(self):
         return f"{self.quantity} of {self.product.name} for {self.user.username}"
