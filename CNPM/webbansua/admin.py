@@ -2,14 +2,14 @@ from django.shortcuts import redirect
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
-from .models import Employee, Order, Voucher, Article, Product,Promotion
+from .models import Employee, Order, Voucher, Article, Product,Promotion,CartItem
 
 admin.site.register(Employee)
 admin.site.register(Order)
 admin.site.register(Voucher)
 admin.site.register(Article)
 admin.site.register(Product)
-
+admin.site.register(CartItem)
 class CustomUserAdmin(admin.ModelAdmin):
     model = CustomUser
     list_display = ['username', 'email', 'first_name', 'last_name']
