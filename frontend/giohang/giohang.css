@@ -327,9 +327,7 @@ form {
 h2 {
   font-weight: 100;
 }
-.select-group select {
-  cursor: pointer;
-}
+
 .header_form input {
   width: 300px;
   height: 33px;
@@ -341,21 +339,6 @@ h2 {
 }
 .header_form input:nth-child(1) {
   margin-right: 30px;
-}
-.select-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-.select-group select {
-  width: 245px;
-  height: 33px;
-  border-radius: 15px;
-  padding-left: 12px;
-  outline: none;
-  margin-bottom: 20px;
-  border: 1px solid gray;
 }
 .title_header {
   display: flex;
@@ -382,11 +365,18 @@ h2 {
   align-items: center;
   height: 75px;
 }
-.cart-item {
-  padding-top: 20px;
+.cart-content {
+  padding-top: 10px;
   display: flex;
   gap: 15px;
   justify-content: space-between;
+}
+input.soluong1 {
+  text-align: center;
+  height: 20px;
+  width: 40px;
+  border-radius: 5px;
+  border: none;
 }
 .col-md-3 {
   padding: 0 !important;
@@ -414,9 +404,10 @@ h2 {
 .cartcount1 {
   border: 1px solid #d9d9d9;
   border-radius: 16px;
-  padding: 8px 8px 8px 15px;
+  padding: 8px;
   width: 100px;
   margin: 10px 0;
+  text-align: center;
 }
 .soluong3166 {
   width: 50px;

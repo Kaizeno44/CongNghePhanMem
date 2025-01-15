@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/accounts/login/'
 
 # Application definition
 
@@ -75,14 +77,16 @@ WSGI_APPLICATION = 'CNPM.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "data",
-        "USER": "root",
-        "PASSWORD": "21122005",
-        "HOST": "127.0.0.1",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'login',  # Tên database bạn đã tạo
+        'USER': 'root',           # Tên người dùng MySQL
+        'PASSWORD': '21122005',  # Mật khẩu MySQL
+        'HOST': '127.0.0.1',      # Địa chỉ host
+        'PORT': '3306',           # Cổng MySQL
     }
 }
+
 
 
 # Password validation
@@ -125,3 +129,22 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'webbansua.CustomUser'
+MEDIA_URL = '/media/'  # URL phục vụ tệp tin media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Thư mục chứa tệp tin media
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Đảm bảo dòng này tồn tại
+    'django.contrib.messages.middleware.MessageMiddleware',     # Đảm bảo dòng này tồn tại
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
+SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = True  # Chỉ bật nếu dùng HTTPS

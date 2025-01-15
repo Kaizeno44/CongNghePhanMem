@@ -17,16 +17,16 @@
     <header>
         <div class="header_top">
             <div class="img_km">
-                <a href="../Home/Home.html">
-                    <img src="../Home/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                <a href="Home.html">
+                    <img src="img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
         <div class="container_header">
             <div class="container_header_top">
                 <div class="logo">
-                    <a href="../Home/Home.html">
-                        <img src="../Home/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                    <a href="Home.html">
+                        <img src="img/Logo.png" alt="MILK SHOP" style="height: 60px;">
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
@@ -34,14 +34,14 @@
                     <i class="fa fa-search"></i>
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function" onclick="openCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
                         <a href="../giohang/giohang.html">
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -55,18 +55,18 @@
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="../login/login.html"> 
+                        <a href="../login/login.html">
                             <div class="header__bars_1">
                                 <span>Đăng nhập</span>
                                 <div class="menu_content_1">
-                                    <ul >
-                                        <li >
+                                    <ul>
+                                        <li>
                                             <a href="#">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
                                         </li>
-                                        <li >
+                                        <li>
                                             <a href="#">
                                                 <i class="fa fa-sign-out"></i>
                                                 <span>Đăng xuất</span>
@@ -84,16 +84,16 @@
                         <i class="fa fa-bars"></i>
                         <span>Danh Mục</span>
                         <div class="menu_content">
-                            <ul >
-                                <li >
+                            <ul>
+                                <li>
                                     <div class="noidungmenu">
                                         <a href="../Muahang/muahang.html">SỮA BỘT DINH DƯỠNG</a>
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                                     </div>
-                                    
+
 
                                 </li>
-                                <li >
+                                <li>
                                     <div class="noidungmenu">
                                         <a href="../Muahang/muahang.html">TÃ BỈM CHO BÉ</a>
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -106,7 +106,7 @@
                     <div class="header__menu">
                         <ul>
                             <li>
-                                <a href="../Home/Home.html">Trang chủ</a>
+                                <a href="Home.html">Trang chủ</a>
                             </li>
 
                             <li>
@@ -144,20 +144,11 @@
                         <input type="text" placeholder="Họ tên">
                         <input type="text" placeholder="Số điện thoại">
                     </div>
-                    <div class="header_form">
+                    <div class="header_form_1" style="margin-right: 16px;">
                         <input type="email" placeholder="Email">
-                        <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
                     </div>
-                    <div class="select-group">
-                        <select>
-                            <option>Chọn Tỉnh / Thành phố</option>
-                        </select>
-                        <select>
-                            <option>Chọn Quận / Huyện</option>
-                        </select>
-                        <select>
-                            <option>Chọn Phường / Xã</option>
-                        </select>
+                    <div class="header_form_1" style="margin-right: 16px;">
+                        <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
                     </div>
                     <div class="header_form_1" style="margin-right: 16px;">
                         <input placeholder="Ghi chú thêm"></input>
@@ -180,25 +171,8 @@
             <!-- Giỏ hàng -->
             <div class="cart">
                 <h2>Giỏ hàng</h2>
-                <div id="emptyCartMessage">Chưa có sản phẩm trong giỏ</div>
-                <div id="cartItems" style="display: none;"></div>
-                <div class="summary-container" style="display: none;">
-                    <div class="summary" style="border-bottom:2px solid gainsboro;">
-                        <div class="sum1">
-                            <p>Tạm tính: </p> <span id="subtotal">0đ</span>
-                        </div>
-                        <div class="sum1">
-                            <p>Giảm giá: </p> <span id="discount">0đ</span>
-                        </div>
-                        <div class="sum1">
-                            <p>Phí giao hàng: </p> <span id="shipping">0đ</span>
-                        </div>
-                    </div>
-                    <div class="sum1">
-                        <p><strong>Tổng: </strong></p> <span id="total">0đ</span>
-                    </div>
-                    <button class="pay-btn">Thanh toán</button>
-                </div>
+                <div id="cartItems"></div>
+        
             </div>
             
         </div>

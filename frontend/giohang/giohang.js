@@ -1,118 +1,93 @@
-// Khởi tạo giỏ hàng từ localStorage hoặc giỏ hàng trống nếu chưa có
-let cartData = JSON.parse(localStorage.getItem('cartData')) || [];
 
-const handleMua = (value) => {
-  const { id, name, image, price } = value.dataset;
-  
-  const product = {
-    id,
-    name,
-    image,
-    price,
-    quantity: 1,
+
+const getProduct = (item) => {
+  const products = JSON.parse(localStorage.getItem("cartItems")) || [];
+  const infoProductCart = products.find((sp) => item.id === sp.id) || {};
+  return {
+    ...infoProductCart,
+    ...item,
   };
-
-  // Kiểm tra nếu sản phẩm đã có trong giỏ hàng
-  const existingProduct = cartData.find((item) => item.id === id);
-  
-  if (existingProduct) {
-    // Nếu sản phẩm đã có, tăng số lượng
-    existingProduct.quantity += 1;
-  } else {
-    // Nếu sản phẩm chưa có, thêm mới vào giỏ
-    cartData.push(product);
-  }
-
-  // Lưu giỏ hàng vào localStorage
-  localStorage.setItem('cartData', JSON.stringify(cartData));
-
-  // Cập nhật giỏ hàng trên giao diện
-  updateCartData();
-  
-  alert("Đã thêm sản phẩm vào giỏ hàng");
 };
 
-const updateCartData = () => {
-  // Cập nhật tổng số lượng sản phẩm trong giỏ hàng
-  const cartCounter = document.getElementById("valueGioHang");
-  const totalQuantity = cartData.reduce((sum, { quantity }) => sum + quantity, 0);
-  cartCounter.textContent = totalQuantity;
+const showCart = () => {
+  const cartItems = document.getElementById("cartItems");
 
-  // Cập nhật giỏ hàng trong trang giỏ hàng
-  const cartContainer = document.getElementById('cartItems');
-  const emptyMessage = document.getElementById('emptyCartMessage');
-  const summaryContainer = document.querySelector('.summary-container');
-  const subtotalElement = document.getElementById('subtotal');
-  const totalElement = document.getElementById('total');
-
-  if (cartData.length === 0) {
-    emptyMessage.style.display = 'block';
-    cartContainer.style.display = 'none';
-    summaryContainer.style.display = 'none';
+  // Kiểm tra nếu phần tử tồn tại
+  if (!cartItems) {
+    console.error("Phần tử cartItems không tồn tại.");
     return;
   }
 
-  emptyMessage.style.display = 'none';
-  cartContainer.style.display = 'block';
-  summaryContainer.style.display = 'block';
+  // Kiểm tra dữ liệu giỏ hàng
+  const itemProducts = JSON.parse(localStorage.getItem("cartData")) || [];
+  if (itemProducts.length === 0) {
+    cartItems.innerHTML = `<div class="tb_Cart">Chưa có sản phẩm trong giỏ</div>`;
+  } else {
+    let productsHtml = "";
 
-  let subtotal = 0;
+    itemProducts.forEach((item) => {
+      const product = getProduct(item);
+      console.log(product, "product");
 
-  cartContainer.innerHTML = cartData
-    .map(({ id, name, image, price, quantity }) => {
-      subtotal += parseInt(price.replace('.', ''), 10) * quantity;
-      return `
-        <div class="cart-item" id="cartItem-${id}">
-          <div class="col-md-3">
-            <div class="cartpic">
-              <img style="width: 100px; padding: 13px;" src="${image}" alt="${name}">
-              <div class="cartcount">${quantity}</div>
-            </div>
+      productsHtml += `
+        <div class="col-md-3">
+          <div class="cartpic">
+            <img style="width: 100px; padding: 13px;" src="${product.image}" alt="${product.name}">
+            <div class="cartcount">${product.quantity}</div>
           </div>
-          <div class="col-md-6">
-            <div class="carttitle">${name}</div>
-            <div class="cartcount1">
-              <i class="fa fa-minus addminus" onclick="updateQuantity('${id}', -1)"></i>
-              <span>
-                <input type="number" class="soluong" value="${quantity}" readonly>
-              </span>
-              <i class="fa fa-plus addplus" onclick="updateQuantity('${id}', 1)"></i>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <span>${price}đ</span>
+        </div>
+        <div class="col-md-6">
+          <div class="carttitle">${product.name}</div>
+          <div class="cartcount1">
+            <i class="fa fa-minus addminus add-minus" data-gid="${product.id}"></i>
+            <span>
+              <input class="soluong${product.id}" type="number" min = "1" max = "100"  name="txt_soluong" value="${product.quantity}">
+            </span>
+            <i class="fa fa-plus add-plus" data-gid="${product.id}"></i>
           </div>
         </div>
       `;
-    })
-    .join('');
+    });
 
-  subtotalElement.textContent = formatCurrency(subtotal);
-  totalElement.textContent = formatCurrency(subtotal); 
-};
-
-const formatCurrency = (value) => {
-  return value.toLocaleString('vi-VN') + 'đ';
-};
-
-const updateQuantity = (id, change) => {
-  const productIndex = cartData.findIndex(item => item.id === id);
-
-  if (productIndex > -1) {
-    cartData[productIndex].quantity += change;
-
-    // Xóa sản phẩm nếu số lượng là 0
-    if (cartData[productIndex].quantity <= 0) {
-      cartData.splice(productIndex, 1); 
-    }
-
-    // Lưu giỏ hàng vào localStorage và cập nhật giao diện
-    localStorage.setItem('cartData', JSON.stringify(cartData));
-    updateCartData();
+    // Chèn nội dung HTML vào phần tử cartItems
+    cartItems.innerHTML = `
+      <div class="cart-content">
+        ${productsHtml}
+      </div>
+      <div class="apvoucheandgia">
+        <div class="apvoucher">
+          <input type="text" placeholder="Nhập mã giảm giá">
+          <button class="ctn_button">Áp dụng</button>
+        </div>
+        <div class="gia">
+          <span>410.000đ</span>
+        </div>
+      </div>
+      <div class="summary" style="border-bottom:2px solid gainsboro;">
+        <div class="sum1">
+          <p>Tạm tính:</p> <span>410.000đ</span>
+        </div>
+        <div class="sum1">
+          <p>Giảm giá:</p> <span>0đ</span>
+        </div>
+        <div class="sum1">
+          <p>Phí giao hàng:</p> <span>0đ</span>
+        </div>
+      </div>
+      <div class="sum1">
+        <p><strong>Tổng:</strong></p> <span>410.000đ</span>
+      </div>
+      <button class="pay-btn">Thanh toán 410.000đ (COD)</button>
+    `;
   }
 };
 
-// Cập nhật giỏ hàng khi trang được tải lại
-document.addEventListener('DOMContentLoaded', () => {
-  updateCartData();
+// Hàm mở giỏ hàng
+const openCart = () => {
+  showCart();
+};
+
+// Gọi hàm mở giỏ hàng khi DOM tải xong
+document.addEventListener("DOMContentLoaded", () => {
+  openCart();
 });

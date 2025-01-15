@@ -8,14 +8,13 @@
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static "app/login.css" %}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body>
-    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
-        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
-    </a>
+    
     <a href="#" target="_blank" class="foot_zalo">
         <img src="https://sua.vn/themes/sua/images/zalo.png">
     </a>
@@ -23,7 +22,7 @@
         <div class="header_top">
             <div class="img_km">
                 <a href="{% url "home" %}">
-                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
+                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
@@ -46,7 +45,7 @@
                         background-size: contain;"></span>
                         <a href="{% url "giohang" %}">
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -56,23 +55,24 @@
                         </a>
                     </div>
                     <div class="item_list_Function">
+                        {% if user.is_authenticated %}
                         <span style="height: 25px;
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                        <a href="#" style="text-decoration: none; color: black;"> 
                             <div class="header__bars_1">
-                                <span>Đăng nhập</span>
+                                <span>Xin chào, {{ user.username }}</span>
                                 <div class="menu_content_1">
-                                    <ul >
-                                        <li >
-                                            <a href="{% url "hoso" %}">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'hoso' %}">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a href="#">
+                                        <li>
+                                            <a href="{% url 'logout' %}">
                                                 <i class="fa fa-sign-out"></i>
                                                 <span>Đăng xuất</span>
                                             </a>
@@ -81,7 +81,19 @@
                                 </div>
                             </div>  
                         </a>
+                        {% else %}
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                            </div>  
+                        </a>
+                        {% endif %}
                     </div>
+                    
                 </div>
             </div>
             <div class="container_header_bottom">
@@ -141,44 +153,26 @@
     <div class="container_body">
         <div class="container" id="container">
             <div class="form-container sign-up">
-                <form>
+                <form method="POST" action="{% url 'register' %}">
+                    {% csrf_token %}
                     <h1 style="margin-bottom: 10px;">Tạo tài khoản</h1>
-                    {% comment %} <div class="social-icons">
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
-                    </div> {% endcomment %}
-                    <input type="text" placeholder="Họ và tên">
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Mật khẩu">
-                    <button>Đăng Kí</button>
+                    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                    <input type="tel" name="phone_number" placeholder="SĐT" pattern="[0-9]{10}" required>
+                    <input type="password" name="password" placeholder="Mật khẩu" required>
+                    <button type="submit" name="register">Đăng Kí</button>
                 </form>
             </div>
             <div class="form-container sign-in">
-                <form>
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
                     <h1 style="margin-bottom: 10px;">Đăng nhập</h1>
-                    {% comment %} <div class="social-icons">
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
-                    </div> {% endcomment %}
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Mật khẩu">
-                    <a href="">Quên mật khẩu?</a>
-                    <button>Đăng Nhập</button>
+                    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                    <input type="password" name="password" placeholder="Mật khẩu" required>
+
+                    <a href="#">Quên mật khẩu?</a>
+                    <button type="submit" name="login">Đăng Nhập</button>
                 </form>
+                
             </div>
             <div class="toggle-container">
                 <div class="toggle">
@@ -233,7 +227,26 @@
             </div>
         </div>
     </footer>
-    <script src="/static/js/login.js"></script>
+    <div id="toast"></div>
+    <script src="{% static 'js/toast.js' %}"></script>
+    <script src="{% static 'js/login.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            {% if messages %}
+                {% for message in messages %}
+                    toast({
+                        title: "{{ message.tags|title }}",
+                        message: "{{ message|escapejs }}",
+                        type: "{{ message.tags|default:'success'|slugify }}", 
+                        duration: 3000
+                    });
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+    
+    
 </body>
+
 
 </html>

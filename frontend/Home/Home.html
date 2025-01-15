@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="homeCss.css">
+    <link rel="stylesheet" href="../css/toast.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Home</title>
 </head>
@@ -36,7 +37,7 @@
                     <i class="fa fa-search"></i>
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function" onclick="openCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
@@ -200,7 +201,12 @@
                                 </div>
                             </div>
                             <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
+                                <a href="#"
+                                onclick="handdeMua(this)" 
+                                data-id="2"
+                                data-name="Sữa hạt đa dưỡng chất Forganic 400g tặng lý sứ cao cấp [Có Quà]"
+                                data-image="https://sua.vn/uploads/shop/pic/small_1733135322.nv.jpg"
+                                data-price="410.000">Chọn mua</a>
                             </div>
                         </div>
                     </div>
@@ -976,7 +982,9 @@
             </div>
         </div>
     </footer>
-    <script src="home.js"></script>
+    <div id="toast"></div>
+    <script src="../js/home.js"></script>
+    <script src="../js/toast.js"></script>
 </body>
 
 </html>

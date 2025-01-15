@@ -6,3 +6,4 @@ const handeSignUp = () =>
 const handeSignIn = () => {
     container.classList.remove("active");
 }
+
