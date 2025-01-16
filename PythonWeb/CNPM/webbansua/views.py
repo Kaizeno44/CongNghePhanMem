@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
 from .models import CustomUser, Product, Promotion, CartItem
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 import json
 
 def user_login(request):
@@ -156,15 +157,25 @@ def get_current_user(request):
         'phone_number': user.phone_number,
     }
     return JsonResponse(data)
+@login_required
 def get_user_cart_items(request):
     try:
-        cart_items = CartItem.objects.filter(user=request.user)
-        cart_item_list = list(cart_items.values(
-            'id', 'price', 'image_url', 'quantity', 'user_id','product_id'
-        ))
+        # Lấy giỏ hàng của người dùng hiện tại
+        cart_items = CartItem.objects.filter(user=request.user).select_related('product')
+        cart_item_list = [
+            {
+                "id": item.id,
+                "product_name": item.product.name,
+                "price": item.price,
+                "quantity": item.quantity,
+                "image_url": item.image_url,
+                "total": item.price * item.quantity,
+            }
+            for item in cart_items
+        ]
         return JsonResponse(cart_item_list, safe=False, status=200)
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=400)
+        return JsonResponse({"error": str(e)}, status=500)
 def check_login_status(request):
     if request.user.is_authenticated:
         return JsonResponse({"logged_in": True})

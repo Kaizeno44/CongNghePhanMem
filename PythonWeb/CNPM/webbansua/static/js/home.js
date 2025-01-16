@@ -127,7 +127,6 @@ window.addEventListener("load", async () => {
   try {
     const response = await fetch("/api/promotion/");
     const dataKM = await response.json();
-    console.log(dataKM, "khuyen mai");
     const ct_Khuyen_Mai = document.getElementById("ct_Khuyen_Mai");
     let itemKM = "";
     if (dataKM.length > 0) {
@@ -158,7 +157,7 @@ const handleBuy = async (productId) => {
   try {
     const loginStatusResponse = await fetch("/api/check_login/");
     const loginStatus = await loginStatusResponse.json();
-    if (!loginStatus.led_ioggn) {
+    if (!loginStatus.logged_in) {
       toast({
         title: "Warning",
         message: "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng!",
