@@ -156,7 +156,7 @@
                 <form>
                     <div class="header_form">
                         <input type="text" placeholder="Họ tên">
-                        <input type="text" placeholder="Số điện thoại">
+                        <input type="tel" placeholder="Số điện thoại">
                     </div>
                     <div class="header_form_1" style="margin-right: 16px;">
                         <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
@@ -176,14 +176,14 @@
                         <input type="radio" name="payment" style="cursor: pointer;">
                         Chuyển khoản ngân hàng
                     </div>
-                    <button class="pay-btn">Thanh toán 0đ (COD)</button>
+                    <button class="pay-btn" onclick="createOrder()">Thanh toán 0đ (COD)</button>
 
                 </div>
             </div>
             <div class="cart">
                 <h2>Giỏ hàng</h2>
                 <div class="list_product_Cart" id="product_Cart">
-
+                    <p>Không có sản phẩm</p>
                 </div>
             </div>
         </div>

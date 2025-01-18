@@ -214,6 +214,7 @@ const updateUserCartData = async () => {
     if (loginStatus.logged_in) {
       const response = await fetch("/api/user-cart/");
       const cartItems = await response.json();
+      
       const cartCounter = document.getElementById("valueGioHang");
       const totalQuantity = cartItems.reduce((sum, { quantity }) => sum + quantity, 0);
       cartCounter.textContent = totalQuantity;

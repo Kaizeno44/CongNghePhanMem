@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from decimal import Decimal
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, sdt, password=None, **extra_fields):
@@ -25,6 +26,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     phone_number = models.CharField(max_length=10, unique=True, blank=True, null=True)  # Không bắt buộc cho đăng nhập
     is_active = models.BooleanField(default=True)   
     is_staff = models.BooleanField(default=False)
+    Point = models.CharField(max_length=15)
 
     objects = CustomUserManager()
 
@@ -66,9 +68,6 @@ class Employee(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
     phone_number = models.CharField(max_length=15)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(
         max_length=50,
         choices=[
@@ -81,14 +80,25 @@ class Order(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     voucher = models.ForeignKey('Voucher', on_delete=models.SET_NULL, null=True, blank=True)
-    
-    # Các trường mới thêm vào
     full_name = models.CharField(max_length=255, null=False, default='')  # Họ và tên
     notes = models.TextField(null=True, blank=True)  # Ghi chú thêm
     address = models.TextField(null=True, blank=True)  # Địa chỉ
+    total_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0.00")
+    )
+
 
     def __str__(self):
         return f"Order {self.id} - {self.phone_number or self.customer.username}"
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)  
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity} x {self.price}"
 
 
 class Voucher(models.Model):
@@ -108,19 +118,7 @@ class Voucher(models.Model):
         from django.utils.timezone import now
         return now().date() <= self.expiration_date
 
-        
-class Article(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
-
-
-
+    
 class Product(models.Model):
     STATUS_CHOICES = [
         ('con_hang', 'Còn hàng'),
@@ -144,7 +142,8 @@ class Product(models.Model):
     image_url = models.URLField(blank=True, null=True)  # Trường để lưu link ảnh trực tuyến
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    name_brand = models.CharField(max_length=255)
+    Point = models.CharField(max_length=15)
     def __str__(self):
         return self.name
     @property
@@ -195,12 +194,9 @@ class Reward(models.Model):
     def __str__(self):
         return f"{self.product_name} - {self.points} points"
     
-
-class Point(models.Model):
-    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)  # Liên kết người dùng
-    order = models.ForeignKey('Order', on_delete=models.CASCADE)  # Liên kết với đơn hàng
-    points_earned = models.PositiveIntegerField()  # Số điểm tích được từ đơn hàng
-    created_at = models.DateTimeField(auto_now_add=True)
+class Brand(models.Model):
+    name = models.CharField(max_length=255, unique=True)  # Tên thương hiệu
+    image_url = models.URLField(max_length=500)  # URL hình ảnh thương hiệu
 
     def __str__(self):
-        return f"User {self.user.username} earned {self.points_earned} points from Order {self.order.id}"
+        return self.name

@@ -3,9 +3,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
-from .models import CustomUser, Product, Promotion, CartItem
+from .models import CustomUser, Product, Promotion, CartItem, Voucher, Order,OrderItem
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
+from django.utils.timezone import now
 import json
 
 def user_login(request):
@@ -184,3 +187,75 @@ def get_promotion(request):
     promotion = Promotion.objects.all().values(
         'id', 'title', 'description', 'image' )
     return JsonResponse(list(promotion), safe=False)
+@csrf_exempt
+@login_required
+def update_cart_item(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            cart_item_id = data.get("id")
+            new_quantity = data.get("quantity")
+            if not cart_item_id or new_quantity is None:
+                return JsonResponse({"error": "Thiếu thông tin giỏ hàng hoặc số lượng"}, status=400)
+            cart_item = CartItem.objects.filter(id=cart_item_id, user=request.user).first()
+            if not cart_item:
+                return JsonResponse({"error": "Không tìm thấy sản phẩm trong giỏ hàng"}, status=404)
+            cart_item.quantity = new_quantity
+            cart_item.save()
+            return JsonResponse({"message": "Cập nhật số lượng thành công"}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+@csrf_exempt
+@login_required
+@transaction.atomic
+def create_order(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            full_name = data.get("full_name")
+            address = data.get("address")
+            phone_number = data.get("phone_number")
+            notes = data.get("notes")
+            user = request.user
+            if not full_name or not address or not phone_number:
+                return JsonResponse({"error": "Vui lòng nhập đầy đủ thông tin!"}, status=400)
+            cart_items = CartItem.objects.filter(user=user).exclude(product__isnull=True)
+            if not cart_items.exists():
+                return JsonResponse({"error": "Giỏ hàng trống hoặc chứa sản phẩm không hợp lệ."}, status=400)
+            total_price = sum(item.price * item.quantity for item in cart_items)
+            order = Order.objects.create(
+                customer=user,
+                total_price=total_price,
+                phone_number=phone_number,
+                address=address,
+                full_name=full_name,
+                notes=notes,
+                status="dang_cho_xu_ly",
+            )
+            for item in cart_items:
+                OrderItem.objects.create(
+                    order=order,  
+                    product=item.product,  
+                    quantity=item.quantity,
+                    price=item.price,
+                )
+            cart_items.delete()
+            return JsonResponse({"message": "Đặt hàng thành công!", "order_id": order.id}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+@csrf_exempt
+@login_required
+def delete_cart_item(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            cart_item_id = data.get("id")
+            if not cart_item_id:
+                return JsonResponse({"error": "Thiếu thông tin giỏ hàng"}, status=400)
+            cart_item = CartItem.objects.filter(id=cart_item_id, user=request.user).first()
+            if not cart_item:
+                return JsonResponse({"error": "Không tìm thấy sản phẩm trong giỏ hàng"}, status=404)
+            cart_item.delete()
+            return JsonResponse({"message": "Xóa sản phẩm thành công"}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
