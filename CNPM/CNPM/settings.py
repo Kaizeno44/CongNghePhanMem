@@ -133,3 +133,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'webbansua.CustomUser'
 MEDIA_URL = '/media/'  # URL phục vụ tệp tin media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Thư mục chứa tệp tin media
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Đảm bảo dòng này tồn tại
+    'django.contrib.messages.middleware.MessageMiddleware',     # Đảm bảo dòng này tồn tại
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
+SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = True  # Chỉ bật nếu dùng HTTPS

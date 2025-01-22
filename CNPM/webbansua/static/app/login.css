@@ -669,3 +669,7 @@
     font-size: 0.875rem;
     color: #666;
   }
+  .alert.alert-danger {
+    font-size: 14px;
+    color: red;
+}

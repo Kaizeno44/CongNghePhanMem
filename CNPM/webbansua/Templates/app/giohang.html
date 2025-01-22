@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giao Diện Thanh Toán</title>
     <link rel="stylesheet" href="{% static "app/giohang.css" %}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
-        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
-    </a>
+    
     <a href="#" target="_blank" class="foot_zalo">
         <img src="https://sua.vn/themes/sua/images/zalo.png">
     </a>
@@ -19,7 +19,7 @@
         <div class="header_top">
             <div class="img_km">
                 <a href="{% url "home" %}">
-                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
+                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
@@ -35,14 +35,14 @@
                     <i class="fa fa-search"></i>
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function" onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <a href="{% url "giohang" %}">
+                        <a {% url "giohang" %}>
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -52,23 +52,24 @@
                         </a>
                     </div>
                     <div class="item_list_Function">
+                        {% if user.is_authenticated %}
                         <span style="height: 25px;
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                        <a href="#" style="text-decoration: none; color: black;"> 
                             <div class="header__bars_1">
-                                <span>Đăng nhập</span>
+                                <span>Xin chào, {{ user.username }}</span>
                                 <div class="menu_content_1">
-                                    <ul >
-                                        <li >
-                                            <a href="{% url "hoso" %}">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'hoso' %}">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a href="#">
+                                        <li>
+                                            <a href="{% url 'logout' %}">
                                                 <i class="fa fa-sign-out"></i>
                                                 <span>Đăng xuất</span>
                                             </a>
@@ -77,7 +78,19 @@
                                 </div>
                             </div>  
                         </a>
+                        {% else %}
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                            </div>  
+                        </a>
+                        {% endif %}
                     </div>
+                    
                 </div>
             </div>
             <div class="container_header_bottom">
@@ -145,23 +158,11 @@
                         <input type="text" placeholder="Họ tên">
                         <input type="text" placeholder="Số điện thoại">
                     </div>
-                    <div class="header_form">
-                        <input type="email" placeholder="Email">
+                    <div class="header_form_1" style="margin-right: 16px;">
                         <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
                     </div>
-                    <div class="select-group">
-                        <select>
-                            <option>Chọn Tỉnh / Thành phố</option>
-                        </select>
-                        <select>
-                            <option>Chọn Quận / Huyện</option>
-                        </select>
-                        <select>
-                            <option>Chọn Phường / Xã</option>
-                        </select>
-                    </div>
                     <div class="header_form_1" style="margin-right: 16px;">
-                        <input placeholder="Ghi chú thêm"></input>
+                        <input placeholder="Ghi chú thêm">
                     </div>
                 </form>
                 <h2 style="font-weight: 100; padding-bottom: 10px;">Hình thức thanh toán</h2>
@@ -175,57 +176,15 @@
                         <input type="radio" name="payment" style="cursor: pointer;">
                         Chuyển khoản ngân hàng
                     </div>
+                    <button class="pay-btn">Thanh toán 0đ (COD)</button>
+
                 </div>
             </div>
-    
-            <!-- Giỏ hàng -->
             <div class="cart">
                 <h2>Giỏ hàng</h2>
-                <div class="cart-item">
-                    <div class="col-md-3">
-                        <div class="cartpic">
-                            <img  style="width: 100px; padding: 13px;" src="https://sua.vn/uploads/shop/pic/1732777227.nv.jpg">
-                            <div class="cartcount">1</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="carttitle">
-                            Sữa hạt đa dưỡng chất Forganic 800g tặng Sữa bữa ăn thay thế 400g [Mua 1 Tặng 1]
-                        </div>
-                        <div class="cartcount1">
-                            <i class="fa fa-minus addminus add-minus" data-gid="3166"></i>
-                            <span>
-                                <input class="soluong3166" type="number" name="txt_soluong" value="1">
-                            </span>
-                            <i class="fa fa-plus add-plus" data-gid="3166"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="apvoucheandgia">
-                    <div class="apvoucher">
-                        <input type="text" placeholder="Nhập mã giảm giá">
-                        <button class="ctn_button">Áp dụng</button>
-                    </div>
-                    <div class="gia">
-                        <span>410.000đ</span>
-                    </div>
-                </div>
-                <div class="summary" style="border-bottom:2px solid gainsboro ;">
-                    <div class="sum1">
-                        <p>Tạm tính: </p> <span>410.000đ</span>
-                    </div>
-                    <div class="sum1">
-                        <p>Giảm giá: </p> <span>0đ</span>
-                    </div>
-                    <div class="sum1">
-                        <p>Phí giao hàng: </p> <span>0đ</span>
-                    </div>
-                </div>
-                <div class="sum1">
-                    <p><strong>Tổng: </strong></p> <span>410.000đ</span>
-                </div>
+                <div class="list_product_Cart" id="product_Cart">
 
-                <button class="pay-btn">Thanh toán 410.000đ (COD)</button>
+                </div>
             </div>
         </div>
     </main>
@@ -266,5 +225,9 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/giohang.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+
 </body>
 </html>

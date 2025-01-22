@@ -10,20 +10,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Render danh sách voucher
         vouchers.forEach(voucher => {
+            const discount = voucher.discount_value
+                ? `${parseFloat(voucher.discount_value).toLocaleString()}đ`
+                : `${voucher.discount_percent || 0}%`;
+
+            const minOrder = voucher.minimum_order_value
+                ? `${parseFloat(voucher.minimum_order_value).toLocaleString()}k`
+                : "Không có điều kiện";
+
+            const expirationDate = voucher.expiration_date || "Không có ngày hết hạn";
+
             const voucherHTML = `
                 <div class="itemvoucher">
                     <div class="voucher_header">
-                        <span>${voucher.discount_value ? `${parseFloat(voucher.discount_value).toLocaleString()}đ` : `${voucher.discount_percent}%`}</span>
+                        <span>${discount}</span>
                         <div class="thongtin">
                             <p>Cho đơn hàng online từ</p>
-                            <p>${parseFloat(voucher.minimum_order_value || 0).toLocaleString()}k</p>
+                            <p>${minOrder}</p>
                         </div>
                     </div>
                     <div class="voucher_footer">
                         <p>${voucher.brand || "Không rõ thương hiệu"}</p>
                         <span style="color: #ae0258; font-size: 11px;">Mã dành cho ${voucher.description || "Không có mô tả"}</span>
                         <div class="tile1">
-                            <span style="color: #ae0258; font-size: 11px;">Đến ngày ${voucher.expiration_date}</span>
+                            <span style="color: #ae0258; font-size: 11px;">Đến ngày ${expirationDate}</span>
                             <div class="tile2">
                                 <button style="border: none; background: none; color: white;">${voucher.code}</button>
                             </div>

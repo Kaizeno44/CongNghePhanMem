@@ -4,50 +4,43 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
-        # Kiểm tra email
-        if not email:
-            raise ValueError('The Email field must be set')
+    def create_user(self, username, sdt, password=None, **extra_fields):
+        if not sdt:
+            raise ValueError('The Phone Number field must be set')
         
-        # Chuẩn hóa email
-        email = self.normalize_email(email)
-        
-        # Tạo người dùng mới
-        user = self.model(username=username, email=email, **extra_fields)
-        user.set_password(password)  # Đặt mật khẩu
+        sdt = sdt.strip()  
+        user = self.model(username=username, phone_number=sdt, **extra_fields)
+        user.set_password(password)  # Mã hóa mật khẩu
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        # Đảm bảo rằng superuser có quyền admin
+    def create_superuser(self, username, sdt, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        
-        return self.create_user(username, email, password, **extra_fields)
-
+        return self.create_user(username, sdt, password, **extra_fields)
 
 # CustomUser kế thừa từ AbstractUser, cho phép thêm các trường tùy chỉnh
-class CustomUser(AbstractUser):
-    # Thêm trường tùy chỉnh như phone nếu cần
-    points = models.PositiveIntegerField(default=0)  # Điểm của người dùng
-    phone_number = models.CharField(max_length=15, null=True, blank=True)  # Thêm trường số điện thoại
-    # Chỉ định manager cho CustomUser
+class CustomUser(AbstractUser, PermissionsMixin):
+    username = models.CharField(max_length=150, unique=True)
+    phone_number = models.CharField(max_length=10, unique=True, blank=True, null=True)  # Không bắt buộc cho đăng nhập
+    is_active = models.BooleanField(default=True)   
+    is_staff = models.BooleanField(default=False)
+
     objects = CustomUserManager()
-    class Meta:
-        db_table = 'webbansua_customuser'
+
+    USERNAME_FIELD = 'username'  # Đăng nhập bằng tên đăng nhập
+    REQUIRED_FIELDS = []  # Không yêu cầu các trường bổ sung khi tạo superuser
+
     def __str__(self):
-        return self.username  # Trả về tên người dùng khi in đối tượng
-
-
+        return self.username
 @receiver(post_save, sender=CustomUser)
 def create_employee_for_new_user(sender, instance, created, **kwargs):
     if created:
-        # Kiểm tra xem Employee đã tồn tại chưa trước khi tạo mới
         if not hasattr(instance, 'employee'):
             Employee.objects.create(
                 user=instance,
-                name=instance.username,
-                email=instance.email,
+                name=instance.username,  # Sử dụng `username` từ `CustomUser`
+                phone=instance.phone_number,  # Sử dụng `phone_number` từ `CustomUser`
                 position='Employee'
             )
 
@@ -61,10 +54,9 @@ def save_employee(sender, instance, **kwargs):
         pass
 class Employee(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
-    position = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)  # Tên nhân viên
+    phone = models.CharField(max_length=15, null=True, blank=True)  # Số điện thoại
+    position = models.CharField(max_length=100)  # Vị trí
     date_joined = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -167,13 +159,11 @@ class CartItem(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
-    product_name = models.CharField(max_length=255, blank=True)
-    image_url = models.URLField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Thêm trường giá
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    image_url = models.URLField(null=True, blank=True)  # Thêm trường image_url
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.name} for {self.user.username}"
-
+        return f"{self.quantity} of {self.product.name if self.product else 'Unknown'} for {self.user.username if self.user else 'Unknown User'}"
 
 
 class OrderItem(models.Model):
@@ -185,10 +175,9 @@ class OrderItem(models.Model):
 class Promotion(models.Model):
     title = models.CharField(max_length=255)  # Tiêu đề khuyến mãi
     description = models.TextField(blank=True, null=True)  # Mô tả
-    discount_percent = models.DecimalField(max_digits=5, decimal_places=2)  # % giảm giá
     start_date = models.DateField()  # Ngày bắt đầu
     end_date = models.DateField()  # Ngày kết thúc
-    image = models.ImageField(upload_to='promotions/', blank=True, null=True)  # Ảnh khuyến mãi
+    image = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title

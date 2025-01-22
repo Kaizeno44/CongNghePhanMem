@@ -3,7 +3,6 @@ from .models import CustomUser  # Đảm bảo CustomUser đã được định 
 from webbansua.models import CustomUser  # Import mô hình người dùng mặc định
 
 
-
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Tên đăng nhập'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Mật khẩu'}))
@@ -27,7 +26,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'phone_number', 'password']  # Đúng tên trường trong mô hình
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -35,11 +34,13 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Tên người dùng đã tồn tại.")
         return username
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if CustomUser.objects.filter(email=email).exists():
-            raise forms.ValidationError("Email đã được sử dụng.")
-        return email
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number.isdigit() or len(phone_number) != 10:
+            raise forms.ValidationError("Số điện thoại không hợp lệ.")
+        if CustomUser.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError("Số điện thoại đã được sử dụng.")
+        return phone_number
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -49,9 +50,7 @@ class RegistrationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
+        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
         if commit:
             user.save()
         return user
-
-

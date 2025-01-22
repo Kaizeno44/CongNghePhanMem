@@ -8,14 +8,13 @@
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static "app/login.css" %}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body>
-    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
-        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
-    </a>
+    
     <a href="#" target="_blank" class="foot_zalo">
         <img src="https://sua.vn/themes/sua/images/zalo.png">
     </a>
@@ -46,7 +45,7 @@
                         background-size: contain;"></span>
                         <a href="{% url "giohang" %}">
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -157,26 +156,19 @@
                 <form method="POST" action="{% url 'register' %}">
                     {% csrf_token %}
                     <h1 style="margin-bottom: 10px;">Tạo tài khoản</h1>
-                    {{ register_form.non_field_errors }}
-                    <input type="text" name="username" placeholder="Tên đăng nhập">
-                    {{ register_form.username.errors }}
-                    <input type="email" name="email" placeholder="Email">
-                    {{ register_form.email.errors }}
-                    <input type="password" name="password" placeholder="Mật khẩu">
-                    {{ register_form.password.errors }}
+                    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                    <input type="tel" name="phone_number" placeholder="SĐT" pattern="[0-9]{10}" required>
+                    <input type="password" name="password" placeholder="Mật khẩu" required>
                     <button type="submit" name="register">Đăng Kí</button>
                 </form>
-                
             </div>
             <div class="form-container sign-in">
                 <form method="POST" action="{% url 'login' %}">
                     {% csrf_token %}
                     <h1 style="margin-bottom: 10px;">Đăng nhập</h1>
-                    {{ form.non_field_errors }}
                     <input type="text" name="username" placeholder="Tên đăng nhập" required>
-                    {{ form.username.errors }}
                     <input type="password" name="password" placeholder="Mật khẩu" required>
-                    {{ form.password.errors }}
+
                     <a href="#">Quên mật khẩu?</a>
                     <button type="submit" name="login">Đăng Nhập</button>
                 </form>
@@ -235,7 +227,26 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/toast.js' %}"></script>
     <script src="{% static 'js/login.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            {% if messages %}
+                {% for message in messages %}
+                    toast({
+                        title: "{{ message.tags|title }}",
+                        message: "{{ message|escapejs }}",
+                        type: "{{ message.tags|default:'success'|slugify }}", 
+                        duration: 3000
+                    });
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+    
+    
 </body>
+
 
 </html>

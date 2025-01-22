@@ -6,11 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static "app/homeCss.css"%}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Home</title>
 </head>
 
-<body style="background: #F5F7FD; ">
+<body>
     <a href="https://zalo.me/0925931331" target="_blank" class="foot_zalo">
         <img src="https://sua.vn/themes/sua/images/zalo.png">
     </a>
@@ -34,14 +35,14 @@
                     <i class="fa fa-search"></i>
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <a href="{% url "giohang" %}">
+                        <a href="{% url "giohang" %}"  onclick = "showCart()">
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -51,23 +52,24 @@
                         </a>
                     </div>
                     <div class="item_list_Function">
+                        {% if user.is_authenticated %}
                         <span style="height: 25px;
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                        <a href="#" style="text-decoration: none; color: black;"> 
                             <div class="header__bars_1">
-                                <span>Đăng nhập</span>
+                                <span>Xin chào, {{ user.username }}</span>
                                 <div class="menu_content_1">
-                                    <ul >
-                                        <li >
-                                            <a href="{% url "hoso" %}">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'hoso' %}">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a href="#">
+                                        <li>
+                                            <a href="{% url 'logout' %}">
                                                 <i class="fa fa-sign-out"></i>
                                                 <span>Đăng xuất</span>
                                             </a>
@@ -76,7 +78,19 @@
                                 </div>
                             </div>  
                         </a>
+                        {% else %}
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                            </div>  
+                        </a>
+                        {% endif %}
                     </div>
+                    
                 </div>
             </div>
             <div class="container_header_bottom">
@@ -141,185 +155,7 @@
             <div class="logo_sale">
                 <img style="max-width: 150px; padding: 4px 50px;" src="/static/img/flash-sale.png" alt="Ảnh sale">
             </div>
-            <div class="list_products">
-                {% for product in products %}
-                <div class="item_products">
-                    <div class="inside-flas isspbc" style="position: relative;">
-                        <div class="home-sua-percent">
-                            {% if product.discount > 0 %}
-                            <span>- {{ product.discount|floatformat:0 }}%</span>
-                            {% else %}
-                            <span>- 0%</span>
-                            {% endif %}
-                        </div>
-                        <a style="text-decoration: none;" href="{% url 'chitietsp' product.id %}">
-                            <div class="flashsale-pic">
-                                {% if product.image_url %}
-                                <img src="{{ product.image_url }}" alt="{{ product.name }}">
-                                {% elif product.image %}
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                                {% else %}
-                                <img src="/static/img/default-product.jpg" alt="Sản phẩm mặc định">
-                                {% endif %}                                
-                            </div>
-                            <div class="flashsale-title">{{ product.description}}</div>
-                        </a>
-                        
-
-                        <div>
-                            <div class="title_gia" style="display: flex; flex-direction: column; margin-bottom: 5px;">
-                                <!-- Nếu có sale_price, hiển thị giá khuyến mãi -->
-                                {% if product.sale_price %}
-                                <div style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">
-                                            {{ product.sale_price|floatformat:0 }}<sup>đ</sup>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root" style="text-decoration: line-through; color: #aaa;">
-                                            {{ product.price|floatformat:0 }}<sup>đ</sup>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <!-- Nếu không có sale_price, hiển thị giá gốc -->
-                                <div style="display: flex;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">
-                                            {{ product.price|floatformat:0 }}<sup>đ</sup>
-                                        </div>
-                                    </div>
-                                    {% if product.original_price %}
-                                    <div class="col-md-6">
-                                        <div class="sales-root" style="text-decoration: line-through; color: #aaa;">
-                                            {{ product.original_price|floatformat:0 }}<sup>đ</sup>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                </div>
-                                {% endif %}
-                            </div>
-                        
-                        
-                            
-                            <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <p>Hiện không có sản phẩm nào trong danh sách.</p>
-                {% endfor %}
-                <div class="item_products">
-                    <div class="inside-flas isspbc" style="position: relative;">
-                        <div class="home-sua-percent">
-                            <span>- 9%</span>
-                        </div>
-                        <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                            <div class="flashsale-pic">
-                                <img src="https://sua.vn/uploads/shop/pic/small_1733135322.nv.jpg">
-                            </div>
-                            <div class="flashsale-title">Sữa hạt đa dưỡng chất Forganic 400g tặng lý sứ cao cấp [Có Quà] 
-                            </div>
-                        </a>
-                        <div>
-                            <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                <div class="col-md-6 paddL0">
-                                    <div class="sales-price">410.000<sup>đ</sup></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="sales-root">450.000<sup>đ</sup></div>
-                                </div>
-                            </div>
-                            <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="inside-flas isspbc" style="position: relative;">
-                        <div class="home-sua-percent">
-                            <span>- 37%</span>
-                        </div>
-                        <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                            <div class="flashsale-pic">
-                                <img src="https://sua.vn/uploads/shop/pic/small_1732777227.nv.jpg">
-                            </div>
-                            <div class="flashsale-title">Sữa hạt đa dưỡng chất Forganic 800g tặng Sữa bữa ăn thay thế 400g [Mua 1 Tặng 1]
-                            </div>
-                        </a>
-                        <div>
-                            <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                <div class="col-md-6 paddL0">
-                                    <div class="sales-price">789.000<sup>đ</sup></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="sales-root">1.249.000<sup>đ</sup></div>
-                                </div>
-                            </div>
-                            <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="inside-flas isspbc" style="position: relative;">
-                        <div class="home-sua-percent">
-                            <span>- 6%</span>
-                        </div>
-                        <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                            <div class="flashsale-pic">
-                                <img src="https://sua.vn/uploads/shop/pic/small_1731899307.nv.jpg">
-                            </div>
-                            <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g [Combo 6 Lon][Có Quà] cho bé 2-6 tuổi. Tặng xe đạp 12inch cho bé
-                            </div>
-                        </a>
-                        <div>
-                            <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                <div class="col-md-6 paddL0">
-                                    <div class="sales-price">3.480.000<sup>đ</sup></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="sales-root">3.690.000<sup>đ</sup></div>
-                                </div>
-                            </div>
-                            <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="inside-flas isspbc" style="position: relative;">
-                        <div class="home-sua-percent">
-                            <span>- 6%</span>
-                        </div>
-                        <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                            <div class="flashsale-pic">
-                                <img src="https://sua.vn/uploads/shop/pic/small_1731898382.nv.jpg">
-                            </div>
-                            <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi. [Combo 2 Lon][Có Quà] Tặng xe điều khiển từ xa cho bé
-                            </div>
-                        </a>
-                        <div>
-                            <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                <div class="col-md-6 paddL0">
-                                    <div class="sales-price">1.160.000<sup>đ</sup></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="sales-root">1.239.000<sup>đ</sup></div>
-                                </div>
-                            </div>
-                            <div class="chonmua_buy_fast">
-                                <a href="#">Chọn mua</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="list_products" id = "products_fashsale">
                 
             </div>
         </div>
@@ -329,184 +165,8 @@
                     <img style="width: 1140px;" src="/static/img/spbanchay.jpg" alt="Sản phẩm bán chạy">
                 </a>
             </div>
-            <div class="list_products_1">
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 5%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                <div class="flashsale-pic">
-                                    <img src="/static/img/suabot1.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">890.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">940.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 13%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1730519403.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa bầu Morinaga E-Okasan vị trà sữa 800g 
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">550.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">630.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 8%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1728373943.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Similac Total Protection 1+ 850g (1 - 2 tuổi)
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">595.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">645.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 40%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1730521533.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa tăng chiều cao Hiup 650gr (cho bé 3 - 18 tuổi)
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">535.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">890.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 6%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1663754217.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">580.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">615.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 5%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1686023151.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Pediasure B/A 1kg6 (1-10t) Mẫu mới
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">1.140.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">1.090.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
+            <div class="list_products_1" id = "products_banchay">
+                
             </div>
         </div>
         <div class="container_ngoaispban">
@@ -516,543 +176,10 @@
                         <img style="width: 1140px; border-radius: 5px;" src="/static/img/anh_mua.jpg" alt="Sản phẩm bán chạy">
                     </a>
                 </div>
-                <div class="list_products_1">
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="/static/img/suabot1.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">890.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">940.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 13%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730519403.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa bầu Morinaga E-Okasan vị trà sữa 800g 
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">550.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">630.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 8%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1728373943.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Similac Total Protection 1+ 850g (1 - 2 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">595.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">645.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 40%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730521533.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa tăng chiều cao Hiup 650gr (cho bé 3 - 18 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">535.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">890.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 6%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1663754217.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">580.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">615.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1686023151.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Pediasure B/A 1kg6 (1-10t) Mẫu mới
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">1.140.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">1.090.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
+                <div class="list_products_1" id = "products_ban">
+                    
                 </div>
-                <div class="list_products_1">
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="/static/img/suabot1.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">890.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">940.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 13%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730519403.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa bầu Morinaga E-Okasan vị trà sữa 800g 
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">550.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">630.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 8%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1728373943.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Similac Total Protection 1+ 850g (1 - 2 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">595.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">645.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 40%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730521533.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa tăng chiều cao Hiup 650gr (cho bé 3 - 18 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">535.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">890.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 6%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1663754217.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">580.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">615.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1686023151.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Pediasure B/A 1kg6 (1-10t) Mẫu mới
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">1.140.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">1.090.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="list_products_1">
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="/static/img/suabot1.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">890.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">940.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 13%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730519403.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa bầu Morinaga E-Okasan vị trà sữa 800g 
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">550.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">630.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 8%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1728373943.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Similac Total Protection 1+ 850g (1 - 2 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">595.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">645.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 40%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1730521533.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa tăng chiều cao Hiup 650gr (cho bé 3 - 18 tuổi)
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">535.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">890.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 6%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1663754217.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">580.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">615.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="item_products">
-                        <div class="contens_sp">
-                            <div class="inside-flas-isspbc" style="position: relative;">
-                                <div class="home-sua-percent">
-                                    <span>- 5%</span>
-                                </div>
-                                <a style="text-decoration: none;" href="{% url "chitietsp" %}">
-                                    <div class="flashsale-pic">
-                                        <img src="https://sua.vn/uploads/shop/pic/small_1686023151.nv.jpg">
-                                    </div>
-                                    <div class="flashsale-title">Sữa Pediasure B/A 1kg6 (1-10t) Mẫu mới
-                                    </div>
-                                </a>
-                                <div>
-                                    <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                        <div class="col-md-6 paddL0">
-                                            <div class="sales-price">1.140.000<sup>đ</sup></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sales-root">1.090.000<sup>đ</sup></div>
-                                        </div>
-                                    </div>
-                                    <div class="chonmua_buy_fast">
-                                        <a href="#">Chọn mua</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
+                
                 <div class="button_mua">
                     <a class="c-btn" href="{% url "muahang" %}">
                         <span>Xem tất cả</span>
@@ -1065,22 +192,8 @@
                 <span>Chương trình khuyến mãi</span>
             </div>
             <div class="listkm">
-                <div class="listItemKm">
-                    {% for promotion in promotions %}
-                        <div class="itemkm">
-                            <a href="#">
-                                <!-- Hiển thị hình ảnh khuyến mãi -->
-                                {% if promotion.image %}
-                                    <img src="{{ promotion.image.url }}" alt="{{ promotion.title }}">
-                                {% else %}
-                                    <img src="/static/img/default-product.jpg" alt="Khuyến mãi mặc định">
-                                {% endif %}
-                            </a>
-                            <p>{{ promotion.title }}</p>
-                        </div>
-                    {% empty %}
-                        <p>Không có khuyến mãi nào hiện tại.</p>
-                    {% endfor %}
+                <div class="listItemKm" id = "ct_Khuyen_Mai">
+                    
                 </div>
                 <div class="button_mua">
                     <a class="c-btn" href="{% url "khuyenmai" %}">
@@ -1179,7 +292,10 @@
             </div>
         </div>
     </footer>
-    
+    <div id="toast"></div>
+    <script src="{% static 'js/home.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+
 </body>
 
 </html>
