@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doi_qua</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static "app/Doiqua.css" %}">
+</head>
+<body style="background: #F5F7FD;">
+    
+    <a href="#" target="_blank" class="foot_zalo">
+        <img src="https://sua.vn/themes/sua/images/zalo.png">
+    </a>
+    <header>
+        <div class="header_top">
+            <div class="img_km">
+                <a href="{% url "home" %}">
+                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                </a>
+            </div>
+        </div>
+        <div class="container_header" >
+            <div class="container_header_top">
+                <div class="logo">
+                    <a href="{% url "home" %}">
+                        <img src="/static/img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                    </a>
+                </div>
+                <div class="search" style="position: relative;">
+                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="list_Function">
+                    <div class="item_list_Function" onclick = "showCart()">
+                        <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
+                        width: 25px;
+                        height: 25px;
+                        background-size: contain;"></span>
+                        <a href="{% url "giohang" %}">
+                            <div class="tb_gio_hang">
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="item_list_Function">
+                        <a href="{% url "kiemtradonhang" %}">
+                            <span>Kiểm tra đơn hàng</span>
+                        </a>
+                    </div>
+                    <div class="item_list_Function">
+                        {% if user.is_authenticated %}
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="#" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Xin chào, {{ user.username }}</span>
+                                <div class="menu_content_1">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'hoso' %}">
+                                                <i class="fa fa-user-o"></i>
+                                                <span>Hồ sơ</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'logout' %}">
+                                                <i class="fa fa-sign-out"></i>
+                                                <span>Đăng xuất</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>  
+                        </a>
+                        {% else %}
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                            </div>  
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="container_header_bottom">
+                <div class="header__danhmuc">
+                    <div class="header__bars">
+                        <i class="fa fa-bars"></i>
+                        <span>Danh Mục</span>
+                        <div class="menu_content">
+                            <ul >
+                                <li >
+                                    <div class="noidungmenu">
+                                        <a href="{% url "muahang" %}">SỮA BỘT DINH DƯỠNG</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                    
+
+                                </li>
+                                <li >
+                                    <div class="noidungmenu">
+                                        <a href="{% url "muahang" %}">TÃ BỈM CHO BÉ</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header__menu">
+                        <ul>
+                            <li>
+                                <a href="{% url "home" %}">Trang chủ</a>
+                            </li>
+
+                            <li>
+                                <a href="{% url "muahang" %}">Mua hàng</a>
+                            </li>
+
+                            <li>
+                                <a href="{% url "kienthuc" %}">Kiến thức</a>
+                            </li>
+
+                            <li>
+                                <a href="{% url "khuyenmai" %}">Khuyến mãi</a>
+                            </li>
+
+                            <li>
+                                <a  href="{% url "doiqua" %}">Đổi quà</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="theme-supertitle">
+            <span>Tích điểm - Đổi quà</span>
+        </div>
+        <div class="container_doiqua">
+            <div class="header_doiqua">
+                <div class="khung_chucnang">
+                    <a href="{% url "doiqua" %}"><p>Đổi quà</p></a>
+                </div>
+                <div class="khung_chucnang">
+                    <a href="{% url "tichdiem" %}"><p>Tích điểm</p></a>
+                </div>
+            </div>
+            <div class="list_doiqua">
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1587783971_c04b6ed78eae74f02dbf.jpg">
+                    </div>
+                        <p>Máy đo huyết áp cổ tay Beurer BC30</p>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>800</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655091032_z3478867714068_d724fba4b0928e91eb19019178df9e39.jpg">
+                    </div>
+                        <p>Nồi Chiên Không Dầu Lock&Lock 4,5 lít EJF175SLV</p>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>1190</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090615_z3478867684487_554e6401372c887ead0eb14a3d5e2165.jpg">
+                    </div>
+                    <div class="title">
+                        <p>Nước Giặt DNEE Thái lan Can 3000ml</p>
+                    </div>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>180</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090336_z3478867680629_cbb009cfee590201ee0c5aef1561b964.jpg">
+                    </div>
+                    <div class="title">
+                        <p>Đồ chơi đàn piano hình con bò</p>
+                    </div>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>110</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list_doiqua">
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1587783971_c04b6ed78eae74f02dbf.jpg">
+                    </div>
+                        <p>Máy đo huyết áp cổ tay Beurer BC30</p>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>800</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655091032_z3478867714068_d724fba4b0928e91eb19019178df9e39.jpg">
+                    </div>
+                        <p>Nồi Chiên Không Dầu Lock&Lock 4,5 lít EJF175SLV</p>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>1190</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090615_z3478867684487_554e6401372c887ead0eb14a3d5e2165.jpg">
+                    </div>
+                    <div class="title">
+                        <p>Nước Giặt DNEE Thái lan Can 3000ml</p>
+                    </div>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>180</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item_doiqua">
+                    <div class="anh_qua">
+                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090336_z3478867680629_cbb009cfee590201ee0c5aef1561b964.jpg">
+                    </div>
+                    <div class="title">
+                        <p>Đồ chơi đàn piano hình con bò</p>
+                    </div>
+                    <div class="thong_tindoi">
+                        <div class="thongtin1">
+                            <strong>110</strong>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="thongtin2">
+                            <span>Đổi quà</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+    <footer class="footer">
+        <div class="container_footer">
+            <div class="grid">
+                <div class="section">
+                    <h3>Giới thiệu về chúng tôi</h3>
+                    <ul>
+                        <li><a href="#">Cửa hàng của chúng tôi</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Nhãn hàng</a></li>
+                        <li><a href="#">Tặng quà</a></li>
+                    </ul>
+                </div>
+    
+                <div class="section newsletter">
+                    <h3>Đăng ký nhận bản tin của chúng tôi để nhận thông báo và các chương trình khuyến mãi khác</h3>
+                    <div class="form-container">
+                        <input type="email" placeholder="Email address...">
+                        <button>Subscribe</button>
+                    </div>
+                </div>
+    
+                <div class="section"  style="padding-left: 90px;">
+                    <h3>Dịch vụ khách hàng</h3>
+                    <ul>
+                        <li><a href="#">Câu hỏi thường gặp</a></li>
+                        <li><a href="#">Định vị cửa hàng</a></li>
+                        <li><a href="#">Trả lại</a></li>
+                        <li><a href="#">Thông tin vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2024. All Right Reserved</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

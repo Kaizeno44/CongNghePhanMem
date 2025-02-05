@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao Diện Thanh Toán</title>
+    <link rel="stylesheet" href="giohang.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
+        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
+    </a>
+    <a href="#" target="_blank" class="foot_zalo">
+        <img src="https://sua.vn/themes/sua/images/zalo.png">
+    </a>
+    <header>
+        <div class="header_top">
+            <div class="img_km">
+                <a href="Home.html">
+                    <img src="img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
+                </a>
+            </div>
+        </div>
+        <div class="container_header">
+            <div class="container_header_top">
+                <div class="logo">
+                    <a href="Home.html">
+                        <img src="img/Logo.png" alt="MILK SHOP" style="height: 60px;">
+                    </a>
+                </div>
+                <div class="search" style="position: relative;">
+                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="list_Function">
+                    <div class="item_list_Function" onclick="openCart()">
+                        <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
+                        width: 25px;
+                        height: 25px;
+                        background-size: contain;"></span>
+                        <a href="../giohang/giohang.html">
+                            <div class="tb_gio_hang">
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="item_list_Function">
+                        <a href="../Kiemtradonhang/index.html">
+                            <span>Kiểm tra đơn hàng</span>
+                        </a>
+                    </div>
+                    <div class="item_list_Function">
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="../login/login.html">
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                                <div class="menu_content_1">
+                                    <ul>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-user-o"></i>
+                                                <span>Hồ sơ</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-sign-out"></i>
+                                                <span>Đăng xuất</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container_header_bottom">
+                <div class="header__danhmuc">
+                    <div class="header__bars">
+                        <i class="fa fa-bars"></i>
+                        <span>Danh Mục</span>
+                        <div class="menu_content">
+                            <ul>
+                                <li>
+                                    <div class="noidungmenu">
+                                        <a href="../Muahang/muahang.html">SỮA BỘT DINH DƯỠNG</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+
+
+                                </li>
+                                <li>
+                                    <div class="noidungmenu">
+                                        <a href="../Muahang/muahang.html">TÃ BỈM CHO BÉ</a>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="header__menu">
+                        <ul>
+                            <li>
+                                <a href="Home.html">Trang chủ</a>
+                            </li>
+
+                            <li>
+                                <a href="../Muahang/muahang.html">Mua hàng</a>
+                            </li>
+
+                            <li>
+                                <a href="../KienThuc/kienThuc.html">Kiến thức</a>
+                            </li>
+
+                            <li>
+                                <a href="../KhuyenMai/Khuyenmai.html">Khuyến mãi</a>
+                            </li>
+
+                            <li>
+                                <a href="../Doiqua/Doiqua.html">Đổi quà</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="shipping-info">
+                <div class="title_header">
+                    <h2 style="font-weight: 100;">Thông Tin Vận Chuyển</h2>
+                    <span>
+                        Bạn đã có tài khoản? <a href="../login/login.html">Đăng nhập</a>
+                    </span>
+                </div>
+                <form>
+                    <div class="header_form">
+                        <input type="text" placeholder="Họ tên">
+                        <input type="text" placeholder="Số điện thoại">
+                    </div>
+                    <div class="header_form_1" style="margin-right: 16px;">
+                        <input type="email" placeholder="Email">
+                    </div>
+                    <div class="header_form_1" style="margin-right: 16px;">
+                        <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
+                    </div>
+                    <div class="header_form_1" style="margin-right: 16px;">
+                        <input placeholder="Ghi chú thêm"></input>
+                    </div>
+                </form>
+                <h2 style="font-weight: 100; padding-bottom: 10px;">Hình thức thanh toán</h2>
+                <div class="payment-method">
+                    <div class="icon_giaohang">
+                        <input type="radio" name="payment" checked style="cursor: pointer;">
+                        <span>Thanh toán khi nhận hàng</span>
+                    </div>
+                    <br>
+                    <div class="icon_giaohang">
+                        <input type="radio" name="payment" style="cursor: pointer;">
+                        Chuyển khoản ngân hàng
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Giỏ hàng -->
+            <div class="cart">
+                <h2>Giỏ hàng</h2>
+                <div id="cartItems"></div>
+        
+            </div>
+            
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container_footer">
+            <div class="grid">
+                <div class="section">
+                    <h3>Giới thiệu về chúng tôi</h3>
+                    <ul>
+                        <li><a href="#">Cửa hàng của chúng tôi</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Nhãn hàng</a></li>
+                        <li><a href="#">Tặng quà</a></li>
+                    </ul>
+                </div>
+    
+                <div class="section newsletter">
+                    <h3>Đăng ký nhận bản tin của chúng tôi để nhận thông báo và các chương trình khuyến mãi khác</h3>
+                    <div class="form-container">
+                        <input type="email" placeholder="Email address...">
+                        <button>Subscribe</button>
+                    </div>
+                </div>
+    
+                <div class="section"  style="padding-left: 90px;">
+                    <h3>Dịch vụ khách hàng</h3>
+                    <ul>
+                        <li><a href="#">Câu hỏi thường gặp</a></li>
+                        <li><a href="#">Định vị cửa hàng</a></li>
+                        <li><a href="#">Trả lại</a></li>
+                        <li><a href="#">Thông tin vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2024. All Right Reserved</p>
+            </div>
+        </div>
+    </footer>
+    <script src="giohang.js"></script>
+</body>
+</html>
