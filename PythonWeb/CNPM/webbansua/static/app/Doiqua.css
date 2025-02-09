@@ -159,7 +159,6 @@
   .container_header {
     background: white;
     padding: 0px 45px;
-    position: sticky;
     top: 0;
     z-index: 999;
   }
@@ -496,3 +495,24 @@
     color: #fff;
     cursor: pointer;
   }
+  .suggestions {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+  }
+  
+  .suggestions div {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .suggestions div:hover {
+    background: #f1f1f1;
+  }
+  

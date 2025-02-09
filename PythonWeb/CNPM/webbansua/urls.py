@@ -34,10 +34,9 @@ urlpatterns = [
     path('api/cartitem/update/', views.update_cart_item, name='update_cart_item'),
     path('api/order/add/', views.create_order, name='create_order'),
     path('api/cartitem/delete/', views.delete_cart_item, name='delete_cart_item'),
-
-
-
-
+    path('api/product/<int:id>/', views.get_product_by_id, name='get_product_by_id'),
+    path("api/product/<int:id>/related/", views.get_related_products, name="get_related_products"),
+    path("api/search/", views.search_products, name="search_products"),
 
 ]
 if settings.DEBUG:

@@ -1,4 +1,7 @@
 const PHIGIAOHANG = 30000;
+window.addEventListener("pageshow", async () => {
+    await updateUserCartData();
+});
 const formatCurrency = (amount) => {
     if (!amount) return "0đ";
     return parseFloat(amount).toLocaleString("vi-VN", {
@@ -18,6 +21,7 @@ window.addEventListener("load", async () => {
     await showCart();
     resetThongTin();
 });
+// update quantity gio hang
 const updateUserCartData = async () => {
     try {
         const loginStatusResponse = await fetch("/api/check_login/");
@@ -38,6 +42,7 @@ const updateUserCartData = async () => {
         });
     }
 };
+// update quantity khi + or -
 const updateQuantity = async (cartItemId, newQuantity) => {
     try {
         const response = await fetch("/api/cartitem/update/", {
@@ -53,6 +58,7 @@ const updateQuantity = async (cartItemId, newQuantity) => {
         console.error("Error updating cart item:", error.message);
     }
 };
+// Su kien cong va tru sp
 const pushAndMinus = () => {
     const minusButtons = document.querySelectorAll(".add-minus");
     const plusButtons = document.querySelectorAll(".add-plus");
@@ -66,6 +72,7 @@ const pushAndMinus = () => {
             } else {
                 updateQuantity(cartItemId, newQuantity);
             }
+            updateUserCartData();
         });
     });
     plusButtons.forEach((btn) => {
@@ -74,9 +81,12 @@ const pushAndMinus = () => {
             const quantityInput = document.querySelector(`.soluong${cartItemId}`);
             let newQuantity = parseInt(quantityInput.value) + 1;
             updateQuantity(cartItemId, newQuantity);
+            updateUserCartData();
+
         });
     });
 };
+// Xoa sp khi sp về 0
 const deleteCartItem = async (cartItemId) => {
     try {
         const response = await fetch("/api/cartitem/delete/", {
@@ -97,11 +107,12 @@ const deleteCartItem = async (cartItemId) => {
             });
             showCart();
             updateUserCartData();
-        } 
+        }
     } catch (error) {
         console.error("Error deleting cart item:", error.message);
     }
 };
+// Hien thi san pham co trong gio hang
 const showCart = async () => {
     try {
         const response = await fetch("/api/user-cart/");
@@ -178,12 +189,17 @@ const showCart = async () => {
         console.error("Error fetching cart items:", error.message);
     }
 };
+// Tạo order hàng 
 const createOrder = async () => {
     try {
         const fullName = document.querySelector('input[placeholder="Họ tên"]').value;
         const address = document.querySelector('input[placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)"]').value;
         const phoneNumber = document.querySelector('input[placeholder="Số điện thoại"]').value;
         const notes = document.querySelector('input[placeholder="Ghi chú thêm"]').value;
+        const bankTransferRadio = document.getElementById("bank_transfer");
+        const qrContainer = document.getElementById("qr_container");
+        const qrCodeImg = document.getElementById("qr_code");
+
         if (!fullName || !address || !phoneNumber) {
             toast({
                 title: "Warning",
@@ -193,31 +209,51 @@ const createOrder = async () => {
             });
             return;
         }
-        const response = await fetch("/api/order/add/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCSRFToken(),
-            },
-            body: JSON.stringify({
-                full_name: fullName,
-                address: address,
-                phone_number: phoneNumber,
-                notes: notes,
-            }),
-        });
-        toast({
-            title: "Success",
-            message: "Thanh toán đơn hàng thành công",
-            type: "success",
-            duration: 3000,
-        });
-        resetThongTin();
-        updateUserCartData();
+
+        if (bankTransferRadio.checked) {
+            const totalAmount = getTotalAmount();
+            const transferNote = `Thanh toán đơn hàng - ${phoneNumber}`;
+
+            const info = {
+                url: "https://img.vietqr.io/image/TCB-6664466666-compact2.png",
+                amount: totalAmount,
+                addInfo: transferNote, 
+                accountName: "BUI VAN HUY",
+            };
+            const qrUrl = `${info.url}?amount=${info.amount}&addInfo=${encodeURIComponent(info.addInfo)}&accountName=${encodeURIComponent(info.accountName)}`;
+            qrCodeImg.src = qrUrl;
+            qrContainer.style.display = "block";
+            const response = await fetch("/api/order/add/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken(),
+                },
+                body: JSON.stringify({
+                    full_name: fullName,
+                    address: address,
+                    phone_number: phoneNumber,
+                    notes: notes,
+                }),
+            });
+
+            if (response.ok) {
+                toast({
+                    title: "Success",
+                    message: "Thanh toán đơn hàng thành công",
+                    type: "success",
+                    duration: 3000,
+                });
+                resetThongTin();
+                updateUserCartData();
+            }
+        }
     } catch (error) {
         console.error("Error creating order:", error.message);
     }
 };
+
+
 
 const resetThongTin = () => {
     document.querySelector('input[placeholder="Họ tên"]').value = "";
@@ -232,3 +268,12 @@ const resetThongTin = () => {
         pay_btn.disabled = true;
     }
 };
+const getTotalAmount = () => {
+    const totalElement = document.querySelector(".sum1 span:last-child");
+    if (totalElement) {
+        let total = parseInt(totalElement.textContent.replace(/\D/g, ""), 10);
+        return total + 30000;
+    }
+    return 0;
+};
+

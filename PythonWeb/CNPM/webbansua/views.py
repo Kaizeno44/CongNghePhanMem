@@ -9,7 +9,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.utils.timezone import now
+from django.contrib.messages import get_messages
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 import json
+import random
 
 def user_login(request):
     login_form = LoginForm()
@@ -50,7 +54,8 @@ def Profile(request):
 def home(request):
     username = request.session.get('username') 
     products = Product.objects.exclude(id=None)
-    context = {'products': products,'username': username}
+    storage = get_messages(request)
+    context = {'products': products,'username': username , 'messages': storage}
     return render(request, 'app/Home.html', context)
 
 # Xử lý đăng nhập và đăng ký
@@ -148,7 +153,7 @@ def get_cart_items(request):
     return JsonResponse(cart_item_list, safe=False, status=200)
 def get_customuser(request):
     customuser = CustomUser.objects.all().values(
-        'id', 'username', 'email', 'password', 'phone_number', 'points', 'is_active', 'date_joined'
+        'id', 'username', 'email', 'password', 'phone_number', 'points', 'is_active', 'date_joined', "Point"
     )
     return JsonResponse(list(customuser), safe=False)
 def get_current_user(request):
@@ -156,14 +161,14 @@ def get_current_user(request):
     data = {
         'id': user.id,
         'username': user.username,
-        'email': user.email,
         'phone_number': user.phone_number,
+        'points': user.Point  
+
     }
     return JsonResponse(data)
 @login_required
 def get_user_cart_items(request):
     try:
-        # Lấy giỏ hàng của người dùng hiện tại
         cart_items = CartItem.objects.filter(user=request.user).select_related('product')
         cart_item_list = [
             {
@@ -259,3 +264,38 @@ def delete_cart_item(request):
             return JsonResponse({"message": "Xóa sản phẩm thành công"}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
+def get_product_by_id(request, id):
+    product = get_object_or_404(Product, id=id)
+    product_data = {
+        "id": product.id,
+        "name": product.name,
+        "price": product.price,
+        "status": product.status,
+        "sale_price": product.sale_price,
+        "description": product.description,
+        "image_url": product.image_url,
+    }
+    return JsonResponse(product_data)
+def get_related_products(request, id):
+    product = get_object_or_404(Product, id=id)  
+    related_products = list(Product.objects.filter(category=product.category).exclude(id=id))  
+    random.shuffle(related_products)  
+    selected_products = related_products[:5] 
+    data = [
+        {
+            "id": p.id,
+            "name": p.name,
+            "price": p.price,
+            "sale_price": p.sale_price,
+            "image_url": p.image_url,
+        }
+        for p in selected_products
+    ]
+    return JsonResponse(data, safe=False)
+def search_products(request):
+    query = request.GET.get("q", "").strip()  
+    if not query:
+        return JsonResponse([], safe=False)  
+    products = Product.objects.filter(Q(name__icontains=query))[:5]  
+    data = list(products.values("id", "name", "image_url"))  
+    return JsonResponse(data, safe=False)
