@@ -66,6 +66,11 @@ class Employee(models.Model):
 
 
 class Order(models.Model):
+    PAYMENT_METHOD_CHOICES = [
+        ('cod', 'Thanh toán khi nhận hàng'),
+        ('bank_transfer', 'Chuyển khoản ngân hàng'),
+    ]
+
     customer = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
     phone_number = models.CharField(max_length=15)
     status = models.CharField(
@@ -81,17 +86,13 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     voucher = models.ForeignKey('Voucher', on_delete=models.SET_NULL, null=True, blank=True)
     full_name = models.CharField(max_length=255, null=False, default='')  # Họ và tên
-    notes = models.TextField(null=True, blank=True)  # Ghi chú thêm
-    address = models.TextField(null=True, blank=True)  # Địa chỉ
-    total_price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=Decimal("0.00")
-    )
-
+    notes = models.TextField(null=True, blank=True) 
+    address = models.TextField(null=True, blank=True)  
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"))
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='cod')  
 
     def __str__(self):
-        return f"Order {self.id} - {self.phone_number or self.customer.username}"
+        return f"Order {self.id} - {self.phone_number or self.customer.username} - {self.get_payment_method_display()}"
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey('Product', on_delete=models.CASCADE)  

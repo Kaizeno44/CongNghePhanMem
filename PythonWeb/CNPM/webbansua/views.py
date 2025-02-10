@@ -12,6 +12,7 @@ from django.utils.timezone import now
 from django.contrib.messages import get_messages
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from decimal import Decimal
 import json
 import random
 
@@ -221,13 +222,18 @@ def create_order(request):
             address = data.get("address")
             phone_number = data.get("phone_number")
             notes = data.get("notes")
+            payment_method = data.get("payment_method")  
             user = request.user
-            if not full_name or not address or not phone_number:
+
+            if not full_name or not address or not phone_number or not payment_method:
                 return JsonResponse({"error": "Vui lòng nhập đầy đủ thông tin!"}, status=400)
+
             cart_items = CartItem.objects.filter(user=user).exclude(product__isnull=True)
             if not cart_items.exists():
                 return JsonResponse({"error": "Giỏ hàng trống hoặc chứa sản phẩm không hợp lệ."}, status=400)
+
             total_price = sum(item.price * item.quantity for item in cart_items)
+
             order = Order.objects.create(
                 customer=user,
                 total_price=total_price,
@@ -236,7 +242,9 @@ def create_order(request):
                 full_name=full_name,
                 notes=notes,
                 status="dang_cho_xu_ly",
+                payment_method=payment_method,  
             )
+
             for item in cart_items:
                 OrderItem.objects.create(
                     order=order,  
@@ -244,10 +252,12 @@ def create_order(request):
                     quantity=item.quantity,
                     price=item.price,
                 )
+
             cart_items.delete()
             return JsonResponse({"message": "Đặt hàng thành công!", "order_id": order.id}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+
 @csrf_exempt
 @login_required
 def delete_cart_item(request):

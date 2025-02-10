@@ -197,9 +197,9 @@ const createOrder = async () => {
         const phoneNumber = document.querySelector('input[placeholder="Số điện thoại"]').value;
         const notes = document.querySelector('input[placeholder="Ghi chú thêm"]').value;
         const bankTransferRadio = document.getElementById("bank_transfer");
+        const codRadio = document.getElementById("cod");
         const qrContainer = document.getElementById("qr_container");
         const qrCodeImg = document.getElementById("qr_code");
-
         if (!fullName || !address || !phoneNumber) {
             toast({
                 title: "Warning",
@@ -209,11 +209,13 @@ const createOrder = async () => {
             });
             return;
         }
-
+        let paymentMethod = "cod"; 
         if (bankTransferRadio.checked) {
+            paymentMethod = "bank_transfer";
+        }
+        if (paymentMethod === "bank_transfer") {
             const totalAmount = getTotalAmount();
             const transferNote = `Thanh toán đơn hàng - ${phoneNumber}`;
-
             const info = {
                 url: "https://img.vietqr.io/image/TCB-6664466666-compact2.png",
                 amount: totalAmount,
@@ -223,36 +225,35 @@ const createOrder = async () => {
             const qrUrl = `${info.url}?amount=${info.amount}&addInfo=${encodeURIComponent(info.addInfo)}&accountName=${encodeURIComponent(info.accountName)}`;
             qrCodeImg.src = qrUrl;
             qrContainer.style.display = "block";
-            const response = await fetch("/api/order/add/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCSRFToken(),
-                },
-                body: JSON.stringify({
-                    full_name: fullName,
-                    address: address,
-                    phone_number: phoneNumber,
-                    notes: notes,
-                }),
+        }
+        const response = await fetch("/api/order/add/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({
+                full_name: fullName,
+                address: address,
+                phone_number: phoneNumber,
+                notes: notes,
+                payment_method: paymentMethod,
+            }),
+        });
+        if (response.ok) {
+            toast({
+                title: "Success",
+                message: "Đặt hàng thành công!",
+                type: "success",
+                duration: 3000,
             });
-
-            if (response.ok) {
-                toast({
-                    title: "Success",
-                    message: "Thanh toán đơn hàng thành công",
-                    type: "success",
-                    duration: 3000,
-                });
-                resetThongTin();
-                updateUserCartData();
-            }
+            resetThongTin();
+            updateUserCartData();
         }
     } catch (error) {
         console.error("Error creating order:", error.message);
     }
 };
-
 
 
 const resetThongTin = () => {
