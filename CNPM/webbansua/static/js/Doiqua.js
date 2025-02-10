@@ -13,28 +13,45 @@ function getCookie(name) {
     return cookieValue;
 }
 
-const redeemGiftUrl = '/redeem-gift/';
-
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".thongtin2 button").forEach((btn, index) => {
-        btn.addEventListener("click", () => {
-            const giftId = document.querySelectorAll(".thongtin1 strong")[index].dataset.giftId; // ID sản phẩm
-            const pointsRequired = parseInt(
-                document.querySelectorAll(".thongtin1 strong")[index].textContent
-            );
+    // Sử dụng csrf token từ template nếu có
+    const csrfToken = document.querySelector('script').textContent.trim() || getCookie("csrftoken");
 
-            fetch(redeemGiftUrl, {
+    // Chọn tất cả các nút đổi quà
+    document.querySelectorAll(".btn-redeem").forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+            const strongElement = document.querySelectorAll(".thongtin1 strong")[index];
+            if (!strongElement) {
+                console.error("Không tìm thấy thông tin quà tặng!");
+                return;
+            }
+
+            const giftId = strongElement.dataset.giftId; // ID sản phẩm
+            const pointsRequired = parseInt(strongElement.textContent);
+
+            if (!giftId) {
+                console.error("Không thể tìm thấy gift ID!");
+                return;
+            }
+
+            // Gửi request đổi quà
+            fetch('/redeem-gift/', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"), // CSRF token
+                    "X-CSRFToken": csrfToken, // Sử dụng csrf token
                 },
                 body: JSON.stringify({
                     gift_id: giftId,
                     points_required: pointsRequired,
                 }),
             })
-                .then((response) => response.json())
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then((data) => {
                     if (data.message) {
                         alert(data.message);
@@ -42,9 +59,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data.remaining_points !== undefined) {
                         document.getElementById("current-points").textContent = data.remaining_points;
                     }
+
+                    // Vô hiệu hóa nút nếu điểm không đủ
+                    if (data.remaining_points < pointsRequired) {
+                        btn.disabled = true;
+                    }
                 })
                 .catch((error) => console.error("Error:", error));
         });
     });
 });
-

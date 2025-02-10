@@ -241,12 +241,12 @@ def tichdiem_view(request):
                     total_points += item.quantity * 2  # Quy tắc tích điểm (10 điểm/sản phẩm)
 
             # Cộng điểm vào tài khoản người dùng
-            user.points += total_points
+            user.Point += total_points
             user.save()
 
             return JsonResponse({
                 'message': 'Tích điểm thành công!',
-                'current_points': user.points,
+                'current_points': user.Point,
                 'points_added': total_points
             }, status=200)
 
@@ -258,6 +258,8 @@ def tichdiem_view(request):
     # Xử lý nếu phương thức không phải POST
     return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
 
+
+from django.db import transaction
 
 @login_required
 @csrf_exempt
@@ -278,35 +280,44 @@ def redeem_gift(request):
             user = request.user
 
             # Kiểm tra điểm của người dùng
-            if user.points < gift.points:
+            if user.Point < gift.points:
                 return JsonResponse({'message': 'Bạn không đủ điểm để đổi quà.'}, status=400)
 
-            # Trừ điểm
-            user.points -= gift.points
-            user.save()
+            # Sử dụng transaction để đảm bảo tính nhất quán
+            with transaction.atomic():
+                # Trừ điểm
+                user.Point -= gift.points
+                user.save()
 
-            # Thêm quà vào giỏ hàng
-            CartItem.objects.create(
-                user=user,
-                product=None,  # Đây là quà tặng, không phải sản phẩm
-                quantity=1,
-                price=0.0,  # Giá quà tặng là 0
-                image_url=gift.img_url,  # Ảnh từ Reward
-                is_reward_item=True,  # Đánh dấu đây là quà tặng
-            )
+                # Tạo một sản phẩm "ảo" để liên kết với CartItem
+                product = Product.objects.create(
+                    name=f"Reward: {gift.product_name}",
+                    price=0.0,
+                    description="Sản phẩm đổi quà",
+                    image_url=gift.img_url,
+                )
+
+                # Thêm vào giỏ hàng
+                CartItem.objects.create(
+                    user=user,
+                    product=product,  # Liên kết với sản phẩm "ảo"
+                    quantity=1,
+                    price=0.0,  # Giá quà tặng là 0
+                    image_url=gift.img_url,  # Ảnh từ Reward
+                )
 
             return JsonResponse({
                 'message': 'Đổi quà thành công! Quà đã được thêm vào giỏ hàng.',
-                'remaining_points': user.points
+                'remaining_points': user.Point
             }, status=200)
 
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Dữ liệu không hợp lệ.'}, status=400)
         except Exception as e:
+            # Ghi log lỗi chi tiết để debug
+            print(f"Lỗi xảy ra: {str(e)}")
             return JsonResponse({'message': 'Đã xảy ra lỗi.', 'error': str(e)}, status=500)
 
     return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
-
-
 
 

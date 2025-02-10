@@ -25,7 +25,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
     phone_number = models.CharField(max_length=10, unique=True, blank=True, null=True)  # Không bắt buộc cho đăng nhập
     is_active = models.BooleanField(default=True)   
     is_staff = models.BooleanField(default=False)
-
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'  # Đăng nhập bằng tên đăng nhập
