@@ -32,6 +32,9 @@ urlpatterns = [
     path('api/user-cart/', views.get_user_cart_items, name='get_user_cart'),
     path("api/check_login/", views.check_login_status, name="check_login"),
     path("api/promotion/", views.get_promotion, name="get_promotion"),
+    path("api/Earnpoints/", views.tichdiem_view, name="tich_diem"),
+    path('redeem-gift/', views.redeem_gift, name='redeem_gift'),
+
 
 
 

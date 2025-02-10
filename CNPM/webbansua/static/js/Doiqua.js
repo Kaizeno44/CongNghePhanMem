@@ -1,40 +1,50 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const redeemGiftUrl = '/redeem-gift/';
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Lấy số điểm từ localStorage
-    function getPoints() {
-        return parseInt(localStorage.getItem("userPoints")) || 0; // Trả về 0 nếu không có dữ liệu
-    }
-
-    // Hiển thị số điểm trên giao diện
-    function displayPoints() {
-        const pointsElement = document.getElementById("current-points");
-        if (pointsElement) {
-            pointsElement.textContent = getPoints(); // Hiển thị điểm từ localStorage
-        }
-    }
-
-    // Đổi quà và cập nhật điểm
-    function redeemGift(pointsRequired) {
-        let userPoints = getPoints();
-        if (userPoints >= pointsRequired) {
-            userPoints -= pointsRequired;
-            localStorage.setItem("userPoints", userPoints); // Cập nhật điểm sau khi đổi quà
-            alert(`Đổi quà thành công! Điểm còn lại: ${userPoints}`);
-            displayPoints(); // Cập nhật lại giao diện
-        } else {
-            alert("Bạn không đủ điểm để đổi quà.");
-        }
-    }
-
-    // Gán sự kiện cho nút "Đổi quà"
-    document.querySelectorAll(".thongtin2 span").forEach((btn, index) => {
+    document.querySelectorAll(".thongtin2 button").forEach((btn, index) => {
         btn.addEventListener("click", () => {
+            const giftId = document.querySelectorAll(".thongtin1 strong")[index].dataset.giftId; // ID sản phẩm
             const pointsRequired = parseInt(
                 document.querySelectorAll(".thongtin1 strong")[index].textContent
             );
-            redeemGift(pointsRequired);
+
+            fetch(redeemGiftUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken"), // CSRF token
+                },
+                body: JSON.stringify({
+                    gift_id: giftId,
+                    points_required: pointsRequired,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.message) {
+                        alert(data.message);
+                    }
+                    if (data.remaining_points !== undefined) {
+                        document.getElementById("current-points").textContent = data.remaining_points;
+                    }
+                })
+                .catch((error) => console.error("Error:", error));
         });
     });
-
-    // Hiển thị điểm khi tải trang
-    displayPoints();
 });
+

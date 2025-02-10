@@ -3,19 +3,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
-from .models import CustomUser, Product, Promotion, CartItem,Voucher
+from .models import CustomUser, Product, Promotion, CartItem,Voucher,Point,Order,OrderItem,Reward
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
 
 
 def user_login(request):
     login_form = LoginForm()
     return render(request, 'app/login.html', {'login_form': login_form})
 def Redeem_gifts(request):
-    context = {}
+    gifts = Reward.objects.all()  
+    context = {'gifts': gifts}
     return render(request, 'app/Doiqua.html', context)
 def promote(request):
     promotions = Promotion.objects.all()
@@ -202,3 +206,107 @@ def get_promotion(request):
     promotion = Promotion.objects.all().values(
         'id', 'title', 'description', 'image' )
     return JsonResponse(list(promotion), safe=False)
+
+
+logger = logging.getLogger(__name__)
+
+@login_required
+@csrf_exempt
+def tichdiem_view(request):
+    if request.method == 'POST':
+        try:
+            # Đọc dữ liệu từ request
+            data = json.loads(request.body)
+            phone = data.get('phone')
+
+            # Kiểm tra số điện thoại hợp lệ
+            if not phone or not phone.isdigit() or len(phone) != 10:
+                return JsonResponse({'message': 'Số điện thoại không hợp lệ.'}, status=400)
+
+            # Kiểm tra người dùng tồn tại
+            user = CustomUser.objects.filter(phone_number=phone).first()
+            if not user:
+                return JsonResponse({'message': 'Người dùng không tồn tại.'}, status=404)
+
+            # Kiểm tra xem người dùng có đơn hàng nào không
+            orders = Order.objects.filter(customer=user)
+            if not orders.exists():
+                return JsonResponse({'message': 'Người dùng chưa có đơn hàng nào.'}, status=400)
+
+            # Tính điểm cho tất cả các đơn hàng
+            total_points = 0
+            for order in orders:
+                order_items = OrderItem.objects.filter(order=order)
+                for item in order_items:
+                    total_points += item.quantity * 2  # Quy tắc tích điểm (10 điểm/sản phẩm)
+
+            # Cộng điểm vào tài khoản người dùng
+            user.points += total_points
+            user.save()
+
+            return JsonResponse({
+                'message': 'Tích điểm thành công!',
+                'current_points': user.points,
+                'points_added': total_points
+            }, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Dữ liệu gửi lên không hợp lệ.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'message': 'Đã xảy ra lỗi.', 'error': str(e)}, status=500)
+
+    # Xử lý nếu phương thức không phải POST
+    return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
+
+
+@login_required
+@csrf_exempt
+def redeem_gift(request):
+    if request.method == 'POST':
+        try:
+            # Lấy dữ liệu từ request
+            data = json.loads(request.body)
+            gift_id = data.get('gift_id')
+
+            if not gift_id:
+                return JsonResponse({'error': 'Missing gift_id'}, status=400)
+
+            # Lấy thông tin quà tặng
+            gift = get_object_or_404(Reward, id=gift_id)
+
+            # Lấy người dùng hiện tại
+            user = request.user
+
+            # Kiểm tra điểm của người dùng
+            if user.points < gift.points:
+                return JsonResponse({'message': 'Bạn không đủ điểm để đổi quà.'}, status=400)
+
+            # Trừ điểm
+            user.points -= gift.points
+            user.save()
+
+            # Thêm quà vào giỏ hàng
+            CartItem.objects.create(
+                user=user,
+                product=None,  # Đây là quà tặng, không phải sản phẩm
+                quantity=1,
+                price=0.0,  # Giá quà tặng là 0
+                image_url=gift.img_url,  # Ảnh từ Reward
+                is_reward_item=True,  # Đánh dấu đây là quà tặng
+            )
+
+            return JsonResponse({
+                'message': 'Đổi quà thành công! Quà đã được thêm vào giỏ hàng.',
+                'remaining_points': user.points
+            }, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Dữ liệu không hợp lệ.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'message': 'Đã xảy ra lỗi.', 'error': str(e)}, status=500)
+
+    return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
+
+
+
+

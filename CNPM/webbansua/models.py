@@ -33,6 +33,15 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+class Employee(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=255)  # Tên nhân viên
+    phone = models.CharField(max_length=15, null=True, blank=True)  # Số điện thoại
+    position = models.CharField(max_length=100)  # Vị trí
+    date_joined = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 @receiver(post_save, sender=CustomUser)
 def create_employee_for_new_user(sender, instance, created, **kwargs):
     if created:
@@ -52,15 +61,7 @@ def save_employee(sender, instance, **kwargs):
         instance.employee.save()
     except Employee.DoesNotExist:
         pass
-class Employee(models.Model):
-    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=255)  # Tên nhân viên
-    phone = models.CharField(max_length=15, null=True, blank=True)  # Số điện thoại
-    position = models.CharField(max_length=100)  # Vị trí
-    date_joined = models.DateField(auto_now_add=True)
 
-    def __str__(self):
-        return self.name
 
 
 class Order(models.Model):

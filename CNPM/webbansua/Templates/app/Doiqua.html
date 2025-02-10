@@ -149,147 +149,50 @@
         <div class="container_doiqua">
             <div class="header_doiqua">
                 <div class="khung_chucnang">
-                    <a href="{% url "doiqua" %}"><p>Đổi quà</p></a>
+                    <a href="{% url 'doiqua' %}">
+                        <p>Đổi quà</p>
+                    </a>
                 </div>
                 <div class="khung_chucnang">
-                    <a href="{% url "tichdiem" %}"><p>Tích điểm</p></a>
+                    <a href="{% url 'tichdiem' %}">
+                        <p>Tích điểm</p>
+                    </a>
                 </div>
             </div>
             <div class="list_doiqua">
+                {% for gift in gifts %}
                 <div class="item_doiqua">
                     <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1587783971_c04b6ed78eae74f02dbf.jpg">
+                        <img src="{{ gift.img_url }}" alt="{{ gift.product_name }}">
                     </div>
-                        <p>Máy đo huyết áp cổ tay Beurer BC30</p>
+                    <p>{{ gift.product_name }}</p>
                     <div class="thong_tindoi">
                         <div class="thongtin1">
-                            <strong>800</strong>
+                            <!-- Thêm data-gift-id vào strong -->
+                            <strong data-gift-id="{{ gift.id }}">{{ gift.points }}</strong>
                             <i class="fa fa-star" aria-hidden="true"></i>
                         </div>
                         <div class="thongtin2">
-                            <span>Đổi quà</span>
+                            <button 
+                                class="btn-redeem" 
+                                {% if user.points < gift.points %} disabled {% endif %}>
+                                Đổi quà
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655091032_z3478867714068_d724fba4b0928e91eb19019178df9e39.jpg">
-                    </div>
-                        <p>Nồi Chiên Không Dầu Lock&Lock 4,5 lít EJF175SLV</p>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>1190</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090615_z3478867684487_554e6401372c887ead0eb14a3d5e2165.jpg">
-                    </div>
-                    <div class="title">
-                        <p>Nước Giặt DNEE Thái lan Can 3000ml</p>
-                    </div>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>180</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090336_z3478867680629_cbb009cfee590201ee0c5aef1561b964.jpg">
-                    </div>
-                    <div class="title">
-                        <p>Đồ chơi đàn piano hình con bò</p>
-                    </div>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>110</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="list_doiqua">
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1587783971_c04b6ed78eae74f02dbf.jpg">
-                    </div>
-                        <p>Máy đo huyết áp cổ tay Beurer BC30</p>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>800</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655091032_z3478867714068_d724fba4b0928e91eb19019178df9e39.jpg">
-                    </div>
-                        <p>Nồi Chiên Không Dầu Lock&Lock 4,5 lít EJF175SLV</p>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>1190</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090615_z3478867684487_554e6401372c887ead0eb14a3d5e2165.jpg">
-                    </div>
-                    <div class="title">
-                        <p>Nước Giặt DNEE Thái lan Can 3000ml</p>
-                    </div>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>180</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_doiqua">
-                    <div class="anh_qua">
-                        <img src="https://doiqua.sua.vn/uploads/shop/doiqua/1655090336_z3478867680629_cbb009cfee590201ee0c5aef1561b964.jpg">
-                    </div>
-                    <div class="title">
-                        <p>Đồ chơi đàn piano hình con bò</p>
-                    </div>
-                    <div class="thong_tindoi">
-                        <div class="thongtin1">
-                            <strong>110</strong>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <div class="thongtin2">
-                            <span>Đổi quà</span>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
-        
+    
+        <!-- Thêm CSRF token trong script -->
+        <script>
+            const csrftoken = "{{ csrf_token }}";
+        </script>
     </main>
+    
+   
+
     <footer class="footer">
         <div class="container_footer">
             <div class="grid">
@@ -327,5 +230,6 @@
             </div>
         </div>
     </footer>
+    <script src="/static/js/Doiqua.js"></script>
 </body>
 </html>
