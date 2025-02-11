@@ -37,7 +37,9 @@ urlpatterns = [
     path('api/product/<int:id>/', views.get_product_by_id, name='get_product_by_id'),
     path("api/product/<int:id>/related/", views.get_related_products, name="get_related_products"),
     path("api/search/", views.search_products, name="search_products"),
-
+    path("api/Earnpoints/", views.tichdiem_view, name="tich_diem"),
+    path('api/rewards/', views.get_rewards, name='get_rewards'),
+    path('api/redeem_gift/', views.redeem_gift, name='redeem_gift'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

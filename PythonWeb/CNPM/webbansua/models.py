@@ -156,7 +156,7 @@ class Product(models.Model):
 
 class CartItem(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -169,7 +169,7 @@ class CartItem(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey('Order', on_delete=models.CASCADE)  # Liên kết với đơn hàng
     product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Liên kết với sản phẩm
-    quantity = models.PositiveIntegerField()  # Số lượng sản phẩm
+    quantity = models.PositiveIntegerField(default=1)  # Số lượng sản phẩm
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Giá tại thời điểm đặt hàng
 
 class Promotion(models.Model):

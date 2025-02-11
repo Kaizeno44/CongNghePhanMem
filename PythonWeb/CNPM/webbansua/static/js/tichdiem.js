@@ -55,42 +55,66 @@ const updateUserCartData = async () => {
     try {
         const loginStatusResponse = await fetch("/api/check_login/");
         const loginStatus = await loginStatusResponse.json();
+
         if (loginStatus.logged_in) {
             const response = await fetch("/api/user-cart/");
-            const cartItems = await response.json();
+            let cartItems = await response.json();
+
+            // Đảm bảo cartItems là mảng
+            cartItems = Array.isArray(cartItems) ? cartItems : [];
 
             const cartCounter = document.getElementById("valueGioHang");
             const totalQuantity = cartItems.reduce((sum, { quantity }) => sum + quantity, 0);
             cartCounter.textContent = totalQuantity;
         }
     } catch (error) {
-        toast({
-            title: "Lỗi",
-            message: error.message,
-            type: "error",
-            duration: 3000,
-        });
+        console.error("Lỗi khi cập nhật giỏ hàng:", error);
+        alert("Không thể cập nhật giỏ hàng, vui lòng thử lại.");
     }
 };
 
-// Hiern thi thong tin khach hang
-window.addEventListener("load", async () => {
-    try {
-        const response = await fetch("/api/currentuser/");
-        const user = await response.json();
-        const proFile = document.getElementById("proFile");
-        const phoneNumber = user.phone_number ? user.phone_number : "";
-        if (user) {
-            proFile.innerHTML = `
-                <div class="info">
-                    <div><span>Tên đăng nhập:</span> ${user.username}</div>
-                    <div><span>Số điện thoại:</span> ${phoneNumber}</div>
-                    <div><span>Điểm:</span> ${user.points} <i class="fa fa-star" aria-hidden="true"></i></div>
-                </div>`;
-        } else {
-            proFile.innerHTML = `<p>Không tìm thấy thông tin tài khoản.</p>`;
+document.addEventListener("DOMContentLoaded", function () {
+    // Tích điểm và gửi yêu cầu đến backend
+    async function addPoints() {
+        const phoneInput = document.querySelector("input[type='tel']").value;
+        // Kiểm tra số điện thoại có đúng định dạng không
+        if (phoneInput.length !== 10 || isNaN(phoneInput)) {
+            toast({
+                title: "Warning",
+                message: "Vui lòng nhập đúng số điện thoại (10 số)!",
+                type: "warning",
+                duration: 3000,
+            });
+            return;
         }
-    } catch (error) {
-        document.getElementById("proFile").innerHTML = `<p>Có lỗi xảy ra, vui lòng thử lại.</p>`;
+        try {
+            const response = await fetch("/api/Earnpoints/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ phone: phoneInput }),
+            });
+            const result = await response.json();
+            if (response.status === 200) {
+                toast({
+                    title: "Success",
+                    message: `Tích điểm thành công! Điểm hiện tại: ${result.current_points}`,
+                    type: "success",
+                    duration: 3000,
+                });
+            } else {
+                toast({
+                    title: "Warning",
+                    message: `${result.message}`,
+                    type: "warning",
+                    duration: 3000,
+                });
+            }
+        } catch (error) {
+            console.error("Lỗi khi gửi yêu cầu:", error);
+            alert("Không thể kết nối đến máy chủ, vui lòng thử lại sau.");
+        }
     }
+    document.querySelector("button").addEventListener("click", addPoints);
 });

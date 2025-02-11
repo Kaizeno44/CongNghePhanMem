@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
-from .models import CustomUser, Product, Promotion, CartItem, Voucher, Order,OrderItem
+from .models import CustomUser, Product, Promotion, CartItem, Voucher, Order,OrderItem, Reward
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -15,6 +15,7 @@ from django.db.models import Q
 from decimal import Decimal
 import json
 import random
+import logging
 
 def user_login(request):
     login_form = LoginForm()
@@ -171,10 +172,11 @@ def get_current_user(request):
 def get_user_cart_items(request):
     try:
         cart_items = CartItem.objects.filter(user=request.user).select_related('product')
+
         cart_item_list = [
             {
                 "id": item.id,
-                "product_name": item.product.name,
+                "product_name": item.product.name if item.product else "Quà tặng",
                 "price": item.price,
                 "quantity": item.quantity,
                 "image_url": item.image_url,
@@ -183,8 +185,10 @@ def get_user_cart_items(request):
             for item in cart_items
         ]
         return JsonResponse(cart_item_list, safe=False, status=200)
+
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
 def check_login_status(request):
     if request.user.is_authenticated:
         return JsonResponse({"logged_in": True})
@@ -309,3 +313,93 @@ def search_products(request):
     products = Product.objects.filter(Q(name__icontains=query))[:5]  
     data = list(products.values("id", "name", "image_url"))  
     return JsonResponse(data, safe=False)
+
+def get_rewards(request):
+    rewards = Reward.objects.all().values("id", "img_url", "product_name", "points")
+    return JsonResponse(list(rewards), safe=False)
+@csrf_exempt
+@login_required
+def tichdiem_view(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            phone = data.get('phone')
+            if not phone or not phone.isdigit() or len(phone) != 10:
+                return JsonResponse({'message': 'Số điện thoại không hợp lệ.'}, status=400)
+            user = CustomUser.objects.filter(phone_number=phone).first()
+            if not user:
+                return JsonResponse({'message': 'Người dùng không tồn tại.'}, status=404)
+            orders = Order.objects.filter(customer=user, status="da_giao")
+            if not orders.exists():
+                return JsonResponse({'message': 'Người dùng chưa có đơn hàng nào được được giao.'}, status=400)
+            total_points = sum(
+                item.quantity * 2 for order in orders for item in OrderItem.objects.filter(order=order)
+            )
+            user.Point = int(user.Point) + total_points
+            user.save()
+            return JsonResponse({
+                'message': 'Tích điểm thành công!',
+                'current_points': user.Point,
+                'points_added': total_points
+            }, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Dữ liệu gửi lên không hợp lệ.'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'message': 'Đã xảy ra lỗi.', 'error': str(e)}, status=500)
+
+    return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
+
+
+@csrf_exempt
+@login_required
+def redeem_gift(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            reward_id = data.get("product_id")
+            reward_points = data.get("points")
+            # Kiểm tra nếu reward_id hoặc reward_points bị thiếu
+            if reward_id is None or reward_points is None:
+                return JsonResponse({"error": "Thiếu thông tin quà tặng hoặc số điểm."}, status=400)
+            try:
+                reward_points = int(reward_points)
+            except ValueError:
+                return JsonResponse({"error": "Số điểm phải là một số nguyên hợp lệ."}, status=400)
+            user = request.user
+            user_points = int(user.Point)
+
+            if user_points < reward_points:
+                return JsonResponse({"error": "Bạn không đủ điểm để đổi quà này."}, status=400)
+
+            reward = get_object_or_404(Reward, id=reward_id)
+            user.Point = str(user_points - reward_points)
+            user.save()
+
+            # Thêm quà vào giỏ hàng
+            cart_item = CartItem.objects.create(
+                user=user,
+                product=None,  # Không liên kết với bảng Product
+                quantity=1,
+                price=0,  # Giá trị là 0 vì đây là quà tặng
+                image_url=reward.img_url,
+            )
+
+            return JsonResponse({
+                "message": "Đổi quà thành công!",
+                "cart_item": {
+                    "id": cart_item.id,
+                    "product_name": reward.product_name,
+                    "quantity": cart_item.quantity,
+                    "image_url": cart_item.image_url,
+                }
+            }, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Dữ liệu gửi lên không hợp lệ."}, status=400)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Phương thức không được hỗ trợ."}, status=405)
