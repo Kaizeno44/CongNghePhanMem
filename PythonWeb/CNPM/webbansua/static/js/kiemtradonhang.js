@@ -2,6 +2,13 @@
 window.addEventListener("pageshow", async () => {
     await updateUserCartData();
 });
+const formatCurrency = (amount) => {
+    if (!amount) return "0đ";
+    return parseFloat(amount).toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+    }).replace("₫", "đ");
+};
 const getCSRFToken = () => {
     const csrfToken = document.cookie
         .split("; ")
@@ -62,52 +69,53 @@ const updateUserCartData = async () => {
         console.error("Lỗi khi cập nhật giỏ hàng:", error);
     }
 };
-window.addEventListener("load", async () => {
-  try {
-      const response = await fetch("/api/promotion/");
-      const dataKM = await response.json();
-      const ct_Khuyen_Mai = document.getElementById("ct_Khuyen_Mai");
-      let itemKM = "";
+// check danh sach don hang
+document.addEventListener("DOMContentLoaded", () => {
+    const phoneInput = document.getElementById("phone-input");
+    const checkOrderBtn = document.getElementById("check-order-btn");
+    const orderResult = document.getElementById("order-result");
 
-      if (dataKM.length > 0) {
-          dataKM.forEach((item) => {
-              itemKM += `
-              <div class="itemkm" data-title="${item.title}" data-image="${item.image}" data-description="${item.description}">
-                  <a href="javascript:void(0);">
-                      <img src="${item.image}">
-                  </a>
-              </div>
-              `;
-          });
+    const fetchOrders = async (phone) => {
+        try {
+            const response = await fetch(`/api/check_order/?phone=${encodeURIComponent(phone)}`);
+            const data = await response.json();
 
-          ct_Khuyen_Mai.innerHTML = itemKM;
+            if (!response.ok) {
+                orderResult.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                return;
+            }
 
-          // Lấy tất cả item và gán sự kiện click
-          document.querySelectorAll(".itemkm").forEach(item => {
-              item.addEventListener("click", function () {
-                  document.getElementById("promoTitle").textContent = this.getAttribute("data-title");
-                  document.getElementById("promoDescription").textContent = this.getAttribute("data-description");
+            let html = "<h3>Danh sách đơn hàng:</h3>";
+            data.orders.forEach(order => {
+                html += `
+                    <div class="order-box">
+                        <p><strong>Mã đơn:</strong> ${order.order_id}</p>
+                        <p><strong>Trạng thái:</strong> ${order.status}</p>
+                        <p><strong>Ngày đặt:</strong> ${order.created_at}</p>
+                        <p><strong>Tổng tiền:</strong> ${formatCurrency(order.total_price)}</p>
+                        <h4>Sản phẩm:</h4>
+                        <ul>
+                            ${order.items.map(item => `
+                                <li>${item.product_name} - SL: ${item.quantity} - ${formatCurrency(item.price)}</li>
+                            `).join("")}
+                        </ul>
+                    </div>
+                `;
+            });
 
-                  // Hiển thị modal
-                  document.getElementById("promotionModal").style.display = "block";
-                  document.getElementById("modalBackdrop").style.display = "block";
-              });
-          });
+            orderResult.innerHTML = html;
+        } catch (error) {
+            console.error("Lỗi:", error);
+            orderResult.innerHTML = `<p style="color: red;">Lỗi khi lấy dữ liệu đơn hàng!</p>`;
+        }
+    };
 
-          // Đóng modal khi nhấn vào backdrop hoặc nút đóng
-          document.getElementById("closeModal").addEventListener("click", () => {
-              document.getElementById("promotionModal").style.display = "none";
-              document.getElementById("modalBackdrop").style.display = "none";
-          });
-
-          document.getElementById("modalBackdrop").addEventListener("click", () => {
-              document.getElementById("promotionModal").style.display = "none";
-              document.getElementById("modalBackdrop").style.display = "none";
-          });
-      } else {
-          ct_Khuyen_Mai.innerHTML = `<p>Không có khuyến mại nào.</p>`;
-      }
-  } catch (error) {
-      console.error("Lỗi khi tải dữ liệu khuyến mãi:", error);
-  }
+    checkOrderBtn.addEventListener("click", () => {
+        const phone = phoneInput.value.trim();
+        if (!phone.match(/^\d{10}$/)) {
+            orderResult.innerHTML = `<p style="color: red;">Số điện thoại không hợp lệ!</p>`;
+            return;
+        }
+        fetchOrders(phone);
+    });
 });

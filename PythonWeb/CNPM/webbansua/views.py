@@ -15,7 +15,7 @@ from django.db.models import Q
 from decimal import Decimal
 import json
 import random
-import logging
+import re
 
 def user_login(request):
     login_form = LoginForm()
@@ -91,19 +91,19 @@ def login_register(request):
                 username = register_form.cleaned_data['username']
                 phone_number = register_form.cleaned_data['phone_number']
                 if CustomUser.objects.filter(username=username).exists():
-                    messages.error(request, 'Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.', extra_tags='regster_error')
+                    messages.error(request, 'Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.', extra_tags='')
                     return redirect('login')
 
                 if CustomUser.objects.filter(phone_number=phone_number).exists():
-                    messages.error(request, 'Số điện thoại đã tồn tại. Vui lòng sử dụng số khác.', extra_tags='register_error')
+                    messages.error(request, 'Số điện thoại đã tồn tại. Vui lòng sử dụng số khác.', extra_tags='')
                     return redirect('login')
                 user = register_form.save(commit=False)
                 user.set_password(register_form.cleaned_data['password'])
                 user.save()
-                messages.success(request, f'Đăng ký thành công! Chào mừng, {user.username}.', extra_tags='register_success')
+                messages.success(request, f'Đăng ký thành công! Chào mừng, {user.username}.', extra_tags='')
                 return redirect('login')
             else:
-                messages.error(request, 'Đăng ký không thành công. Vui lòng kiểm tra thông tin.', extra_tags='register_error')
+                messages.error(request, 'Đăng ký không thành công. Vui lòng kiểm tra thông tin.', extra_tags='')
                 return redirect('login')
 
     return render(request, 'app/login.html', {
@@ -403,3 +403,36 @@ def redeem_gift(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Phương thức không được hỗ trợ."}, status=405)
+
+def check_order_by_phone(request):
+    phone_number = request.GET.get('phone', '').strip()
+    
+    # Kiểm tra nếu không nhập hoặc không đủ 10 số
+    if not phone_number or not re.fullmatch(r'\d{10}', phone_number):
+        return JsonResponse({"error": "Số điện thoại không hợp lệ! Vui lòng nhập đúng 10 chữ số."}, status=400)
+
+    orders = Order.objects.filter(phone_number=phone_number).order_by("-id")
+    
+    if not orders.exists():
+        return JsonResponse({"error": "Không tìm thấy đơn hàng nào!"}, status=404)
+    
+    order_data = []
+    for order in orders:
+        items = OrderItem.objects.filter(order=order).select_related("product")
+        order_items = [
+            {
+                "product_name": item.product.name,
+                "quantity": item.quantity,
+                "price": item.price
+            }
+            for item in items
+        ]
+        order_data.append({
+            "order_id": order.id,
+            "status": order.status,
+            "total_price": order.total_price,
+            "items": order_items,
+            "created_at": order.created_at.strftime("%d/%m/%Y %H:%M")
+        })
+    
+    return JsonResponse({"orders": order_data}, safe=False)

@@ -62,7 +62,7 @@ const updateUserCartData = async () => {
         console.error("Lỗi khi cập nhật giỏ hàng:", error);
     }
 };
-
+// hien thi cacs san pham doi
 document.addEventListener("DOMContentLoaded", async () => {
     const rewardsContainer = document.getElementById("rewardsContainer");
     const rewardsContainer_1 = document.getElementById("rewardsContainer_1");

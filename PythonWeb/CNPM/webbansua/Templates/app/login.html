@@ -236,7 +236,7 @@
             {% if messages %}
                 {% for message in messages %}
                     toast({
-                        title: "{{ message.tags|title }}",
+                        title: "{{ message.tags}}",
                         message: "{{ message|escapejs }}",
                         type: "{{ message.tags|default:'success'|slugify }}", 
                         duration: 3000

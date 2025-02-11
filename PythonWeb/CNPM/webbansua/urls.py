@@ -40,6 +40,8 @@ urlpatterns = [
     path("api/Earnpoints/", views.tichdiem_view, name="tich_diem"),
     path('api/rewards/', views.get_rewards, name='get_rewards'),
     path('api/redeem_gift/', views.redeem_gift, name='redeem_gift'),
+    path("api/check_order/", views.check_order_by_phone, name="check_order_by_phone"),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

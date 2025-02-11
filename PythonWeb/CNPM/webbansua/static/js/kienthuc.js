@@ -1,3 +1,67 @@
+// Khi quay laị update giỏ hàng
+window.addEventListener("pageshow", async () => {
+    await updateUserCartData();
+});
+const getCSRFToken = () => {
+    const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("csrftoken="))
+        ?.split("=")[1];
+    return csrfToken || "";
+};
+// Tim kiem san pham
+document.addEventListener("DOMContentLoaded", () => {
+    const searchBox = document.getElementById("search-box");
+    const searchSuggestions = document.getElementById("search-suggestions");
+    searchBox.addEventListener("input", async () => {
+        const query = searchBox.value.trim();
+        if (!query) {
+            searchSuggestions.innerHTML = "";
+            searchSuggestions.style.display = "none";
+            return;
+        }
+        try {
+            const response = await fetch(`/api/search/?q=${encodeURIComponent(query)}`);
+            const products = await response.json();
+            if (products.length === 0) {
+                searchSuggestions.innerHTML = "<div>Không tìm thấy sản phẩm</div>";
+            } else {
+                searchSuggestions.innerHTML = products
+                    .map(product => `
+                        <div onclick="redirectToProduct(${product.id})">
+                            <img src="${product.image_url}" alt="${product.name}" style="width: 50px; margin-right: 10px;">
+                            ${product.name}
+                        </div>
+                    `)
+                    .join("");
+            }
+            searchSuggestions.style.display = "block";
+        } catch (error) {
+            console.error("Lỗi khi tìm kiếm:", error);
+        }
+    });
+    document.addEventListener("click", (event) => {
+        if (!searchBox.contains(event.target) && !searchSuggestions.contains(event.target)) {
+            searchSuggestions.style.display = "none";
+        }
+    });
+});
+// Khi an sp tiem kiem chuyen tab chi tiet san pham
+function redirectToProduct(productId) {
+    window.location.href = `/Orderdetails/${productId}/`;
+}
+// Update quantity gio hang
+const updateUserCartData = async () => {
+    try {
+        const response = await fetch("/api/user-cart/");
+        let cartItems = await response.json();
+        const totalQuantity = cartItems.reduce((sum, { quantity }) => sum + quantity, 0);
+        const cartCounter = document.getElementById("valueGioHang");
+        cartCounter.textContent = totalQuantity;
+    } catch (error) {
+        console.error("Lỗi khi cập nhật giỏ hàng:", error);
+    }
+};
 document.addEventListener("DOMContentLoaded", () => {
     // Định nghĩa URL bài viết cho từng phần tử
     const articles = [

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiem tra don hang</title>
     <link rel="stylesheet" href="{% static "app/ktdh.css" %}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
@@ -147,9 +149,10 @@
     <main>
         <div class="container">
             <h2>KIỂM TRA ĐƠN HÀNG</h2>
-            <input type="text" placeholder="Nhập số điện thoại để kiểm tra đơn hàng" />
+            <input type="tel" id="phone-input" placeholder="Nhập số điện thoại để kiểm tra đơn hàng" />
             <br>
-            <button>Kiểm tra đơn hàng</button>
+            <button id="check-order-btn">Kiểm tra đơn hàng</button>
+            <div id="order-result"></div>
     </main>
     <footer class="footer">
         <div class="container_footer">
@@ -188,5 +191,8 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/kiemtradonhang.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
 </body>
 </html>

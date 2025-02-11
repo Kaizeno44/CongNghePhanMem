@@ -209,6 +209,15 @@ const createOrder = async () => {
             });
             return;
         }
+        if (phoneNumber.length !== 10) {
+            toast({
+                title: "Warning",
+                message: "Điền đúng số điện thoại gồm 10!",
+                type: "warning",
+                duration: 3000
+            });
+            return;
+        }
         let paymentMethod = "cod"; 
         if (bankTransferRadio.checked) {
             paymentMethod = "bank_transfer";
