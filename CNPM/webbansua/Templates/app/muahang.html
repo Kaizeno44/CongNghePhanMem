@@ -189,9 +189,16 @@
                                 <div class="title_gia" style="display: flex; margin-bottom: 5px;">
                                     <div class="col-md-6 paddL0">
                                         <div class="sales-price">
-                                            {{ product.sale_price|default:product.price|floatformat:0 }}<sup>đ</sup>
+                                            <!-- Nếu có sale_price thì hiển thị sale_price -->
+                                            {% if product.sale_price %}
+                                                {{ product.sale_price|floatformat:0 }}<sup>đ</sup>
+                                            {% else %}
+                                                <!-- Nếu không có thì hiển thị giá gốc -->
+                                                {{ product.price|floatformat:0 }}<sup>đ</sup>
+                                            {% endif %}
                                         </div>
                                     </div>
+                                    <!-- Chỉ hiển thị giá gốc khi có sale_price -->
                                     {% if product.sale_price %}
                                     <div class="col-md-6">
                                         <div class="sales-root">{{ product.price|floatformat:0 }}<sup>đ</sup></div>
