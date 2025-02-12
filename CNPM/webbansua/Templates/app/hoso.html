@@ -29,11 +29,12 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
@@ -145,17 +146,8 @@
     <main>
         <div class="container">
             <div class="header">Thông tin khách hàng</div>
-            <div class="content">
-                <img src="/static/img/avatar.jpg" alt="Student Photo">
-                <div class="info">
-                    <div><span>Tẻn đăng nhập:</span> Huybv123 </div>
-                    <div><span>Họ tên:</span> Bùi Văn Huy</div>
-                    <div><span>Số điện thoại:</span> 0868698389</div>
-                    <div><span>Email:</span> buivanhuy2706@gmail.com</div>
-                    <div><span>Tích điểm :</span> 970 
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                    </div>
-                </div>
+            <div class="content" id = "proFile">
+                
             </div>
         </div>
     </main>
@@ -196,5 +188,9 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/hoso.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+
 </body>
 </html>

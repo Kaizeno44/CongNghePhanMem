@@ -30,11 +30,12 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
@@ -146,7 +147,7 @@
     <main>
         <div class="container">
             <h2>KIỂM TRA ĐƠN HÀNG</h2>
-            <input type="text" placeholder="Nhập số điện thoại/Email để kiểm tra đơn hàng" />
+            <input type="text" placeholder="Nhập số điện thoại để kiểm tra đơn hàng" />
             <br>
             <button>Kiểm tra đơn hàng</button>
     </main>

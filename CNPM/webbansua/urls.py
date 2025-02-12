@@ -15,7 +15,6 @@ urlpatterns = [
     path('promote/', views.promote, name='khuyenmai'),
     path('shoppingcart/', views.shopping_cart, name='giohang'),
     path('purchase/', views.purchase, name='muahang'),
-    
     path('checkorder/', views.check_order, name='kiemtradonhang'),
     path('knowledge/', views.knowledge, name='kienthuc'),
     path('admin/', admin.site.urls), 
@@ -32,12 +31,12 @@ urlpatterns = [
     path('api/user-cart/', views.get_user_cart_items, name='get_user_cart'),
     path("api/check_login/", views.check_login_status, name="check_login"),
     path("api/promotion/", views.get_promotion, name="get_promotion"),
-    path("api/Earnpoints/", views.tichdiem_view, name="tich_diem"),
-    path('redeem-gift/', views.redeem_gift, name='redeem_gift'),
-
-
-
-
+    path('api/cartitem/update/', views.update_cart_item, name='update_cart_item'),
+    path('api/order/add/', views.create_order, name='create_order'),
+    path('api/cartitem/delete/', views.delete_cart_item, name='delete_cart_item'),
+    path('api/product/<int:id>/', views.get_product_by_id, name='get_product_by_id'),
+    path("api/product/<int:id>/related/", views.get_related_products, name="get_related_products"),
+    path("api/search/", views.search_products, name="search_products"),
 
 ]
 if settings.DEBUG:

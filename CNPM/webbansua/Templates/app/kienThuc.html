@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kien_Thuc</title>
     <link rel="stylesheet" href="{% static "app/kienThuc.css" %}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
@@ -30,11 +31,12 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
@@ -296,5 +298,8 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/kienthuc.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
 </body>
 </html>

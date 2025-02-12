@@ -30,11 +30,12 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
@@ -152,22 +153,8 @@
                 <span>Chương Trình Khuyến Mãi</span>
             </div>
             <div class="listkm">
-                <div class="listItemKm">
-                    {% for promotion in promotions %}
-                        <div class="itemkm">
-                            <a href="#">
-                                <!-- Hiển thị hình ảnh khuyến mãi -->
-                                {% if promotion.image %}
-                                    <img src="{{ promotion.image.url }}" alt="{{ promotion.title }}">
-                                {% else %}
-                                    <img src="/static/img/default.jpg" alt="Khuyến mãi mặc định">
-                                {% endif %}
-                            </a>
-                            <p>{{ promotion.title }}</p>
-                        </div>
-                    {% empty %}
-                        <p>Không có khuyến mãi nào hiện tại.</p>
-                    {% endfor %}
+                <div class="listItemKm" id = "ct_Khuyen_Mai">
+                    
                 </div>
             </div>
         </div>
@@ -209,5 +196,17 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/km.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+    <div id="promotionModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px;">
+        <h2 id="promoTitle"></h2>
+        <p id="promoDescription"></p>
+        <div style= "text-align: center; margin-top: 10px;">
+            <button id="closeModal">Đóng</button>
+        </div>
+    </div>
+    <div id="modalBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;"></div>
+
 </body>
 </html>

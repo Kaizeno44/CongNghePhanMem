@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chi_tiet_sp</title>
     <link rel="stylesheet" href="{% static "app/chitietsp.css" %}">
+    <link rel="stylesheet" href="{% static "app/toast.css"%}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
-    <a class="phone_backtotop" title="Gọi ngay  0123456789" href="tel: 0123456789">
-        <img src="https://sua.vn/themes/sua/images/phone_backtotop.png">
-    </a>
     <a href="#" target="_blank" class="foot_zalo">
         <img src="https://sua.vn/themes/sua/images/zalo.png">
     </a>
@@ -20,7 +19,7 @@
         <div class="header_top">
             <div class="img_km">
                 <a href="{% url "home" %}">
-                    <img src="/static/img/backgroud_1.png/" alt="Ảnh chương trình khuyến mãi">
+                    <img src="/static/img/backgroud_1.png" alt="Ảnh chương trình khuyến mãi">
                 </a>
             </div>
         </div>
@@ -32,18 +31,19 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
                         <a href="{% url "giohang" %}">
                             <div class="tb_gio_hang">
-                                <span style="font-weight: 600; color: red;">0</span>
+                                <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
                         </a>
                     </div>
@@ -53,23 +53,24 @@
                         </a>
                     </div>
                     <div class="item_list_Function">
+                        {% if user.is_authenticated %}
                         <span style="height: 25px;
                         width: 22px;
                         background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
                         background-size: contain;"></span>
-                        <a href="{% url "login" %}" style="text-decoration: none; color: black;"> 
+                        <a href="#" style="text-decoration: none; color: black;"> 
                             <div class="header__bars_1">
-                                <span>Đăng nhập</span>
+                                <span>Xin chào, {{ user.username }}</span>
                                 <div class="menu_content_1">
-                                    <ul >
-                                        <li >
-                                            <a href="{% url "hoso" %}">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'hoso' %}">
                                                 <i class="fa fa-user-o"></i>
                                                 <span>Hồ sơ</span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a href="#">
+                                        <li>
+                                            <a href="{% url 'logout' %}">
                                                 <i class="fa fa-sign-out"></i>
                                                 <span>Đăng xuất</span>
                                             </a>
@@ -78,7 +79,19 @@
                                 </div>
                             </div>  
                         </a>
+                        {% else %}
+                        <span style="height: 25px;
+                        width: 22px;
+                        background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/customer-login.png) center center no-repeat;
+                        background-size: contain;"></span>
+                        <a href="{% url 'login' %}" style="text-decoration: none; color: black;"> 
+                            <div class="header__bars_1">
+                                <span>Đăng nhập</span>
+                            </div>  
+                        </a>
+                        {% endif %}
                     </div>
+                    
                 </div>
             </div>
             <div class="container_header_bottom">
@@ -135,287 +148,16 @@
     <main>
         <div class="container_chi_tiet">
             <div class="container_chi_tiet_contens">
-                <div class="left_container_chi_tiet">
-                    <div class="khung_anh">
-                        <div class="anh">
-                            <img src="https://sua.vn/uploads/shop/pic/1719475078_421837400_1350838775595600_7726488782794726388_n.jpg" alt="Lỗi hiển thị">
-                        </div>
-                    </div>
-                    <div class="bottomleft_container_chi_tiet">
-                        <div class="list_anh">
-                            <img src="https://sua.vn/uploads/shop/pic/1651135331.nv.jpg">
-                            <img src="https://sua.vn/uploads/shop/pic/1719475134_421848344_1350838728928938_272297635713709358_n.jpg">
-                            <img src="https://sua.vn/uploads/shop/pic/1719475134_421849053_1350838695595608_8669088565266642701_n.jpg">
-                            <img src="https://sua.vn/uploads/shop/pic/1719475078_421837400_1350838775595600_7726488782794726388_n.jpg">
-                        </div>
-                    </div>
-                </div>
-                <div class="right_container_chi_tiet">
-                    <div class="tiltle_sp">
-                        <div class="details-titleshop">Sữa Tăng Chiều Cao Nobiko Nhập Khẩu Nhật Bản, Cho Trẻ 2 Đến 16 Tuổi</div>
-                        <div class="details-masp">Mã sản phầm: NOKITOA01</div>
-                        <div class="trangthai">
-                            Trạng thái: <span>Còn hàng</span>
-                        </div>
-                        <div class="gia_sp">
-                            1.160.000 VND
-                            <span>1.230.000 VND</span>
-                        </div>
-                        <div class="nd">
-                            <p>Công thức vượt trội chứa canxi hữu cơ từ tảo biển Nhật Bản và Vitamin D3  giúp trẻ phát triển toàn diện về chiều cao, thể chất và trí thông minh</p>
-                        </div>
-                        <div class="box-promo posR">
-
-                            <p class="box-promo-txt">Khuyến mãi</p><ul class="box-promo-list">
-                                <li class="divb_t2">
-                                    Nhập mã <span class="colsua">FSHIP1</span> giảm đến 50.000đ  khi mua hàng online.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="details-pay">
-					
-                            <a href="#">
-                                <img src="/static/img/muangay.jpg">
-                            </a>
-        
-                            --- Hoặc ---
-        
-                            <a href="#" >
-                                <img src="/static/img/ThemVaoGioHang.jpg">
-                            </a>
-        
-                        </div>
-                    </div>
-                </div>
+                <div id="product-details"></div>
             </div>
             
-        </div>
-        <div class="container_tt">
-            <div class="titlekm">
-                <span>Thông tin sản phẩm </span>
-            </div>
-            <div class="table-container">
-                <table>
-                    
-                    <tbody>
-                        <tr>
-                            <th>Tên sản phẩm</th>
-                            <td>Sữa Tăng Chiều Cao Nobiko Nhập Khẩu Nhật Bản, Cho Trẻ 2 Đến 16 Tuổi</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Thương hiệu</th>
-                            <td>NOBIKO</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Xuất xứ thương hiệu</th>
-                            <td>Việt Nam</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Sản xuất tại</th>
-                            <td>Việt Nam</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Trọng lượng sản phẩm</th>
-                            <td>1 gói 5g</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Độ tuổi phù hợp</th>
-                            <td>Tất cả trẻ em từ 2 – 16 tuổi</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Nhà sản xuất</th>
-                            <td>NOKIKO</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Hướng dẫn sử dụng</th>
-                            <td>. Trẻ từ 2-9 tuổi uống 1 gói mỗi ngày.
-                                <br>
-                                . Trẻ từ 10-16 tuổi uống 2 gói mỗi ngày.
-                                <br>
-                                . Mẹ pha 1 gói sữa tăng chiều cao của Nhật Nobiko với 100ml nước hoặc pha thêm cùng với sữa tươi để tăng hương vị và cho bé uống hàng ngày.</td>
-                            
-                        </tr>
-                        <tr>
-                            <th>Hướng dẫn bảo quản</th>
-                            <td>. Đậy kín sau mỗi lần sử dụng.<br>
-                                . Để nơi thoáng mát và khô ráo.<br>
-                                . Không bảo quản trong tủ lạnh.<br>
-                                . Nên sử dụng trong vòng 3 tuần sau khi mở bao bì
-                                .<br>
-                                Lưu ý:<br>
-                                . Chỉ dùng tối đa trong vòng 1 giờ và phần dư phải đổ bỏ.
-                                <br>
-                                . Chỉ sử dụng muỗng có trong hộp<br>
-                                . Pha đúng lượng như hướng dẫn.<br>
-                                . Sử dụng ít hoặc nhiều hơn có thể làm ảnh hưởng đến sức khỏe trẻ.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-            </div>
         </div>
         <div class="container_chi_tiet">
             <div class="titlekm">
                 <span>Sản phẩm liên quan </span>
             </div>
             <div class="list_products_1">
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 5%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="#">
-                                <div class="flashsale-pic">
-                                    <img src="/static/img/suabot1.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Ensure Gold 850g hương hạnh nhân
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">890.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">940.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 8%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="#">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1728373943.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Similac Total Protection 1+ 850g (1 - 2 tuổi)
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">595.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">645.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 40%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="#">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1730521533.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa tăng chiều cao Hiup 650gr (cho bé 3 - 18 tuổi)
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">535.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">890.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 6%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="#">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1663754217.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Nan InfiniPro A2 số 3 800g cho bé 2-6 tuổi
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">580.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">615.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="item_products">
-                    <div class="contens_sp">
-                        <div class="inside-flas-isspbc" style="position: relative;">
-                            <div class="home-sua-percent">
-                                <span>- 5%</span>
-                            </div>
-                            <a style="text-decoration: none;" href="#">
-                                <div class="flashsale-pic">
-                                    <img src="https://sua.vn/uploads/shop/pic/small_1686023151.nv.jpg">
-                                </div>
-                                <div class="flashsale-title">Sữa Pediasure B/A 1kg6 (1-10t) Mẫu mới
-                                </div>
-                            </a>
-                            <div>
-                                <div class="title_gia" style="display: flex; margin-bottom: 5px;">
-                                    <div class="col-md-6 paddL0">
-                                        <div class="sales-price">1.140.000<sup>đ</sup></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="sales-root">1.090.000<sup>đ</sup></div>
-                                    </div>
-                                </div>
-                                <div class="chonmua_buy_fast">
-                                    <a href="#">Chọn mua</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
+            
             </div>
         </div>
     </main>
@@ -456,5 +198,9 @@
             </div>
         </div>
     </footer>
+    <div id="toast"></div>
+    <script src="{% static 'js/chitietsp.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+
 </body>
 </html>

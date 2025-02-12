@@ -31,16 +31,17 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function" onclick = "showCart()">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <a {% url "giohang" %}>
+                        <a href="{% url "giohang" %}">
                             <div class="tb_gio_hang">
                                 <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
@@ -156,7 +157,7 @@
                 <form>
                     <div class="header_form">
                         <input type="text" placeholder="Họ tên">
-                        <input type="text" placeholder="Số điện thoại">
+                        <input type="tel" placeholder="Số điện thoại">
                     </div>
                     <div class="header_form_1" style="margin-right: 16px;">
                         <input type="text" placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)">
@@ -168,22 +169,23 @@
                 <h2 style="font-weight: 100; padding-bottom: 10px;">Hình thức thanh toán</h2>
                 <div class="payment-method">
                     <div class="icon_giaohang">
-                        <input type="radio" name="payment" checked style="cursor: pointer;">
+                        <input type="radio" name="payment" checked style="cursor: pointer;" id="cod" value="cod">
                         <span>Thanh toán khi nhận hàng</span>
                     </div>
                     <br>
                     <div class="icon_giaohang">
-                        <input type="radio" name="payment" style="cursor: pointer;">
+                        <input type="radio" name="payment" style="cursor: pointer;" id="bank_transfer" value="bank_transfer">
                         Chuyển khoản ngân hàng
                     </div>
-                    <button class="pay-btn">Thanh toán 0đ (COD)</button>
+                    
+                    <button class="pay-btn" onclick="createOrder()">Thanh toán 0đ (COD)</button>
 
                 </div>
             </div>
             <div class="cart">
                 <h2>Giỏ hàng</h2>
                 <div class="list_product_Cart" id="product_Cart">
-
+                    <p>Không có sản phẩm</p>
                 </div>
             </div>
         </div>
@@ -225,6 +227,11 @@
             </div>
         </div>
     </footer>
+    <div id="qr_container" style="display: none; text-align: center; margin-top: 20px;">
+        <h3>Quét mã để thanh toán</h3>
+        <img id="qr_code" src="" style="width: 300px; display: block; margin: 0 auto; border: 2px solid #ccc; padding: 10px; background: white;
+        position: absolute; top: 215px; left: 590px;">
+    </div>
     <div id="toast"></div>
     <script src="{% static 'js/giohang.js' %}"></script>
     <script src="{% static 'js/toast.js' %}"></script>

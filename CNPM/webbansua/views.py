@@ -3,23 +3,27 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
-from .models import CustomUser, Product, Promotion, CartItem,Voucher,Point,Order,OrderItem,Reward
+from .models import CustomUser, Product, Promotion, CartItem, Voucher, Order,OrderItem,Brand
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-import json
-from django.core.serializers.json import DjangoJSONEncoder
-from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
-import logging
-
+from django.db import transaction
+from django.utils.timezone import now
+from django.contrib.messages import get_messages
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from decimal import Decimal
+import json
+import random
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core.paginator import Paginator
 
 
 def user_login(request):
     login_form = LoginForm()
     return render(request, 'app/login.html', {'login_form': login_form})
 def Redeem_gifts(request):
-    gifts = Reward.objects.all()  
-    context = {'gifts': gifts}
+    context = {}
     return render(request, 'app/Doiqua.html', context)
 def promote(request):
     promotions = Promotion.objects.all()
@@ -31,7 +35,6 @@ def shopping_cart(request):
     context = {}
     return render(request, 'app/giohang.html', context)
 def purchase(request):
-    # Truy vấn các voucher còn hiệu lực
     vouchers = Voucher.objects.filter(expiration_date__gte=now().date()).values(
         'code',
         'discount_value',
@@ -41,13 +44,35 @@ def purchase(request):
         'expiration_date',
         'description'
     )
+    brands_raw = Brand.objects.values('id', 'name', 'image_url')
+    seen = set()
+    brands = []
+    for brand in brands_raw:
+        if brand['name'] not in seen:
+            seen.add(brand['name'])
+            brands.append(brand)    
+    
+    brand_id = request.GET.get('brand_id')  # Lấy brand_id từ URL query
+    if brand_id:
+        # Lọc sản phẩm theo brand_id
+        products = Product.objects.filter(name_brand=Brand.objects.get(id=brand_id).name)
+    else:
+        # Hiển thị tất cả sản phẩm nếu không có lọc
+        products = Product.objects.all()
+
+
+    paginator = Paginator(products, 15)  # Mỗi trang 15 sản phẩm
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     # Serialize dữ liệu sang JSON
     context = {
         'vouchers_json': json.dumps(list(vouchers), cls=DjangoJSONEncoder),
+        'brands': brands,
+        'products': products,
+        'page_obj': page_obj
     }
     return render(request, 'app/muahang.html', context)
-
 def check_order(request):
     context = {}
     return render(request, 'app/kiemtradonhang.html', context)
@@ -69,7 +94,8 @@ def Profile(request):
 def home(request):
     username = request.session.get('username') 
     products = Product.objects.exclude(id=None)
-    context = {'products': products,'username': username}
+    storage = get_messages(request)
+    context = {'products': products,'username': username , 'messages': storage}
     return render(request, 'app/Home.html', context)
 
 # Xử lý đăng nhập và đăng ký
@@ -167,7 +193,7 @@ def get_cart_items(request):
     return JsonResponse(cart_item_list, safe=False, status=200)
 def get_customuser(request):
     customuser = CustomUser.objects.all().values(
-        'id', 'username', 'email', 'password', 'phone_number', 'points', 'is_active', 'date_joined'
+        'id', 'username', 'email', 'password', 'phone_number', 'points', 'is_active', 'date_joined', "Point"
     )
     return JsonResponse(list(customuser), safe=False)
 def get_current_user(request):
@@ -175,14 +201,14 @@ def get_current_user(request):
     data = {
         'id': user.id,
         'username': user.username,
-        'email': user.email,
         'phone_number': user.phone_number,
+        'points': user.Point  
+
     }
     return JsonResponse(data)
 @login_required
 def get_user_cart_items(request):
     try:
-        # Lấy giỏ hàng của người dùng hiện tại
         cart_items = CartItem.objects.filter(user=request.user).select_related('product')
         cart_item_list = [
             {
@@ -206,118 +232,119 @@ def get_promotion(request):
     promotion = Promotion.objects.all().values(
         'id', 'title', 'description', 'image' )
     return JsonResponse(list(promotion), safe=False)
-
-
-logger = logging.getLogger(__name__)
-
-@login_required
 @csrf_exempt
-def tichdiem_view(request):
-    if request.method == 'POST':
+@login_required
+def update_cart_item(request):
+    if request.method == "POST":
         try:
-            # Đọc dữ liệu từ request
             data = json.loads(request.body)
-            phone = data.get('phone')
-
-            # Kiểm tra số điện thoại hợp lệ
-            if not phone or not phone.isdigit() or len(phone) != 10:
-                return JsonResponse({'message': 'Số điện thoại không hợp lệ.'}, status=400)
-
-            # Kiểm tra người dùng tồn tại
-            user = CustomUser.objects.filter(phone_number=phone).first()
-            if not user:
-                return JsonResponse({'message': 'Người dùng không tồn tại.'}, status=404)
-
-            # Kiểm tra xem người dùng có đơn hàng nào không
-            orders = Order.objects.filter(customer=user)
-            if not orders.exists():
-                return JsonResponse({'message': 'Người dùng chưa có đơn hàng nào.'}, status=400)
-
-            # Tính điểm cho tất cả các đơn hàng
-            total_points = 0
-            for order in orders:
-                order_items = OrderItem.objects.filter(order=order)
-                for item in order_items:
-                    total_points += item.quantity * 2  # Quy tắc tích điểm (10 điểm/sản phẩm)
-
-            # Cộng điểm vào tài khoản người dùng
-            user.Point += total_points
-            user.save()
-
-            return JsonResponse({
-                'message': 'Tích điểm thành công!',
-                'current_points': user.Point,
-                'points_added': total_points
-            }, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'Dữ liệu gửi lên không hợp lệ.'}, status=400)
+            cart_item_id = data.get("id")
+            new_quantity = data.get("quantity")
+            if not cart_item_id or new_quantity is None:
+                return JsonResponse({"error": "Thiếu thông tin giỏ hàng hoặc số lượng"}, status=400)
+            cart_item = CartItem.objects.filter(id=cart_item_id, user=request.user).first()
+            if not cart_item:
+                return JsonResponse({"error": "Không tìm thấy sản phẩm trong giỏ hàng"}, status=404)
+            cart_item.quantity = new_quantity
+            cart_item.save()
+            return JsonResponse({"message": "Cập nhật số lượng thành công"}, status=200)
         except Exception as e:
-            return JsonResponse({'message': 'Đã xảy ra lỗi.', 'error': str(e)}, status=500)
-
-    # Xử lý nếu phương thức không phải POST
-    return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
-
-
-from django.db import transaction
-
-@login_required
+            return JsonResponse({"error": str(e)}, status=400)
 @csrf_exempt
-def redeem_gift(request):
-    if request.method == 'POST':
+@login_required
+@transaction.atomic
+def create_order(request):
+    if request.method == "POST":
         try:
-            # Lấy dữ liệu từ request
             data = json.loads(request.body)
-            gift_id = data.get('gift_id')
-
-            if not gift_id:
-                return JsonResponse({'error': 'Missing gift_id'}, status=400)
-
-            # Lấy thông tin quà tặng
-            gift = get_object_or_404(Reward, id=gift_id)
-
-            # Lấy người dùng hiện tại
+            full_name = data.get("full_name")
+            address = data.get("address")
+            phone_number = data.get("phone_number")
+            notes = data.get("notes")
+            payment_method = data.get("payment_method")  
             user = request.user
 
-            # Kiểm tra điểm của người dùng
-            if user.Point < gift.points:
-                return JsonResponse({'message': 'Bạn không đủ điểm để đổi quà.'}, status=400)
+            if not full_name or not address or not phone_number or not payment_method:
+                return JsonResponse({"error": "Vui lòng nhập đầy đủ thông tin!"}, status=400)
 
-            # Sử dụng transaction để đảm bảo tính nhất quán
-            with transaction.atomic():
-                # Trừ điểm
-                user.Point -= gift.points
-                user.save()
+            cart_items = CartItem.objects.filter(user=user).exclude(product__isnull=True)
+            if not cart_items.exists():
+                return JsonResponse({"error": "Giỏ hàng trống hoặc chứa sản phẩm không hợp lệ."}, status=400)
 
-                # Tạo một sản phẩm "ảo" để liên kết với CartItem
-                product = Product.objects.create(
-                    name=f"Reward: {gift.product_name}",
-                    price=0.0,
-                    description="Sản phẩm đổi quà",
-                    image_url=gift.img_url,
+            total_price = sum(item.price * item.quantity for item in cart_items)
+
+            order = Order.objects.create(
+                customer=user,
+                total_price=total_price,
+                phone_number=phone_number,
+                address=address,
+                full_name=full_name,
+                notes=notes,
+                status="dang_cho_xu_ly",
+                payment_method=payment_method,  
+            )
+
+            for item in cart_items:
+                OrderItem.objects.create(
+                    order=order,  
+                    product=item.product,  
+                    quantity=item.quantity,
+                    price=item.price,
                 )
 
-                # Thêm vào giỏ hàng
-                CartItem.objects.create(
-                    user=user,
-                    product=product,  # Liên kết với sản phẩm "ảo"
-                    quantity=1,
-                    price=0.0,  # Giá quà tặng là 0
-                    image_url=gift.img_url,  # Ảnh từ Reward
-                )
-
-            return JsonResponse({
-                'message': 'Đổi quà thành công! Quà đã được thêm vào giỏ hàng.',
-                'remaining_points': user.Point
-            }, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'Dữ liệu không hợp lệ.'}, status=400)
+            cart_items.delete()
+            return JsonResponse({"message": "Đặt hàng thành công!", "order_id": order.id}, status=200)
         except Exception as e:
-            # Ghi log lỗi chi tiết để debug
-            print(f"Lỗi xảy ra: {str(e)}")
-            return JsonResponse({'message': 'Đã xảy ra lỗi.', 'error': str(e)}, status=500)
+            return JsonResponse({"error": str(e)}, status=500)
 
-    return JsonResponse({'message': 'Phương thức không được hỗ trợ.'}, status=405)
-
-
+@csrf_exempt
+@login_required
+def delete_cart_item(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            cart_item_id = data.get("id")
+            if not cart_item_id:
+                return JsonResponse({"error": "Thiếu thông tin giỏ hàng"}, status=400)
+            cart_item = CartItem.objects.filter(id=cart_item_id, user=request.user).first()
+            if not cart_item:
+                return JsonResponse({"error": "Không tìm thấy sản phẩm trong giỏ hàng"}, status=404)
+            cart_item.delete()
+            return JsonResponse({"message": "Xóa sản phẩm thành công"}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+def get_product_by_id(request, id):
+    product = get_object_or_404(Product, id=id)
+    product_data = {
+        "id": product.id,
+        "name": product.name,
+        "price": product.price,
+        "status": product.status,
+        "sale_price": product.sale_price,
+        "description": product.description,
+        "image_url": product.image_url,
+    }
+    return JsonResponse(product_data)
+def get_related_products(request, id):
+    product = get_object_or_404(Product, id=id)  
+    related_products = list(Product.objects.filter(category=product.category).exclude(id=id))  
+    random.shuffle(related_products)  
+    selected_products = related_products[:5] 
+    data = [
+        {
+            "id": p.id,
+            "name": p.name,
+            "price": p.price,
+            "sale_price": p.sale_price,
+            "image_url": p.image_url,
+        }
+        for p in selected_products
+    ]
+    return JsonResponse(data, safe=False)
+def search_products(request):
+    query = request.GET.get("q", "").strip()  
+    if not query:
+        return JsonResponse([], safe=False)  
+    products = Product.objects.filter(Q(name__icontains=query))[:5]  
+    data = list(products.values("id", "name", "image_url"))  
+    return JsonResponse(data, safe=False)

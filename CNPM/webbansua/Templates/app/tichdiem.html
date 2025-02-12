@@ -29,11 +29,12 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
-                    <div class="item_list_Function">
+                    <div class="item_list_Function"  onclick = "showCart()">
                         <span style="background: url(https://cdn1.concung.com/themes/desktop4.1/image/v40/icon/cart-top.png);     
                         width: 25px;
                         height: 25px;
@@ -159,7 +160,6 @@
         </div>
         <div class="container">
             <h2>Tích điểm </h2>
-            {% csrf_token %}
             <input type="tel" placeholder="Nhập số điện thoại để tích điểm" />
             <br>
             <button>Xác nhận</button>
@@ -203,6 +203,5 @@
             </div>
         </div>
     </footer>
-    <script src="/static/js/tichdiem.js"></script> 
 </body>
 </html>

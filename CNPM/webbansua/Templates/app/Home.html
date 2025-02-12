@@ -31,8 +31,9 @@
                     </a>
                 </div>
                 <div class="search" style="position: relative;">
-                    <input type="text" placeholder="Tìm sản phẩm" class="input_search">
+                    <input type="text" id="search-box" placeholder="Tìm sản phẩm" class="input_search">
                     <i class="fa fa-search"></i>
+                    <div id="search-suggestions" class="suggestions"></div> 
                 </div>
                 <div class="list_Function">
                     <div class="item_list_Function"  onclick = "showCart()">
@@ -40,7 +41,7 @@
                         width: 25px;
                         height: 25px;
                         background-size: contain;"></span>
-                        <a href="{% url "giohang" %}"  onclick = "showCart()">
+                        <a href="{% url "giohang" %}">
                             <div class="tb_gio_hang">
                                 <span style="font-weight: 600; color: red;" id="valueGioHang">0</span>
                             </div>
@@ -209,9 +210,9 @@
             <div class="list_kien_thuc">
                 <div class="item_kien_thuc">
                     <div class="conten_kienthuc">
-                        <a href="#">
+                        <a href="https://dantri.com.vn/suc-khoe/bi-quyet-nuoi-con-cao-lon-cua-nguoi-nhat-20220405235701665.htm" target="_blank">
                             <div class="anh_kienthuc">
-                                <img src="/static/img/anhkm1.jpeg" alt="Lỗi hiển thị">
+                                <img src="/static/img/anhkm1.jpeg" alt="Bí quyết nuôi con cao lớn của người Nhật">
                             </div>
                             <span class="glock-title">Bí quyết nuôi con cao lớn của người Nhật</span>
                         </a>
@@ -219,9 +220,9 @@
                 </div>
                 <div class="item_kien_thuc">
                     <div class="conten_kienthuc">
-                        <a href="#">
+                        <a href="https://infonet.vietnamnet.vn/du-ban-ron-den-dau-cha-me-cung-khong-nen-cho-tre-an-nhung-thuc-pham-nay-vao-buoi-sang-277499.html" target="_blank">
                             <div class="anh_kienthuc">
-                                <img src="/static/img/kt2.jpg" alt="Lỗi hiển thị">
+                                <img src="/static/img/kt2.jpg" alt="Thực phẩm không nên ăn vào buổi sáng">
                             </div>
                             <span class="glock-title">Dù bận rộn đến đâu, cha mẹ cũng không nên cho trẻ ăn những thực phẩm này vào buổi sáng</span>
                         </a>
@@ -229,25 +230,26 @@
                 </div>
                 <div class="item_kien_thuc">
                     <div class="conten_kienthuc">
-                        <a href="#">
+                        <a href="https://www.vinmec.com/vie/bai-viet/nhan-biet-chuong-bung-day-hoi-o-tre-em-vi" target="_blank">
                             <div class="anh_kienthuc">
-                                <img src="/static/img/kt3.jpg" alt="Lỗi hiển thị">
+                                <img src="/static/img/kt3.jpg" alt="Dấu hiệu trẻ bị đầy bụng, khó tiêu">
                             </div>
-                            <span class="glock-title">Nếu trẻ có 4 biểu hiện bất thường này chứng tỏ việc tích tụ thức ăn trong cơ thể quá nhiều, trẻ đang bị đầy bụng và khó tiêu</span>
+                            <span class="glock-title">Nếu trẻ có 4 biểu hiện bất thường này chứng tỏ trẻ đang bị đầy bụng và khó tiêu</span>
                         </a>
                     </div>
                 </div>
                 <div class="item_kien_thuc">
                     <div class="conten_kienthuc">
-                        <a href="#">
+                        <a href="https://nhatban.vn/thuc-pham-bo-nao-cho-tre-em/" target="_blank">
                             <div class="anh_kienthuc">
-                                <img src="/static/img/kt4.jpg" alt="Lỗi hiển thị">
+                                <img src="/static/img/kt4.jpg" alt="Thực phẩm bổ não cho trẻ">
                             </div>
-                            <span class="glock-title">10 thực phẩm bổ não, tăng cường trí nhớ - </span>
+                            <span class="glock-title">10 thực phẩm bổ não, tăng cường trí nhớ</span>
                         </a>
                     </div>
                 </div>
             </div>
+            
             <div class="button_mua">
                 <a class="c-btn" href="{% url "kienthuc" %}">
                     <span>Xem tất cả tin tức</span>
@@ -293,6 +295,14 @@
         </div>
     </footer>
     <div id="toast"></div>
+    <div id="promotionModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px;">
+        <h2 id="promoTitle"></h2>
+        <p id="promoDescription"></p>
+        <div style= "text-align: center; margin-top: 10px;">
+            <button id="closeModal">Đóng</button>
+        </div>
+    </div>
+    <div id="modalBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;"></div>
     <script src="{% static 'js/home.js' %}"></script>
     <script src="{% static 'js/toast.js' %}"></script>
 
