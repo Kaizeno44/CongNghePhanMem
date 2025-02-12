@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
-from .models import CustomUser, Product, Promotion, CartItem, Voucher, Order,OrderItem, Reward
+from .models import CustomUser, Product, Promotion, CartItem, Voucher, Order,OrderItem, Reward,Brand
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -16,6 +16,8 @@ from decimal import Decimal
 import json
 import random
 import re
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core.paginator import Paginator
 
 def user_login(request):
     login_form = LoginForm()
@@ -33,7 +35,43 @@ def shopping_cart(request):
     context = {}
     return render(request, 'app/giohang.html', context)
 def purchase(request):
-    context = {}
+    vouchers = Voucher.objects.filter(expiration_date__gte=now().date()).values(
+        'code',
+        'discount_value',
+        'discount_percent',
+        'minimum_order_value',
+        'brand',
+        'expiration_date',
+        'description'
+    )
+    brands_raw = Brand.objects.values('id', 'name', 'image_url')
+    seen = set()
+    brands = []
+    for brand in brands_raw:
+        if brand['name'] not in seen:
+            seen.add(brand['name'])
+            brands.append(brand)    
+    
+    brand_id = request.GET.get('brand_id')  # Lấy brand_id từ URL query
+    if brand_id:
+        # Lọc sản phẩm theo brand_id
+        products = Product.objects.filter(name_brand=Brand.objects.get(id=brand_id).name)
+    else:
+        # Hiển thị tất cả sản phẩm nếu không có lọc
+        products = Product.objects.all()
+
+
+    paginator = Paginator(products, 12)  # Mỗi trang 15 sản phẩm
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Serialize dữ liệu sang JSON
+    context = {
+        'vouchers_json': json.dumps(list(vouchers), cls=DjangoJSONEncoder),
+        'brands': brands,
+        'products': products,
+        'page_obj': page_obj
+    }
     return render(request, 'app/muahang.html', context)
 def check_order(request):
     context = {}
@@ -436,3 +474,45 @@ def check_order_by_phone(request):
         })
     
     return JsonResponse({"orders": order_data}, safe=False)
+
+@csrf_exempt
+@login_required
+def apply_voucher(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            voucher_code = data.get("voucher_code", "").strip()
+
+            if not voucher_code:
+                return JsonResponse({"error": "Vui lòng nhập mã giảm giá."}, status=400)
+
+            # Tìm voucher trong CSDL
+            voucher = Voucher.objects.filter(code=voucher_code, expiration_date__gte=now().date()).first()
+
+            if not voucher:
+                return JsonResponse({"error": "Mã giảm giá không hợp lệ hoặc đã hết hạn."}, status=400)
+
+            cart_items = CartItem.objects.filter(user=request.user)
+            if not cart_items.exists():
+                return JsonResponse({"error": "Giỏ hàng trống."}, status=400)
+
+            total_price = sum(item.price * item.quantity for item in cart_items)
+
+            # Kiểm tra điều kiện đơn hàng tối thiểu
+            if voucher.minimum_order_value and total_price < voucher.minimum_order_value:
+                return JsonResponse({"error": f"Đơn hàng tối thiểu phải đạt {voucher.minimum_order_value}đ để sử dụng mã này."}, status=400)
+
+            # Tính toán số tiền giảm giá
+            discount_amount = voucher.discount_value if voucher.discount_value else (total_price * voucher.discount_percent / 100)
+            final_price = max(0, total_price - discount_amount)
+
+            return JsonResponse({
+                "message": "Áp dụng mã giảm giá thành công!",
+                "discount_amount": discount_amount,
+                "final_price": final_price
+            }, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Phương thức không được hỗ trợ."}, status=405)

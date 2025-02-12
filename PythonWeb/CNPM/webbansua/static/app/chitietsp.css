@@ -574,6 +574,7 @@ tr:hover {
 .chonmua_buy_fast > a:hover {
   background: rgb(234, 0, 97);
   color: #fff;
+  cursor: pointer;
 }
 .flashsale-title:hover {
   color: rgb(234, 0, 97);

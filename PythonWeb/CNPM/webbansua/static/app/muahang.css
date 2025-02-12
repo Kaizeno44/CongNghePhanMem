@@ -564,6 +564,7 @@ main {
 .chonmua_buy_fast>a:hover {
   background: rgb(234, 0, 97);
   color: #fff;
+  cursor: pointer;
 }
 
 .flashsale-title:hover {
@@ -768,4 +769,81 @@ a {
 
 .suggestions div:hover {
   background: #f1f1f1;
+}
+.thuonghieu-list {
+  display: flex;
+  justify-content: center; /* Canh giữa các item */
+  flex-wrap: wrap; /* Tự động xuống dòng nếu không đủ chỗ */
+  gap: 15px; /* Khoảng cách giữa các item */
+}
+
+.brand-item {
+  flex: 0 0 auto; /* Đảm bảo mỗi item không giãn ra */
+  text-align: center;
+}
+
+.brand-item img {
+  width: 100px; /* Kích thước logo */
+  height: auto;
+  transition: transform 0.3s; /* Hiệu ứng khi hover */
+}
+
+.brand-item img:hover {
+  transform: scale(1.1); /* Phóng to khi hover */
+}
+.zcatpic {
+  width: 100%;
+  height: 85px;
+  border: 2px solid #ccc;
+  margin-bottom: 15px;
+  border-radius: 100%;
+}
+
+.zcatpic img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.thuonghieu-km {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.list_products {
+  padding-left: 50px;
+  display: flex;
+  width: calc(100% / 5);
+  gap: 27px;
+}
+
+.list_products .item_products {
+  padding: 0px 5px;
+  margin-bottom: 20px;
+}
+
+.list_products_1 {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  flex-wrap: wrap; /* Cho phép nội dung xuống dòng khi quá số lượng */
+  justify-items: start; /* Căn sản phẩm về phía trái */
+
+}
+
+.item_products {
+  background: white;
+  border-radius: 8px;
+  width: 185px;
+  height: 316px;
+  border: 1px solid rgb(11, 183, 252);
+  box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi kích thước phần tử */
+  flex: 1 1 calc(16.66% - 20px); /* Chiếm 1/6 chiều rộng trừ đi khoảng cách */
+
+  max-width: calc(16.66% - 20px); /* Đảm bảo chiều rộng tối đa là 1/6 */
+
 }

@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/rewards/', views.get_rewards, name='get_rewards'),
     path('api/redeem_gift/', views.redeem_gift, name='redeem_gift'),
     path("api/check_order/", views.check_order_by_phone, name="check_order_by_phone"),
+    path('api/apply_voucher/', views.apply_voucher, name='apply_voucher'),
 
 ]
 if settings.DEBUG:

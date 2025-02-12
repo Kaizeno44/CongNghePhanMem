@@ -1,4 +1,6 @@
 const PHIGIAOHANG = 30000;
+let discountAmount = 0;  
+
 window.addEventListener("pageshow", async () => {
     await updateUserCartData();
 });
@@ -112,83 +114,6 @@ const deleteCartItem = async (cartItemId) => {
         console.error("Error deleting cart item:", error.message);
     }
 };
-// Hien thi san pham co trong gio hang
-const showCart = async () => {
-    try {
-        const response = await fetch("/api/user-cart/");
-        const data = await response.json();
-        const productCartContainer = document.getElementById("product_Cart");
-        let cartProducts = "";
-        let subtotal = 0;
-        let total = 0;
-
-        if (data.length > 0) {
-            data.forEach(product => {
-                const itemTotal = product.price * product.quantity;
-                subtotal += itemTotal;
-                total = subtotal + PHIGIAOHANG;
-
-                cartProducts += `
-                <div class="cart-item">
-                  <div class="col-md-3">
-                    <div class="cartpic">
-                      <img style="width: 100px; padding: 13px;" src="${product.image_url}" alt="${product.product_name}">
-                      <div class="cartcount">${product.quantity}</div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="carttitle">${product.product_name}</div>
-                    <div class="cartcount1">
-                      <i class="fa fa-minus addminus add-minus" data-gid="${product.id}" style ="cursor: pointer;"></i>
-                      <span>
-                        <input class="soluong${product.id}" type="number" min="1" max="100" name="txt_soluong" value="${product.quantity}">
-                      </span>
-                      <i class="fa fa-plus add-plus" data-gid="${product.id}" style ="cursor: pointer;"></i>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="cartprice">${formatCurrency(product.price)}</div>
-                  </div>
-                </div>`;
-            });
-            productCartContainer.innerHTML = cartProducts;
-            const containerNhapVoucvher = `
-            <div class="apvoucheandgia">
-                    <div class="apvoucher">
-                        <input type="text" placeholder="Nhập mã giảm giá">
-                        <button class="ctn_button">Áp dụng</button>
-                    </div>
-                </div>`;
-            const summaryHTML = `
-            <div class="summary" style="border-bottom:2px solid gainsboro;">
-                <div class="sum1">
-                    <p>Tạm tính: </p> <span>${formatCurrency(subtotal)}</span>
-                </div>
-                <div class="sum1">
-                    <p>Giảm giá: </p> <span>0đ</span>
-                </div>
-                <div class="sum1">
-                    <p>Phí giao hàng: </p> <span>${formatCurrency(PHIGIAOHANG)}</span>
-                </div>
-            </div>
-            <div class="sum1">
-                <p><strong>Tổng: </strong></p> <span>${formatCurrency(total)}</span>
-            </div>`;
-            productCartContainer.innerHTML += containerNhapVoucvher;
-            productCartContainer.innerHTML += summaryHTML;
-            const pay_btn = document.querySelector(".pay-btn");
-            if (pay_btn) {
-                pay_btn.textContent = `Thanh toán ${formatCurrency(total)} (COD)`;
-                pay_btn.disabled = false;
-            }
-            pushAndMinus();
-        } else {
-            productCartContainer.innerHTML = `<p>Giỏ hàng trống</p>`;
-        }
-    } catch (error) {
-        console.error("Error fetching cart items:", error.message);
-    }
-};
 // Tạo order hàng 
 const createOrder = async () => {
     try {
@@ -266,24 +191,161 @@ const createOrder = async () => {
 
 
 const resetThongTin = () => {
-    document.querySelector('input[placeholder="Họ tên"]').value = "";
-    document.querySelector('input[placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)"]').value = "";
-    document.querySelector('input[placeholder="Số điện thoại"]').value = "";
-    document.querySelector('input[placeholder="Ghi chú thêm"]').value = "";
+    const fullNameInput = document.querySelector('input[placeholder="Họ tên"]');
+    const addressInput = document.querySelector('input[placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)"]');
+    const phoneInput = document.querySelector('input[placeholder="Số điện thoại"]');
+
+    if (fullNameInput) fullNameInput.value = "";
+    if (addressInput) addressInput.value = "";
+    if (phoneInput) phoneInput.value = "";
+
     showCart();
     const cartCounter = document.getElementById("valueGioHang").textContent;
-    const pay_btn = document.querySelector(".pay-btn");
-    if (parseInt(cartCounter) === 0 && pay_btn) {
-        pay_btn.textContent = `Thanh toán 0đ (COD)`;
-        pay_btn.disabled = true;
+    const payBtn = document.querySelector(".pay-btn");
+    if (parseInt(cartCounter) === 0 && payBtn) {
+        payBtn.textContent = `Thanh toán 0đ (COD)`;
+        payBtn.disabled = true;
     }
 };
+
 const getTotalAmount = () => {
     const totalElement = document.querySelector(".sum1 span:last-child");
+    let total = 0;
     if (totalElement) {
-        let total = parseInt(totalElement.textContent.replace(/\D/g, ""), 10);
-        return total + 30000;
+        total = parseInt(totalElement.textContent.replace(/\D/g, ""), 10);
     }
-    return 0;
+    return total;
 };
+
+// hien thi sp gio hang
+const showCart = async () => {
+    try {
+        const response = await fetch("/api/user-cart/");
+        const data = await response.json();
+        const productCartContainer = document.getElementById("product_Cart");
+        let cartProducts = "";
+        let subtotal = 0;
+        let total = 0;
+        if (data.length > 0) {
+            data.forEach(product => {
+                const itemTotal = product.price * product.quantity;
+                subtotal += itemTotal;
+                cartProducts += `
+                <div class="cart-item">
+                  <div class="col-md-3">
+                    <div class="cartpic">
+                      <img style="width: 100px; padding: 13px;" src="${product.image_url}" alt="${product.product_name}">
+                      <div class="cartcount">${product.quantity}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="carttitle">${product.product_name}</div>
+                    <div class="cartcount1">
+                      <i class="fa fa-minus addminus add-minus" data-gid="${product.id}" style ="cursor: pointer;"></i>
+                      <span>
+                        <input class="soluong${product.id}" type="number" min="1" max="100" name="txt_soluong" value="${product.quantity}">
+                      </span>
+                      <i class="fa fa-plus add-plus" data-gid="${product.id}" style ="cursor: pointer;"></i>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="cartprice">${formatCurrency(product.price)}</div>
+                  </div>
+                </div>`;
+            });
+            productCartContainer.innerHTML = cartProducts;
+            const containerNhapVoucvher = `
+            <div class="apvoucheandgia">
+                <div class="apvoucher">
+                    <input type="text" placeholder="Nhập mã giảm giá" id="input_voucher">
+                    <button class="ctn_button" id="xacnhan_voucher" onclick="handleVoucher()">Áp dụng</button>
+                </div>
+            </div>`;
+            const summaryHTML = `
+            <div class="summary" style="border-bottom:2px solid gainsboro;">
+                <div class="sum1">
+                    <p>Tạm tính: </p> <span>${formatCurrency(subtotal)}</span>
+                </div>
+                <div class="sum1">
+                    <p>Giảm giá: </p> <span id="tien_giam_gia">- ${formatCurrency(discountAmount)}</span>
+                </div>
+                <div class="sum1">
+                    <p>Phí giao hàng: </p> <span>${formatCurrency(PHIGIAOHANG)}</span>
+                </div>
+            </div>
+            <div class="sum1">
+                <p><strong>Tổng: </strong></p> <span>${formatCurrency(subtotal + PHIGIAOHANG - discountAmount)}</span>
+            </div>`;
+            productCartContainer.innerHTML += containerNhapVoucvher;
+            productCartContainer.innerHTML += summaryHTML;
+            total = subtotal + PHIGIAOHANG - discountAmount;
+            const pay_btn = document.querySelector(".pay-btn");
+            if (pay_btn) {
+                pay_btn.textContent = `Thanh toán ${formatCurrency(total)} (COD)`;
+                pay_btn.disabled = false;
+            }
+            pushAndMinus();
+        } else {
+            productCartContainer.innerHTML = `<p>Giỏ hàng trống</p>`;
+        }
+    } catch (error) {
+        console.error("Error fetching cart items:", error.message);
+    }
+};
+// xu li voucher
+const handleVoucher = async () => {
+    const input_voucher = document.getElementById('input_voucher');
+    const voucherCode = input_voucher.value.trim();
+    if (!voucherCode) {
+        toast({
+            title: "Warning",
+            message: "Vui lòng nhập mã giảm giá!",
+            type: "warning",
+            duration: 3000,
+          });
+        return;
+    }
+    try {
+        const response = await fetch("/api/apply_voucher/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({ voucher_code: voucherCode }),
+        });
+        const result = await response.json();
+        if (response.ok) {
+            toast({
+                title: "Success",
+                message: `Mã giảm giá áp dụng thành công! Giảm giá: ${formatCurrency(result.discount_amount)}`,
+                type: "success",
+                duration: 3000,
+              });
+            discountAmount = result.discount_amount; 
+            showCart();
+        } else {
+            toast({
+                title: "Warning",
+                message: `${result.error}`,
+                type: "warning",
+                duration: 3000,
+              });
+        }
+    } catch (error) {
+        console.error("Lỗi khi áp dụng mã giảm giá:", error);
+    }
+};
+// update gia giam
+const updateCartSummary = (discountAmount) => {
+    const tien_giam_gia = document.getElementById("tien_giam_gia");
+    const totalElement = document.querySelector(".summary .sum1:nth-child(4) span");
+    if (tien_giam_gia && totalElement) {
+        tien_giam_gia.textContent = formatCurrency(discountAmount);
+        let total = getTotalAmount() - discountAmount;
+        totalElement.textContent = formatCurrency(total);
+    }
+};
+
+
 

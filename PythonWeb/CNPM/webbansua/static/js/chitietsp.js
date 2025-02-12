@@ -222,3 +222,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     const productId = window.location.pathname.split("/").slice(-2, -1)[0];  
     await loadRelatedProducts(productId);
 });
+const handleBuy = async (productId) => {
+    try {
+      const loginStatusResponse = await fetch("/api/check_login/");
+      const loginStatus = await loginStatusResponse.json();
+      if (!loginStatus.logged_in) {
+        toast({
+          title: "Warning",
+          message: "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng!",
+          type: "warning",
+          duration: 3000,
+        });
+        return;
+      }
+      else {
+        const productResponse = await fetch("/api/products/");
+        const products = await productResponse.json();
+        const product = products.find((item) => item.id === productId);
+        const cartItemData = {
+          product: product.name,
+          quantity: 1,
+        };
+        const csrfToken = getCSRFToken();
+        const response = await fetch("/api/cartitem/add/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify(cartItemData),
+        });
+        const updatedCartData = await fetch("/api/cartitem/");
+        const updatedCartItems = await updatedCartData.json();
+        updateUserCartData(updatedCartItems);
+        toast({
+          title: "Success",
+          message: "Đã thêm vào giỏ hàng",
+          type: "success",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        message: error.message || "Đã xảy ra lỗi, vui lòng thử lại!",
+        type: "error",
+        duration: 3000,
+      });
+    }
+  };
