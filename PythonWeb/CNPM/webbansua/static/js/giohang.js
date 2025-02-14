@@ -117,9 +117,10 @@ const deleteCartItem = async (cartItemId) => {
 // Tạo order hàng 
 const createOrder = async () => {
     try {
-        const fullName = document.querySelector('input[placeholder="Họ tên"]').value;
+        const fullName = document.querySelector('input[placeholder="Họ tên (ví dụ: Bùi Văn Huy)"]').value;
         const address = document.querySelector('input[placeholder="Địa chỉ (ví dụ: 435 An Dương Vương)"]').value;
         const phoneNumber = document.querySelector('input[placeholder="Số điện thoại"]').value;
+        console.log(fullName, address, phoneNumber);
         const notes = document.querySelector('input[placeholder="Ghi chú thêm"]').value;
         const bankTransferRadio = document.getElementById("bank_transfer");
         const codRadio = document.getElementById("cod");
