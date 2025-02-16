@@ -23,19 +23,23 @@ class CustomUserManager(BaseUserManager):
 # CustomUser kế thừa từ AbstractUser, cho phép thêm các trường tùy chỉnh
 class CustomUser(AbstractUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
-    phone_number = models.CharField(max_length=10, unique=True, blank=True, null=True)  # Không bắt buộc cho đăng nhập
-    is_active = models.BooleanField(default=True)   
+    phone_number = models.CharField(max_length=10, unique=True, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    Point = models.CharField(max_length=15)
+    Point = models.CharField(max_length=15, default="0")  # Mặc định là 0
 
-    objects = CustomUserManager()
-
-    USERNAME_FIELD = 'username'  # Đăng nhập bằng tên đăng nhập
-    REQUIRED_FIELDS = []  # Không yêu cầu các trường bổ sung khi tạo superuser
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.username
+
+# Định nghĩa tín hiệu để đảm bảo Point là "0" khi tạo user mới
 @receiver(post_save, sender=CustomUser)
+def set_default_point(sender, instance, created, **kwargs):
+    if created and not instance.Point:  # Chỉ chạy khi user mới được tạo
+        instance.Point = "0"
+        instance.save()
 def create_employee_for_new_user(sender, instance, created, **kwargs):
     if created:
         if not hasattr(instance, 'employee'):

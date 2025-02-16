@@ -193,7 +193,7 @@
                                         <div class="sales-price">
                                             <!-- Nếu có sale_price thì hiển thị sale_price -->
                                             {% if product.sale_price %}
-                                                {{ product.sale_price|floatformat:0 }}<sup>đ</sup>
+                                                {{ product.price|floatformat:0 }}<sup>đ</sup>
                                             {% else %}
                                                 <!-- Nếu không có thì hiển thị giá gốc -->
                                                 {{ product.price|floatformat:0 }}<sup>đ</sup>
@@ -203,7 +203,7 @@
                                     <!-- Chỉ hiển thị giá gốc khi có sale_price -->
                                     {% if product.sale_price %}
                                     <div class="col-md-6">
-                                        <div class="sales-root">{{ product.price|floatformat:0 }}<sup>đ</sup></div>
+                                        <div class="sales-root">{{ product.sale_price|floatformat:0 }}<sup>đ</sup></div>
                                     </div>
                                     {% endif %}
                                 </div>

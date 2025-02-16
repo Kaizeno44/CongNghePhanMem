@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'login',  # Tên database bạn đã tạo
         'USER': 'root',           # Tên người dùng MySQL
-        'PASSWORD': '27062005',  # Mật khẩu MySQL
+        'PASSWORD': '27062005',  # Mật khẩu MySQL của bạn
         'HOST': '127.0.0.1',      # Địa chỉ host
         'PORT': '3306',           # Cổng MySQL
     }

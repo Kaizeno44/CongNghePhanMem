@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                     <div class="voucher_footer">
                         <p>${voucher.brand || "Không rõ thương hiệu"}</p>
-                        <span style="color: #ae0258; font-size: 11px;">Mã dành cho ${voucher.description || "Không có mô tả"}</span>
+                        <span style="color: #ae0258; font-size: 11px;">Mã dành cho ${voucher.brand || "Không có mô tả"}</span>
                         <div class="tile1">
                             <span style="color: #ae0258; font-size: 11px;">Đến ngày ${expirationDate}</span>
                             <div class="tile2">
