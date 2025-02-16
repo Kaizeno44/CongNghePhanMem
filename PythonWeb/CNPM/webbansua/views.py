@@ -52,7 +52,7 @@ def purchase(request):
             seen.add(brand['name'])
             brands.append(brand)    
     
-    brand_id = request.GET.get('brand_id')  # Lấy brand_id từ URL query
+    brand_id = request.GET.get('brand_id')  
     if brand_id:
         # Lọc sản phẩm theo brand_id
         products = Product.objects.filter(name_brand=Brand.objects.get(id=brand_id).name)
@@ -61,7 +61,7 @@ def purchase(request):
         products = Product.objects.all()
 
 
-    paginator = Paginator(products, 12)  # Mỗi trang 15 sản phẩm
+    paginator = Paginator(products, 12)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
