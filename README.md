@@ -15,7 +15,7 @@ B4:
   + Chạy python manage.py migrate để cập nhật.
   + Và python manage.py runserver để chạy web.
 
-<<<<<<< HEAD
+
 
 
 =======
